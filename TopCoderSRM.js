@@ -52,7 +52,7 @@ $(function(){
                     td = '<td bgcolor="#FF6347">';
                 }
                 var problemUrl = 'http://community.topcoder.com/' + problem['url'];
-                level[problem['level']] = td + '<a href="' + problemUrl + '" target="_blank">' +  problem['problemName'] + '</a>' + '<br>' + problem['successRate'] + '</td>';
+                level[problem['level']] = td + '<a href="' + problemUrl + '" target="_blank">' +  problem['problemName'] + '</a>' + '<br>' + problem['overall'] + '</td>';
             }
             divisionDict[division]= level['Easy'] + level['Normal'] + level['Hard']
         }
