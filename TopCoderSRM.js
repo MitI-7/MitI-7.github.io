@@ -22,7 +22,7 @@ function readJson(url) {
 
 $(function(){
 
-    var problemData = readJson("./allProblem.json");
+    var problemData = readJson("./data/TopCoder/allProblem.json");
     var solved = readJson("./data/TopCoder/solved.json");
     var review = readJson("./data/TopCoder/review.json");
     problemData = sortDict(problemData);
