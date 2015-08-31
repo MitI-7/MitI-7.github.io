@@ -2,11 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>SRM Status</title>
     <style type="text/css">
+        .legend {
+            margin: 10px 10px 20px 0;
+        }
         .allTable {
             border-collapse: collapse;
-            width: 1800px;
+            width: 1700px;
             box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.2);
             border-color: #DCDCDC;
         }
@@ -25,6 +28,17 @@
 <body>
 
 <p>SRM Status<p>
+
+<table class="legend">
+    <tr>
+        <td bgcolor="#98FB98" width="70"></td>
+        <td>solved</td>
+    </tr>
+    <tr>
+        <td bgcolor="#FF6347"></td>
+        <td>review</td>
+    </tr>
+</table>
 
 <table id="all_table" class="allTable" border="1">
     <thead>
