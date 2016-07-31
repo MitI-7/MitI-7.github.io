@@ -135,6 +135,12 @@
             console.log("checkbox_status is selected");
             make_table();
         }, false);
+
+
+        $(".column").click(function(){
+            var id = $(this).attr("id");
+            alert(id);
+        });
     });
 })((this || 0).self || global);
 
