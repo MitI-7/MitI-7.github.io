@@ -34,7 +34,17 @@
                     console.log("ERROR:", k);
                     continue;
                 }
-                tx.executeSql('INSERT OR REPLACE INTO topcoder VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', k,
+                for (var j = 0; j < k.length; ++j) {
+                    if (k[j] == "None") {
+                        k[j] = null;
+                    }
+                }
+
+                tx.executeSql('INSERT OR REPLACE INTO topcoder VALUES (?, ?, ?,' +
+                                                                      '?, ?, ?, ?, ?, ?,' +
+                                                                      '?, ?, ?, ?, ?, ?,' +
+                                                                      '?, ?, ?, ?, ?, ?,' +
+                                                                      '?, ?, ?, ?, ?, ?);', k,
 
          			function(tx, res) {
 		        	},
@@ -47,7 +57,7 @@
     }
 
     function make_td(pm, pm_name, accuracy, status) {
-        if (pm == 'None') {
+        if (pm == null) {
             return '<td bgcolor="F5F5F5">' + '-' + '</td>'
         }
 
@@ -138,8 +148,50 @@
         $(".column").click(function(){
             var id = $(this).attr("id");
             console.log(id, "is clicked");
+            var order = "";
+            switch (id) {
+                case "round_column":
+                    order += "rd_date ";
+                    break;
+                case "div2_column":
+                    break;
+                case "div1_column":
+                    break;
+                case "div2_easy_column":
+                    order += "div2_level1_pm_accuracy ";
+                    break;
+                case "div2_normal_column":
+                    order += "div2_level2_pm_accuracy ";
+                    break;
+                case "div2_hard_column":
+                    order += "div2_level3_pm_accuracy ";
+                    break;
+                case "div1_easy_column":
+                    order += "div1_level1_pm_accuracy ";
+                    break;
+                case "div1_normal_column":
+                    order += "div1_level2_pm_accuracy ";
+                    break;
+                case "div1_hard_column":
+                    order += "div1_level3_pm_accuracy ";
+                    break;
+            }
+            if (DESC_ASC == "DESC") {
+                DESC_ASC = "ASC";
+                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 100 ELSE " + order + "END ASC";
+            }
+            else {
+                DESC_ASC = "DESC";
+                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 0 ELSE " + order + "END DESC";
+            }
+            console.log(order);
+            make_table(order);
+
         });
     });
+
+    var DESC_ASC = "DESC";
+
 })((this || 0).self || global);
 
 

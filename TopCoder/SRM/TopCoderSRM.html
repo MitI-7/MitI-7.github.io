@@ -24,6 +24,7 @@
 
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="TopCoderSRM.js"></script>
+
 </head>
 <body>
 
@@ -55,17 +56,17 @@
 <table id="all_table" class="allTable" border="1">
     <thead>
         <tr>
-            <td rowspan="2">Round</td>
-            <td colspan="3">DIV2</td>
-            <td colspan="3">DIV1</td>
+            <td rowspan="2" class="column" id="round_column">Round</td>
+            <td colspan="3" class="column" id="div2_column">DIV2</td>
+            <td colspan="3" class="column" id="div1_column">DIV1</td>
         </tr>
         <tr>
-            <td>Easy</td>
-            <td>Normal</td>
-            <td>Hard</td>
-            <td>Easy</td>
-            <td>Normal</td>
-            <td>Hard</td>
+            <td class="column" id="div2_easy_column">Easy</td>
+            <td class="column" id="div2_normal_column">Normal</td>
+            <td class="column" id="div2_hard_column">Hard</td>
+            <td class="column" id="div1_easy_column">Easy</td>
+            <td class="column" id="div1_normal_column">Normal</td>
+            <td class="column" id="div1_hard_column">Hard</td>
         </tr>
     </thead>
     <tbody id="problem_table"></tbody>
