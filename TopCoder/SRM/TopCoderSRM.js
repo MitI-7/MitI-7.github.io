@@ -1,99 +1,142 @@
-function sortDict(object) {
-    var sorted = {};
-    var array = [];
-    for (var k in object) {
-        array.push(k);
-    }
-    array.sort();
-    array.reverse();
-    for (var i = 0; i < array.length; i++) {
-        sorted[array[i]] = object[array[i]];
+(function(global) {
+    "use strict;"
+
+    function read_file(url) {
+        var xml_http = new XMLHttpRequest;
+        xml_http.open("GET", url, false);
+        xml_http.send();
+        return xml_http.responseText;
     }
 
-    return sorted;
-}
-
-function readJson(url) {
-    var xmlhttp = new XMLHttpRequest;
-    xmlhttp.open("GET", url, false);
-    xmlhttp.send();
-    return JSON.parse(xmlhttp.responseText);
-}
-
-function count(solved) {
-    var k = {'DIV2_Easy': 0, 'DIV2_Normal': 0, 'DIV2_Hard': 0, 'DIV1_Easy': 0, 'DIV1_Normal': 0, 'DIV1_Hard': 0};
-    for (var d in solved) {
-        var t = d.split("_")[1] + '_' + d.split("_")[2];
-        k[t] += 1;
+    function open_db() {
+        return openDatabase('database', '1.0', 'displayName', 65536 * 10);
     }
-    return k;
-}
 
-$(function(){
+    function create_table() {
+        var db = open_db();
+        db.transaction( function(tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS topcoder (rd INTEGER PRIMARY KEY, rd_name TEXT, rd_date TEXT,' +
+                                                               'div2_level1_pm INTEGER, div2_level2_pm INTEGER, div2_level3_pm INTEGER, div1_level1_pm INTEGER, div1_level2_pm INTEGER, div1_level3_pm INTEGER,' +
+                                                               'div2_level1_pm_name TEXT, div2_level2_pm_name TEXT, div2_level3_pm_name TEXT, div1_level1_pm_name TEXT, div1_level2_pm_name TEXT, div1_level3_pm_name TEXT,' +
+                                                               'div2_level1_pm_accuracy REAL, div2_level2_pm_accuracy REAL, div2_level3_pm_accuracy REAL, div1_level1_pm_accuracy REAL, div1_level2_pm_accuracy REAL, div1_level3_pm_accuracy REAL,' +
+                                                               'div2_level1_pm_status INTEGER, div2_level2_pm_status INTEGER, div2_level3_pm_status INTEGER, div1_level1_pm_status INTEGER, div1_level2_pm_status INTEGER, div1_level3_pm_status INTEGER)');
+        });
+    }
 
-    var problemData = readJson("./data/allProblem.json");
-    var solved = readJson("./data/solved.json");
-    var review = readJson("./data/review.json");
-    problemData = sortDict(problemData);
+    function insert_data() {
+        var db = open_db();
+        db.transaction(function(tx) {
+            var csv_data = read_file('./topcoder_data.csv');
+            var tmp = csv_data.split('\n');
+            for (var i = 0; i < tmp.length; ++i) {
+                var k = tmp[i].split(",");
+                if (k.length != 27) {
+                    console.log("ERROR:", k);
+                    continue;
+                }
+                tx.executeSql('INSERT OR REPLACE INTO topcoder VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', k,
 
-    var html = '<tr><td>solved</td>';
-    var cou = count(solved);
-    var n = Object.keys(problemData).length;
+         			function(tx, res) {
+		        	},
+        			function(tx, error) {
+		        	    console.log("error:" + error.message);
+                        console.log(k);
+        			});
+            }
+        });
+    }
 
-    ['DIV2_Easy', 'DIV2_Normal', 'DIV2_Hard', 'DIV1_Easy', 'DIV1_Normal', 'DIV1_Hard'].forEach(function(d) {
-            html += '<td>' + cou[d] + '/' + n + '</td>';
+    function make_td(pm, pm_name, accuracy, status) {
+        if (pm == 'None') {
+            return '<td bgcolor="F5F5F5">' + '-' + '</td>'
         }
-    );
 
-    html += '</tr>';
+        var td = '<td>';
+        // accept
+        if (status == 1) {
+            td = '<td bgcolor="#98FB98">';
+        }
+        // wrong
+        else if (status == 2) {
+            td ='<td bgcolor="#FF6347">';
+        }
 
-    for (var date in problemData) {
-        for (var round in problemData[date]) {
-            html += '<tr>';
-            var round_url = 'http://community.topcoder.com/stat?c=round_overview&rd=' + problemData[date][round]['rd'];
-            html += '<td>' + '<a href="' + round_url + '" target="_blank">' +  round + '</a></td>';
+        var problem_url = 'http://community.topcoder.com/stat?c=problem_statement&pm=' + pm;
+        td += '<a href="' + problem_url + '" target="_blank">' + pm_name + '</a>';
+        try {
+            td += '<br>' + accuracy.toFixed(2) + '%';
+        }
+        catch (e) {
+            td += '<br>-%';
+        }
+        return td + '</td>'
+    }
 
-            ['DIV2', 'DIV1'].forEach(function(division) {
-                ['Easy', 'Normal', 'Hard'].forEach(function(level) {
-                    if (division in problemData[date][round] && level in problemData[date][round][division]) {
+    function make_table() {
 
-                        var td = '<td>';
-                        var solved_date = "";
-                        var tag = round + "_" + division + "_" + level;
-                        if (tag in solved) {
-                            td = '<td bgcolor="#98FB98">';
-                            solved_date = "Solved:" + solved[tag];
-                        }
+        var db = open_db();
+        var status = "(-1,";
+        for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
+            if (form_conditions.checkbox_status[i].checked) {
+                status += form_conditions.checkbox_status[i].value + ",";
+            }
+        }
 
-                        if (review.indexOf(tag) != -1) {
-                            td = '<td bgcolor="#FF6347">';
-                        }
+        status = status.slice(0, status.length - 1) + ")";
+        console.log(status);
 
-                        var problem_url = 'http://community.topcoder.com/stat?c=problem_statement&pm=' + problemData[date][round][division][level]['pm'];
-                        html += td + '<a href="' + problem_url + '" target="_blank">' + problemData[date][round][division][level]['problem'] + '</a>';
-                        html += '<br>' + problemData[date][round][division][level]['accuracy'] + '%';
-                        html += '<br>' + solved_date + '</td>';
-                    }
-                    // ñ‚ëËÇ™ë∂ç›ÇµÇ»Ç¢
-                    else {
-                        html += '<td bgcolor="F5F5F5">' + '-' + '</td>';
-                    }
-                })
+        $('#all_table tbody').empty();
+
+        db.transaction( function(trans) {
+            var sql= 'SELECT * FROM topcoder';
+            sql += ' WHERE div2_level1_pm_status in ' + status;
+            sql += ' OR div2_level2_pm_status in ' + status;
+            sql += ' OR div2_level3_pm_status in ' + status;
+
+            sql += ' OR div1_level1_pm_status in ' + status;
+            sql += ' OR div1_level2_pm_status in ' + status;
+            sql += ' OR div1_level3_pm_status in ' + status;
+
+            sql += ' ORDER BY rd_date DESC;';
+
+            trans.executeSql(sql, [], function(trans, r) {
+                var html = "";
+                for(var i = 0; i < r.rows.length; i++) {
+                    var item = r.rows.item(i);
+
+                    html += '<tr>';
+
+                    var round_url = 'https://community.topcoder.com/stat?c=round_overview&rd=' + item.rd;
+                    var td = '<a href="' + round_url + '" target="_blank">' + item.rd_name + '</a>';
+
+                    html += '<td>' + td + '</td>';
+
+                    html += make_td(item.div2_level1_pm, item.div2_level1_pm_name, item.div2_level1_pm_accuracy, item.div2_level1_pm_status);
+                    html += make_td(item.div2_level2_pm, item.div2_level2_pm_name, item.div2_level2_pm_accuracy, item.div2_level2_pm_status);
+                    html += make_td(item.div2_level3_pm, item.div2_level3_pm_name, item.div2_level3_pm_accuracy, item.div2_level3_pm_status);
+
+                    html += make_td(item.div1_level1_pm, item.div1_level1_pm_name, item.div1_level1_pm_accuracy, item.div1_level1_pm_status);
+                    html += make_td(item.div1_level2_pm, item.div1_level2_pm_name, item.div1_level2_pm_accuracy, item.div1_level2_pm_status);
+                    html += make_td(item.div1_level3_pm, item.div1_level3_pm_name, item.div1_level3_pm_accuracy, item.div1_level3_pm_status);
+
+                    html += '</tr>';
+                }
+                $('#all_table tbody').append(html);
             });
-            html += '</tr>';
-        }
+        });
     }
-    $('#all_table tbody').append(html);
-});
+
+    $(function() {
+        create_table();
+        insert_data();
+        make_table();
+
+        form_conditions.addEventListener('change', function () {
+            console.log("checkbox_status is selected");
+            make_table();
+        }, false);
+    });
+})((this || 0).self || global);
 
 
-$(function(){
-    var tr = "#problem_table tr";
-    $(tr).css("background-color", "#ffffff");
-    $(tr).mouseover(function(){
-        $(this).css("background-color", "#F5F5F5")
-    });
-    $(tr).mouseout(function(){
-        $(this).css("background-color", "#ffffff")
-    });
-});
+
