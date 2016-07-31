@@ -72,8 +72,7 @@
         return td + '</td>'
     }
 
-    function make_table() {
-
+    function make_table(order) {
         var db = open_db();
         var status = "(-1,";
         for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
@@ -97,8 +96,7 @@
             sql += ' OR div1_level2_pm_status in ' + status;
             sql += ' OR div1_level3_pm_status in ' + status;
 
-            sql += ' ORDER BY rd_date DESC;';
-
+            sql += order + ";";
             trans.executeSql(sql, [], function(trans, r) {
                 var html = "";
                 for(var i = 0; i < r.rows.length; i++) {
@@ -129,17 +127,17 @@
     $(function() {
         create_table();
         insert_data();
-        make_table();
+        make_table(' ORDER BY rd_date DESC');
 
         form_conditions.addEventListener('change', function () {
             console.log("checkbox_status is selected");
-            make_table();
+            make_table(' ORDER BY rd_date DESC');
         }, false);
 
 
         $(".column").click(function(){
             var id = $(this).attr("id");
-            alert(id);
+            console.log(id, "is clicked");
         });
     });
 })((this || 0).self || global);
