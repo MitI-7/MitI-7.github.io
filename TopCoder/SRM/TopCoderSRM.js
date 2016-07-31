@@ -178,11 +178,11 @@
             }
             if (DESC_ASC == "DESC") {
                 DESC_ASC = "ASC";
-                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 100 ELSE " + order + "END ASC";
+                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 101 ELSE " + order + "END ASC";
             }
             else {
                 DESC_ASC = "DESC";
-                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 0 ELSE " + order + "END DESC";
+                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN -1 ELSE " + order + "END DESC";
             }
             console.log(order);
             make_table(order);
