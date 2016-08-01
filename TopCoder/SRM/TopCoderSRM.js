@@ -68,15 +68,40 @@
         status = status.slice(0, status.length - 1) + ")";
         console.log(status);
         var sql = "";
-        sql += ' WHERE div2_level1_pm_status in ' + status;
+        sql += ' WHERE (div2_level1_pm_status in ' + status;
         sql += ' OR div2_level2_pm_status in ' + status;
         sql += ' OR div2_level3_pm_status in ' + status;
 
         sql += ' OR div1_level1_pm_status in ' + status;
         sql += ' OR div1_level2_pm_status in ' + status;
-        sql += ' OR div1_level3_pm_status in ' + status;
+        sql += ' OR div1_level3_pm_status in ' + status + ")";
 
-        return sql;
+        var sql2 = "";
+
+        for (var i = 0; i < form_conditions.checkbox_round.length; ++i) {
+            var round_name = form_conditions.checkbox_round[i].value;
+            var is_checked  = form_conditions.checkbox_round[i].checked
+            var tag = "";
+            tag = " (rd_name GLOB '*" + round_name + "*') ";
+            if (is_checked) {
+                if (sql2 != "") {
+                    sql2 += " OR ";
+                }
+                sql2 += tag;
+            }
+            else {
+                if (sql2 != "") {
+                    sql2 += " AND ";
+                }
+                sql2 += "NOT" + tag;
+            }
+
+        }
+        if (sql2 == "") {
+            return sql;
+        }
+
+        return sql + " AND (" + sql2 + " )";
     }
 
     function make_td(pm, pm_name, accuracy, status) {
@@ -114,6 +139,7 @@
             var sql= 'SELECT * FROM topcoder';
             sql += make_where_query();
             sql += order + ";";
+            console.log(sql);
             trans.executeSql(sql, [], function(trans, r) {
                 var html = "";
                 for(var i = 0; i < r.rows.length; i++) {
