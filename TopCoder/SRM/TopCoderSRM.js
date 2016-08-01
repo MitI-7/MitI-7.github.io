@@ -56,6 +56,29 @@
         });
     }
 
+    function make_where_query() {
+
+        var status = "(-1,";
+        for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
+            if (form_conditions.checkbox_status[i].checked) {
+                status += form_conditions.checkbox_status[i].value + ",";
+            }
+        }
+
+        status = status.slice(0, status.length - 1) + ")";
+        console.log(status);
+        var sql = "";
+        sql += ' WHERE div2_level1_pm_status in ' + status;
+        sql += ' OR div2_level2_pm_status in ' + status;
+        sql += ' OR div2_level3_pm_status in ' + status;
+
+        sql += ' OR div1_level1_pm_status in ' + status;
+        sql += ' OR div1_level2_pm_status in ' + status;
+        sql += ' OR div1_level3_pm_status in ' + status;
+
+        return sql;
+    }
+
     function make_td(pm, pm_name, accuracy, status) {
         if (pm == null) {
             return '<td bgcolor="F5F5F5">' + '-' + '</td>'
@@ -84,28 +107,12 @@
 
     function make_table(order) {
         var db = open_db();
-        var status = "(-1,";
-        for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
-            if (form_conditions.checkbox_status[i].checked) {
-                status += form_conditions.checkbox_status[i].value + ",";
-            }
-        }
-
-        status = status.slice(0, status.length - 1) + ")";
-        console.log(status);
 
         $('#all_table tbody').empty();
 
         db.transaction( function(trans) {
             var sql= 'SELECT * FROM topcoder';
-            sql += ' WHERE div2_level1_pm_status in ' + status;
-            sql += ' OR div2_level2_pm_status in ' + status;
-            sql += ' OR div2_level3_pm_status in ' + status;
-
-            sql += ' OR div1_level1_pm_status in ' + status;
-            sql += ' OR div1_level2_pm_status in ' + status;
-            sql += ' OR div1_level3_pm_status in ' + status;
-
+            sql += make_where_query();
             sql += order + ";";
             trans.executeSql(sql, [], function(trans, r) {
                 var html = "";
