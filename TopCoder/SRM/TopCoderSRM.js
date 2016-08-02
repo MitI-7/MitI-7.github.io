@@ -57,49 +57,32 @@
     }
 
     function make_where_query() {
+        var where_list = [];
 
-        var status = "(-1,";
+        // •\¦‚·‚éStatus‚ğ“ü‚ê‚é
+        var status_list = [];
         for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
-            if (form_conditions.checkbox_status[i].checked) {
-                status += form_conditions.checkbox_status[i].value + ",";
-            }
+            var is_checked = form_conditions.checkbox_status[i].checked;
+            var num = form_conditions.checkbox_status[i].value;
+            status_list.push(is_checked ? num : -1);
+        }
+        console.log(status_list);
+        for (var i = 0; i < 6; ++i) {
+            where_list = where_list.concat(status_list);
         }
 
-        status = status.slice(0, status.length - 1) + ")";
-        console.log(status);
-        var sql = "";
-
-        sql += ' WHERE (div2_level1_pm_status in ' + status;
-        sql += ' OR div2_level2_pm_status in ' + status;
-        sql += ' OR div2_level3_pm_status in ' + status;
-
-        sql += ' OR div1_level1_pm_status in ' + status;
-        sql += ' OR div1_level2_pm_status in ' + status;
-        sql += ' OR div1_level3_pm_status in ' + status + ")";
-
-        var sql2 = "";
-
+        // •\¦‚·‚éRound‚ğ“ü‚ê‚é
+        var round_list = [];
+        // SRM, TCO, TCC, OTHER‚Ì‡”Ô‚Å‚­‚é
         for (var i = 0; i < form_conditions.checkbox_round.length; ++i) {
-            var round_name = form_conditions.checkbox_round[i].value;
             var is_checked  = form_conditions.checkbox_round[i].checked;
-            if (is_checked) {
-                if (sql2 != "") {
-                    sql2 += " OR ";
-                }
-                if (round_name == "OTHER") {
-                    sql2 += " NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') ";
-                }
-                else {
-                    sql2 += " (rd_name GLOB '*" + round_name + "*') ";
-                }
-            }
+            round_list.push(is_checked ? 1 : 0);
         }
-        if (sql2 == "") {
-            return "False";
-        }
-        //return " where rd_name MATCH '%SRM%' ";
-        return sql + " AND (" + sql2 + " )";
+        where_list = where_list.concat(round_list);
+
+        return where_list;
     }
+
 
     function make_td(pm, pm_name, accuracy, status) {
         if (pm == null) {
@@ -133,11 +116,23 @@
         $('#all_table tbody').empty();
 
         db.transaction( function(trans) {
-            var sql= 'SELECT * FROM topcoder';
-            sql += make_where_query();
-            sql += order + ";";
-            console.log(sql);
-            trans.executeSql(sql, [], function(trans, r) {
+            var where_query = make_where_query();
+            console.log(where_query);
+            trans.executeSql("SELECT * FROM topcoder WHERE (   div2_level1_pm_status in (?, ?, ?) " +
+                                                           "OR div2_level2_pm_status in (?, ?, ?) " +
+                                                           "OR div2_level3_pm_status in (?, ?, ?) " +
+                                                           "OR div1_level1_pm_status in (?, ?, ?) " +
+                                                           "OR div1_level2_pm_status in (?, ?, ?) " +
+                                                           "OR div1_level3_pm_status in (?, ?, ?) " +
+                                                           ")" +
+                                                           "AND" +
+                                                           "(" +
+                                                           "   (rd_name GLOB '*SRM*' AND ?) " +
+                                                           "OR (rd_name GLOB '*TCO*' AND ?) " +
+                                                           "OR (rd_name GLOB '*TCC*' AND ?) " +
+                                                           "OR (NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') AND ?)" +
+                                                            ")" + order,
+                             where_query, function(trans, r) {
                 var html = "";
                 for(var i = 0; i < r.rows.length; i++) {
                     var item = r.rows.item(i);
