@@ -110,14 +110,15 @@
         return td + '</td>'
     }
 
-    function make_table(order) {
+    function make_table(order_query) {
         var db = open_db();
 
         $('#all_table tbody').empty();
 
         db.transaction( function(trans) {
-            var where_query = make_where_query();
-            console.log(where_query);
+            var query = make_where_query();
+            console.log(query);
+            console.log(order_query);
             trans.executeSql("SELECT * FROM topcoder WHERE (   div2_level1_pm_status in (?, ?, ?) " +
                                                            "OR div2_level2_pm_status in (?, ?, ?) " +
                                                            "OR div2_level3_pm_status in (?, ?, ?) " +
@@ -131,8 +132,8 @@
                                                            "OR (rd_name GLOB '*TCO*' AND ?) " +
                                                            "OR (rd_name GLOB '*TCC*' AND ?) " +
                                                            "OR (NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') AND ?)" +
-                                                            ")" + order,
-                             where_query, function(trans, r) {
+                                                           ") " + order_query,
+                                                           query, function(trans, r) {
                 var html = "";
                 for(var i = 0; i < r.rows.length; i++) {
                     var item = r.rows.item(i);
@@ -162,56 +163,57 @@
     $(function() {
         create_table();
         insert_data();
-        make_table(' ORDER BY rd_date DESC');
+        make_table("ORDER BY rd_date DESC");
 
+        // 表示条件が変わった
         form_conditions.addEventListener('change', function () {
             console.log("checkbox_status is selected");
-            make_table(' ORDER BY rd_date DESC');
+            make_table("ORDER BY rd_date " + DESC_ASC);
         }, false);
 
-
+        // 表題がクリック
         $(".column").click(function(){
             var id = $(this).attr("id");
             console.log(id, "is clicked");
-            var order = "";
+            var tag;
             switch (id) {
                 case "round_column":
-                    order += "rd_date ";
+                    tag = "rd_date";
                     break;
                 case "div2_column":
                     break;
                 case "div1_column":
                     break;
                 case "div2_easy_column":
-                    order += "div2_level1_pm_accuracy ";
+                    tag = "div2_level1_pm_accuracy";
                     break;
                 case "div2_normal_column":
-                    order += "div2_level2_pm_accuracy ";
+                    tag = "div2_level2_pm_accuracy";
                     break;
                 case "div2_hard_column":
-                    order += "div2_level3_pm_accuracy ";
+                    tag = "div2_level3_pm_accuracy";
                     break;
                 case "div1_easy_column":
-                    order += "div1_level1_pm_accuracy ";
+                    tag = "div1_level1_pm_accuracy";
                     break;
                 case "div1_normal_column":
-                    order += "div1_level2_pm_accuracy ";
+                    tag = "div1_level2_pm_accuracy";
                     break;
                 case "div1_hard_column":
-                    order += "div1_level3_pm_accuracy ";
+                    tag = "div1_level3_pm_accuracy";
                     break;
             }
+
+            var order = "";
             if (DESC_ASC == "DESC") {
                 DESC_ASC = "ASC";
-                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN 101 ELSE " + order + "END ASC";
+                order = " ORDER BY CASE WHEN " + tag + " IS NULL THEN 101 ELSE " + tag + " END ASC";
             }
             else {
                 DESC_ASC = "DESC";
-                order = " ORDER BY CASE WHEN " + order + "IS NULL THEN -1 ELSE " + order + "END DESC";
+                order = " ORDER BY CASE WHEN " + tag + " IS NULL THEN -1 ELSE " + tag + " END DESC";
             }
-            console.log(order);
             make_table(order);
-
         });
     });
 
