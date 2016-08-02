@@ -59,7 +59,7 @@
     function make_where_query() {
         var where_list = [];
 
-        // •\¦‚·‚éStatus‚ğ“ü‚ê‚é
+        // è¡¨ç¤ºã™ã‚‹Statusã‚’å…¥ã‚Œã‚‹
         var status_list = [];
         for (var i = 0; i < form_conditions.checkbox_status.length; ++i) {
             var is_checked = form_conditions.checkbox_status[i].checked;
@@ -71,9 +71,9 @@
             where_list = where_list.concat(status_list);
         }
 
-        // •\¦‚·‚éRound‚ğ“ü‚ê‚é
+        // è¡¨ç¤ºã™ã‚‹Roundã‚’å…¥ã‚Œã‚‹
         var round_list = [];
-        // SRM, TCO, TCC, OTHER‚Ì‡”Ô‚Å‚­‚é
+        // SRM, TCO, TCC, OTHERã®é †ç•ªã§ãã‚‹
         for (var i = 0; i < form_conditions.checkbox_round.length; ++i) {
             var is_checked  = form_conditions.checkbox_round[i].checked;
             round_list.push(is_checked ? 1 : 0);
