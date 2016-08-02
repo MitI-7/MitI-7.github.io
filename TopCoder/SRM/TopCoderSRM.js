@@ -68,6 +68,7 @@
         status = status.slice(0, status.length - 1) + ")";
         console.log(status);
         var sql = "";
+
         sql += ' WHERE (div2_level1_pm_status in ' + status;
         sql += ' OR div2_level2_pm_status in ' + status;
         sql += ' OR div2_level3_pm_status in ' + status;
@@ -80,27 +81,23 @@
 
         for (var i = 0; i < form_conditions.checkbox_round.length; ++i) {
             var round_name = form_conditions.checkbox_round[i].value;
-            var is_checked  = form_conditions.checkbox_round[i].checked
-            var tag = "";
-            tag = " (rd_name GLOB '*" + round_name + "*') ";
+            var is_checked  = form_conditions.checkbox_round[i].checked;
             if (is_checked) {
                 if (sql2 != "") {
                     sql2 += " OR ";
                 }
-                sql2 += tag;
-            }
-            else {
-                if (sql2 != "") {
-                    sql2 += " AND ";
+                if (round_name == "OTHER") {
+                    sql2 += " NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') ";
                 }
-                sql2 += "NOT" + tag;
+                else {
+                    sql2 += " (rd_name GLOB '*" + round_name + "*') ";
+                }
             }
-
         }
         if (sql2 == "") {
-            return sql;
+            return "False";
         }
-
+        //return " where rd_name MATCH '%SRM%' ";
         return sql + " AND (" + sql2 + " )";
     }
 
