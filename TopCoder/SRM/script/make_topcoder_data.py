@@ -6,32 +6,30 @@ DATA_DIR = "data"
 
 def make_database():
     with sqlite3.connect(os.path.join(DATA_DIR, "data.db")) as con:
-        con.execute("CREATE TABLE IF NOT EXISTS pm_data (pm INTEGER, div INTEGER, level INTEGER, name TEXT, accuracy REAL)")
+        con.execute("CREATE TABLE IF NOT EXISTS pm_data (pm INTEGER PRIMARY KEY, div INTEGER, level INTEGER, name TEXT, accuracy REAL)")
         with open(os.path.join(DATA_DIR, "pm_data.csv")) as f:
             for line in f:
                 pm, div, level, name, accuracy = line.strip().split(",")
                 con.execute("INSERT OR REPLACE INTO pm_data values (?, ?, ?, ?, ?)", (pm, div, level, name, accuracy))
 
-        con.execute("CREATE TABLE IF NOT EXISTS pm_rd (pm INTEGER, rd INTEGER)")
+        con.execute("CREATE TABLE IF NOT EXISTS pm_rd (pm INTEGER PRIMARY KEY, rd INTEGER)")
         with open(os.path.join(DATA_DIR, "pm_rd.csv")) as f:
             for line in f:
                 pm, rd = line.strip().split(",")
                 con.execute("INSERT OR REPLACE INTO pm_rd values (?, ?)", (pm, rd))
 
-        con.execute("CREATE TABLE IF NOT EXISTS rd_data (rd INTEGER, name TEXT, date TEXT)")
+        con.execute("CREATE TABLE IF NOT EXISTS rd_data (rd INTEGER PRIMARY KEY, name TEXT, date TEXT)")
         with open(os.path.join(DATA_DIR, "rd_data.csv")) as f:
             for line in f:
                 rd, name, date = line.strip().split(",")
                 con.execute("INSERT OR REPLACE INTO rd_data values (?, ?, ?)", (rd, name, date))
 
-        con.execute("CREATE TABLE IF NOT EXISTS pm_status (pm INTEGER, status INTEGER)")
-        if os.path.exists(os.path.join(DATA_DIR, "pm_status.csv")):
-            # TODO: pm_status.csvは手作りしてるので自動でやるようにする
-            with open(os.path.join(DATA_DIR, "pm_status.csv")) as f:
-                for line in f:
-                    pm, status = line.strip().split(",")
-                    con.execute("INSERT OR REPLACE INTO pm_status values (?, ?)", (pm, status))
-
+        con.execute("CREATE TABLE IF NOT EXISTS pm_status (pm INTEGER PRIMARY KEY, status INTEGER, date TEXT)")
+        # TODO: pm_status.csvは手作りしてるので自動でやるようにする
+        with open(os.path.join(DATA_DIR, "../../pm_status.csv")) as f:
+            for line in f:
+                pm, status, date = line.strip().split(",")
+                con.execute("INSERT OR REPLACE INTO pm_status values (?, ?, ?)", (pm, status, date))
 
 def main():
     make_database()

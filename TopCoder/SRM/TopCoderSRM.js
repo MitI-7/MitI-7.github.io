@@ -15,6 +15,7 @@
     function create_table() {
         var db = open_db();
         db.transaction( function(tx) {
+            tx.executeSql('DROP TABLE IF EXISTS topcoder');
             tx.executeSql('CREATE TABLE IF NOT EXISTS topcoder (rd INTEGER PRIMARY KEY, rd_name TEXT, rd_date TEXT,' +
                                                                'div2_level1_pm INTEGER, div2_level2_pm INTEGER, div2_level3_pm INTEGER, div1_level1_pm INTEGER, div1_level2_pm INTEGER, div1_level3_pm INTEGER,' +
                                                                'div2_level1_pm_name TEXT, div2_level2_pm_name TEXT, div2_level3_pm_name TEXT, div1_level1_pm_name TEXT, div1_level2_pm_name TEXT, div1_level3_pm_name TEXT,' +
@@ -83,6 +84,20 @@
         return where_list;
     }
 
+    function make_pm_solved_date_dict() {
+        var pm_solved_date = {};
+        var csv_data = read_file('./pm_status.csv');
+        var tmp = csv_data.split('\n');
+        for (var i = 0; i < tmp.length; ++i) {
+            var k = tmp[i].split(",");
+            if (k.length != 3) {
+                console.log("ERROR");
+                continue;
+            }
+            pm_solved_date[k[0]] = k[2];
+        }
+        return pm_solved_date;
+    }
 
     function make_td(pm, pm_name, accuracy, status) {
         if (pm == null) {
@@ -103,10 +118,15 @@
         td += '<a href="' + problem_url + '" target="_blank">' + pm_name + '</a>';
         try {
             td += '<br>' + accuracy.toFixed(2) + '%';
+            if (status) {
+                td += '<br>' + pm_solved_date[pm];
+            }
         }
         catch (e) {
             td += '<br>-%';
         }
+
+
         return td + '</td>'
     }
 
@@ -164,6 +184,7 @@
         create_table();
         insert_data();
         make_table("ORDER BY rd_date DESC");
+        pm_solved_date = make_pm_solved_date_dict();
 
         // 表示条件が変わった
         form_conditions.addEventListener('change', function () {
@@ -218,6 +239,7 @@
     });
 
     var DESC_ASC = "DESC";
+    var pm_solved_date;
 
 })((this || 0).self || global);
 
