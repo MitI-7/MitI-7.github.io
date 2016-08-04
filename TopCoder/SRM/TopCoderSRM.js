@@ -81,6 +81,18 @@
         }
         where_list = where_list.concat(round_list);
 
+        // 表示するdateを入れる
+        var start_cate = form_conditions.start_date.value;
+        var end_date = form_conditions.end_date.value;
+        if (start_cate && end_date && start_cate <= end_date) {
+            where_list.push(start_cate);
+            where_list.push(end_date);
+        }
+        else {
+            where_list.push("0000-00-00");
+            where_list.push("9999-99-99");
+        }
+
         return where_list;
     }
 
@@ -152,7 +164,11 @@
                                                            "OR (rd_name GLOB '*TCO*' AND ?) " +
                                                            "OR (rd_name GLOB '*TCC*' AND ?) " +
                                                            "OR (NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') AND ?)" +
-                                                           ") " + order_query,
+                                                           ") " +
+                                                           "AND" +
+                                                           "(" +
+                                                           " ? <= rd_date AND rd_date <= ?" +
+                                                           ")" + order_query,
                                                            query, function(trans, r) {
                 var html = "";
                 for(var i = 0; i < r.rows.length; i++) {
@@ -238,10 +254,17 @@
         });
     });
 
+
     var DESC_ASC = "DESC";
     var pm_solved_date;
 
 })((this || 0).self || global);
 
 
+$(document).ready( function() {
+    var now = new Date();
+    var today = now.getFullYear() + "-" + ("0"+ (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
+    console.log(today);
+    $('#calendar_end_date').val(today);
+});
 
