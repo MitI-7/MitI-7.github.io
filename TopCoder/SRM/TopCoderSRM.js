@@ -199,13 +199,13 @@
     $(function() {
         create_table();
         insert_data();
-        make_table("ORDER BY rd_date DESC");
+        make_table(ORDER);
         pm_solved_date = make_pm_solved_date_dict();
 
         // 表示条件が変わった
         form_conditions.addEventListener('change', function () {
             console.log("checkbox_status is selected");
-            make_table("ORDER BY rd_date " + DESC_ASC);
+            make_table(ORDER);
         }, false);
 
         // 表題がクリック
@@ -241,21 +241,20 @@
                     break;
             }
 
-            var order = "";
             if (DESC_ASC == "DESC") {
                 DESC_ASC = "ASC";
-                order = " ORDER BY CASE WHEN " + tag + " IS NULL THEN 101 ELSE " + tag + " END ASC";
+                ORDER = " ORDER BY CASE WHEN " + tag + " IS NULL THEN 101 ELSE " + tag + " END ASC";
             }
             else {
                 DESC_ASC = "DESC";
-                order = " ORDER BY CASE WHEN " + tag + " IS NULL THEN -1 ELSE " + tag + " END DESC";
+                ORDER = " ORDER BY CASE WHEN " + tag + " IS NULL THEN -1 ELSE " + tag + " END DESC";
             }
-            make_table(order);
+            make_table(ORDER);
         });
     });
 
-
     var DESC_ASC = "DESC";
+    var ORDER = "ORDER BY rd_date " + DESC_ASC;
     var pm_solved_date;
 
 })((this || 0).self || global);
