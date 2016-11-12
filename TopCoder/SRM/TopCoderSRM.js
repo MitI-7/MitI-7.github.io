@@ -116,7 +116,7 @@
             return '<td bgcolor="F5F5F5">' + '-' + '</td>'
         }
 
-        var td = '<td>';
+        var td = '<td name="' + pm_name + '" >';
         // accept
         if (status == 1) {
             td = '<td bgcolor="#98FB98">';
@@ -207,6 +207,38 @@
             console.log("checkbox_status is selected");
             make_table(ORDER);
         }, false);
+
+        $("#select_problem").click(function () {
+            var db = open_db();
+
+            db.transaction( function(trans) {
+            var query = make_where_query();
+            trans.executeSql("SELECT rd_name FROM topcoder WHERE (   div2_level1_pm_status in (?, ?, ?) " +
+                "OR div2_level2_pm_status in (?, ?, ?) " +
+                "OR div2_level3_pm_status in (?, ?, ?) " +
+                "OR div1_level1_pm_status in (?, ?, ?) " +
+                "OR div1_level2_pm_status in (?, ?, ?) " +
+                "OR div1_level3_pm_status in (?, ?, ?) " +
+                ")" +
+                "AND" +
+                "(" +
+                "   (rd_name GLOB '*SRM*' AND ?) " +
+                "OR (rd_name GLOB '*TCO*' AND ?) " +
+                "OR (rd_name GLOB '*TCC*' AND ?) " +
+                "OR (NOT(rd_name GLOB '*SRM*' OR rd_name GLOB '*TCC*' OR rd_name GLOB '*TCO*') AND ?)" +
+                ") " +
+                "AND" +
+                "(" +
+                    " ? <= rd_date AND rd_date <= ?" +
+                ") ORDER BY RAND() LIMIT 1" +
+                query, function(trans, r) {
+                    for(var i = 0; i < r.rows.length; i++) {
+                        var item = r.rows.item(i);
+                        alert(item);
+                   }
+                });
+            });
+        });
 
         // 表題がクリック
         $(".column").click(function(){
