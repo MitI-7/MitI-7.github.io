@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>SRM Status</title>
+    <meta charset="UTF-8" />
+
     <style type="text/css">
+        body {
+            background-color: #FCFFFF;
+        }
         .legend {
             margin: 10px 10px 20px 0;
         }
@@ -15,16 +18,139 @@
         }
         .allTable td {
             text-align: center;
-            padding: 3px;
+            padding: 7px;
         }
         a {
             text-decoration: none;
         }
+
+        #select_problem {
+            width: 200px;
+            background-color: #AAAAAA;
+            border-radius: 2px;
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
     </style>
 
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="TopCoderSRM.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.js"></script>
+    <script src="js/taffy.js"></script>
 
+    <script type="text/javascript">
+        function read_file(url) {
+            var xml_http = new XMLHttpRequest;
+            xml_http.open("GET", url, false);
+            xml_http.send();
+            return xml_http.responseText;
+        }
+
+        function make_table() {
+            $('#all_table tbody').empty();
+
+            var solved_num_list = [0, 0, 0, 0, 0, 0];
+            var problem_num_list = [0, 0, 0, 0, 0, 0];
+
+            var limit = form_conditions.count.value;
+            rd_db({'round_name': {'left': 'SRM'}}).limit(limit).order("date desc").each(function (r1, no) {
+
+                var tableRef = document.getElementById("problem_table");
+                var newRow = tableRef.insertRow(-1);
+                newRow.id = no;
+                for (var i = 0; i < 7; ++i) {
+                    newRow.insertCell(-1);
+                    newRow.cells[i].appendChild(document.createTextNode('-'));
+                }
+
+                var round_url = 'https://community.topcoder.com/stat?c=round_overview&rd=' + r1['rd'];
+                newRow.cells[0].innerHTML = '<a href="' + round_url + '" target="_blank">' + r1['round_name'].replace(' ', '') + '</a>';
+
+                var found = false;
+                var state_condition = [];
+                for (var i = 0; i < 3; ++i) {
+                    if (form_conditions.checkbox_status[i].checked) {
+                        state_condition.push(i)
+                    }
+                }
+                pm_db({'rd': r1.rd, 'state': state_condition}).each(function (r2) {
+                    var division = parseInt(r2['division']);
+                    var level = parseInt(r2['level']);
+                    var index = Math.abs(division - 2) * 3 + level;     // Round列があるので1つずれる
+                    var accuracy = parseFloat(r2['accuracy']).toFixed(2);
+                    var date = r2['solved_date'];
+
+                    var problem_url = 'http://community.topcoder.com/stat?c=problem_statement&pm=' + r2['pm'];
+                    newRow.cells[index].innerHTML = '<a href="' + problem_url + '" target="_blank">' + r2['problem_name'] + '</a>';
+
+                    // 正解
+                    if (r2['state'] == 1) {
+                        newRow.cells[index].bgColor = '#98FB98';
+                        newRow.cells[index].innerHTML += '<br>' + accuracy + '%' + '<br>' + date;
+                        solved_num_list[index - 1]++;
+                    }
+                    // 不正解
+                    else if (r2['state'] == 2) {
+                        newRow.cells[index].bgColor = '#FF6347';
+                        newRow.cells[index].innerHTML += '<br>' + accuracy + '%' + '<br>' + date;
+                        solved_num_list[index - 1]++;
+                    }
+                    else {
+                        newRow.cells[index].innerHTML += '<br><br><br>';
+                    }
+                    problem_num_list[index - 1]++;
+                    found = true;
+                });
+
+                // 要素がなかったら追加していた行を消す
+                if (!found) {
+                    tableRef.deleteRow(-1);
+                }
+            });
+
+            // 解いた問題数を表示
+            $("#div2_easy_column").html("Easy<br>" + solved_num_list[0] + "/" + problem_num_list[0]);
+            $("#div2_normal_column").html("Normal<br>" + solved_num_list[1] + "/" + problem_num_list[1]);
+            $("#div2_hard_column").html("Hard<br>" + solved_num_list[2] + "/" + problem_num_list[2]);
+            $("#div1_easy_column").html("Easy<br>" + solved_num_list[3] + "/" + problem_num_list[3]);
+            $("#div1_normal_column").html("Normal<br>" + solved_num_list[4] + "/" + problem_num_list[4]);
+            $("#div1_hard_column").html("Hard<br>" + solved_num_list[5] + "/" + problem_num_list[5]);
+        }
+
+        $(function(){
+            rd_db = TAFFY(read_file('./data/rd_data.json'));
+            pm_db = TAFFY(read_file('./data/pm_data.json'));
+            state_db = TAFFY(read_file('./data/pm_state.json'));
+            // pm_dbとstate_dbをマージ
+            pm_db().update({state: 0});
+            pm_db().update({solved_date: "9999-99-99"});
+            state_db().each(function (r) {
+                pm_db({pm: r['pm']}).update({state: r['state'], solved_date: r['date']});
+            });
+
+            make_table();
+
+            // 表示条件が変わった
+            form_conditions.addEventListener('change', function () {
+                make_table();
+            }, false);
+
+            // 問題をランダムに選択
+            $("#select_problem").click(function () {
+                make_table();
+                var n = problem_table.rows.length;
+                var rand = Math.floor( Math.random() * n) ;
+                var p = $('#' + rand).offset().top;
+                $('#' + rand).css("backgroundColor", "#00FFFF");
+                $('#' + rand).css("color", "#00FFFF");
+                $('html,body').animate({ scrollTop: p }, 'slow');
+            });
+        });
+
+        var rd_db;
+        var pm_db;
+        var state_db;
+
+    </script>
 </head>
 <body>
 
@@ -35,9 +161,6 @@
         <tr>
             <td>Round:</td>
             <td><input type="checkbox" name="checkbox_round" value="SRM" checked="checked">SRM</td>
-            <td><input type="checkbox" name="checkbox_round" value="TCO" checked="checked">TCO</td>
-            <td><input type="checkbox" name="checkbox_round" value="TCC" checked="checked">TCC</td>
-            <td><input type="checkbox" name="checkbox_round" value="OTHER" checked="checked">OTHER</td>
         </tr>
 
         <tr>
@@ -47,17 +170,17 @@
             <td><input type="checkbox" name="checkbox_status" value="2" checked="checked">wrong</td>
         </tr>
 
-         <tr>
-             <td>Date:</td>
-             <td><input type="date" name="start_date" value="2001-01-01"> - </td>
-             <td><input type="date" name="end_date" id="calendar_end_date"></td>
+        <tr>
+            <td>count:</td>
+            <td><input type="number" name="count" value="200" style="width:50px"></td>
         </tr>
     </table>
 
-    <button type="button" id="select_problem" value="select"/>select problem at random</button>
-
+    <button type="button" id="select_problem" value="select">select problem at random</button>
 </form>
-
+<br>
+<br>
+<br>
 <table class="legend">
     <tr>
         <td bgcolor="#98FB98" width="70"></td>
@@ -65,25 +188,25 @@
     </tr>
     <tr>
         <td bgcolor="#FF6347"></td>
-        <td>review</td>
+        <td>wrong</td>
     </tr>
 </table>
 
 <table id="all_table" class="allTable" border="1">
     <thead>
-        <tr>
-            <td rowspan="2" class="column" id="round_column">Round</td>
-            <td colspan="3">DIV2</td>
-            <td colspan="3">DIV1</td>
-        </tr>
-        <tr>
-            <td class="column" id="div2_easy_column">Easy</td>
-            <td class="column" id="div2_normal_column">Normal</td>
-            <td class="column" id="div2_hard_column">Hard</td>
-            <td class="column" id="div1_easy_column">Easy</td>
-            <td class="column" id="div1_normal_column">Normal</td>
-            <td class="column" id="div1_hard_column">Hard</td>
-        </tr>
+    <tr>
+        <td rowspan="3" class="column" id="round_column">Round</td>
+        <td colspan="3">DIV2</td>
+        <td colspan="3">DIV1</td>
+    </tr>
+    <tr>
+        <td class="column" id="div2_easy_column">Easy</td>
+        <td class="column" id="div2_normal_column">Normal</td>
+        <td class="column" id="div2_hard_column">Hard</td>
+        <td class="column" id="div1_easy_column">Easy</td>
+        <td class="column" id="div1_normal_column">Normal</td>
+        <td class="column" id="div1_hard_column">Hard</td>
+    </tr>
     </thead>
     <tbody id="problem_table"></tbody>
 </table>

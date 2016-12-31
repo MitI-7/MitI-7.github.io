@@ -4,51 +4,17 @@ import xml.dom.minidom
 from collections import defaultdict
 import lxml.html
 
-# https://apps.topcoder.com/wiki/display/tc/Algorithm+Data+Feedsからデータを取得
+# d = {round_id: {"full_name": "", "short_name": "", "data": "", "division": "", "level": "", "accuracy": ""}}
 
 DATA_DIR = "data"
 ALGORITHM_ROUND_RESULTS_DIR = os.path.join(DATA_DIR, "xml")
 ROUND_OVERVIEW_DIR = os.path.join(DATA_DIR, "html")
 
 
-# Round Feedのfeedをダウンロード
-def save_algorithm_round_list() -> None:
-    url = "http://www.topcoder.com/tc?module=BasicData&c=dd_round_list"
-    xml_data = urllib.request.urlopen(url)
-    with open(os.path.join(DATA_DIR, "round_list.xml"), "bw") as f:
-        f.write(xml_data.read())
-
-
-# Round Resultsのフィードをダウンロード
-def save_algorithm_round_results(round_id: str) -> bool:
-    url = "http://www.topcoder.com/tc?module=BasicData&c=dd_round_results&rd={0}".format(round_id)
-    if not os.path.exists(ALGORITHM_ROUND_RESULTS_DIR):
-        os.mkdir(ALGORITHM_ROUND_RESULTS_DIR)
-
-    file_path = os.path.join(ALGORITHM_ROUND_RESULTS_DIR, round_id + ".xml")
-    if os.path.exists(file_path):
-        return False
-
-    xml_data = urllib.request.urlopen(url)
-    with open(file_path, "bw") as f:
-        f.write(xml_data.read())
-    return True
-
-
-# roundごとのoverviewをダウンロード
-def save_round_overview_html(round_id: str) -> bool:
-    url = "https://community.topcoder.com/stat?c=round_overview&rd={0}".format(round_id)
-    if not os.path.exists(ROUND_OVERVIEW_DIR):
-        os.mkdir(ROUND_OVERVIEW_DIR)
-
-    file_path = os.path.join(ROUND_OVERVIEW_DIR, "overview_" + round_id) + ".html"
-    if os.path.exists(file_path):
-        return False
-
-    xml_data = urllib.request.urlopen(url)
-    with open(file_path, "bw") as f:
-        f.write(xml_data.read())
-    return True
+# https://apps.topcoder.com/wiki/display/tc/Algorithm+Data+Feedsからデータを取得
+DATA_DIR = "data"
+ALGORITHM_ROUND_RESULTS_DIR = os.path.join(DATA_DIR, "xml")
+ROUND_OVERVIEW_DIR = os.path.join(DATA_DIR, "html")
 
 
 # round_listのfeedから[round_id] = (ラウンド名，日付)を取得
@@ -116,12 +82,12 @@ def make_pm_accuracy_dict(pm_data: dict) -> dict:
 
 # round_overviewのhtmlから以下の辞書を作成
 # pm: (rd, division, level, 問題名)
-def make_pm_data_dict() -> dict:
+def make_pm_data_dict(directory_path) -> dict:
     pm_data = {}
     level_conv = {"Level One": "1", "Level Two": "2", "Level Three": "3"}
 
-    for file_name in os.listdir(ROUND_OVERVIEW_DIR):
-        file_path = os.path.join(ROUND_OVERVIEW_DIR, file_name)
+    for file_name in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, file_name)
         dom = lxml.html.parse(file_path)
 
         rd, _ = os.path.splitext(os.path.basename(file_name))
@@ -144,41 +110,30 @@ def make_pm_data_dict() -> dict:
 
 
 def main():
-    import time
-
-    # データの取得と保存
-    save_algorithm_round_list()
-
-    rd_data_dict = make_rd_data_dict(os.path.join(DATA_DIR, "round_list.xml"))
-    for round_id in rd_data_dict.keys():
-        try:
-            if save_algorithm_round_results(round_id):
-                time.sleep(1)
-        except urllib.error.HTTPError:
-            print("HTTP Error", "{0}のresultsの取得に失敗".format(round_id))
-
-    for round_id in rd_data_dict.keys():
-        try:
-            if save_round_overview_html(round_id):
-                time.sleep(1)
-        except urllib.error.HTTPError:
-            print("HTTP Error", "{0}のoverviewの取得に失敗".format(round_id))
+    import json
 
     # データの整形と保存
-    pm_data = make_pm_data_dict()
     rd_data = make_rd_data_dict(os.path.join(DATA_DIR, "round_list.xml"))
+    # rdのjsonデータ作成
+    rd_json_data = []
+    for rd, data in rd_data.items():
+        round_name, date = data
+        rd_json_data.append({"rd": rd, "round_name": round_name, "date": date})
+    with open("rd_data.json", "w") as f:
+        json.dump(rd_json_data, f)
+
+    # pmのjsonデータ作成
+    pm_data = make_pm_data_dict(ROUND_OVERVIEW_DIR)
     pm_accuracy = make_pm_accuracy_dict(pm_data)
+    pm_json_data = []
+    for pm, data in pm_data.items():
+        rd, division, level, problem_name = data
+        accuracy = pm_accuracy[pm]
+        pm_json_data.append({"rd": rd, "pm": pm, "division": division, "level": level, "problem_name": problem_name, "accuracy": accuracy})
 
-    # pm,rdのcsvとpm,division,level,問題名,正解率のcsvを作成
-    with open(os.path.join(DATA_DIR, "pm_rd.csv"), "w") as f1, open(os.path.join(DATA_DIR, "pm_data.csv"), "w") as f2:
-        for pm, (rd, division, level, name) in pm_data.items():
-            f1.write("{0},{1}\n".format(pm, rd))
-            f2.write("{0},{1},{2},{3},{4}\n".format(pm, division, level, name, pm_accuracy.get(pm, -1)))
+    with open("pm_data.json", "w") as f:
+        json.dump(pm_json_data, f)
 
-    # rd, round名，日付のcsvを作成
-    with open(os.path.join(DATA_DIR, "rd_data.csv"), "w") as f:
-        for rd, (name, date) in rd_data.items():
-            f.write("{0},{1},{2}\n".format(rd, name, date))
 
 if __name__ == '__main__':
     main()
