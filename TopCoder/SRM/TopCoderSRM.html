@@ -81,17 +81,18 @@
 
                     var problem_url = 'http://community.topcoder.com/stat?c=problem_statement&pm=' + r2['pm'];
                     newRow.cells[index].innerHTML = '<a href="' + problem_url + '" target="_blank">' + r2['problem_name'] + '</a>';
+                    newRow.cells[index].innerHTML += '<br>' + accuracy + '%';
 
                     // 正解
                     if (r2['state'] == 1) {
                         newRow.cells[index].bgColor = '#98FB98';
-                        newRow.cells[index].innerHTML += '<br>' + accuracy + '%' + '<br>' + date;
+                        newRow.cells[index].innerHTML += '<br>' + date;
                         solved_num_list[index - 1]++;
                     }
                     // 不正解
                     else if (r2['state'] == 2) {
                         newRow.cells[index].bgColor = '#FF6347';
-                        newRow.cells[index].innerHTML += '<br>' + accuracy + '%' + '<br>' + date;
+                        newRow.cells[index].innerHTML += '<br>' + date;
                         solved_num_list[index - 1]++;
                     }
                     else {
