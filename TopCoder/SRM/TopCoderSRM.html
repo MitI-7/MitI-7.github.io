@@ -35,7 +35,7 @@
     </style>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.0.js"></script>
-    <script src="js/taffy.js"></script>
+    <script type="text/javascript" src="js/taffy.js"></script>
 
     <script type="text/javascript">
         function read_file(url) {
@@ -44,16 +44,24 @@
             xml_http.send();
             return xml_http.responseText;
         }
+        
+        function make_round_list(select, order) {
+            round_list = [];
+            pm_db(select).order(order).each(function (r1, no) {
+                round_list.push([r1["rd"], r1["round_name"]]);
+            });
+            return round_list;
+        }
 
-        function make_table() {
+        function make_table(round_list) {
             $('#all_table tbody').empty();
 
             var solved_num_list = [0, 0, 0, 0, 0, 0];
             var problem_num_list = [0, 0, 0, 0, 0, 0];
-
-            var limit = form_conditions.count.value;
-            rd_db({'round_name': {'left': 'SRM'}}).limit(limit).order("date desc").each(function (r1, no) {
-
+            for (var no = 0; no < round_list.length; ++no) {
+                rd = round_list[no][0];
+                round_name = round_list[no][1];
+                
                 var tableRef = document.getElementById("problem_table");
                 var newRow = tableRef.insertRow(-1);
                 newRow.id = no;
@@ -62,8 +70,8 @@
                     newRow.cells[i].appendChild(document.createTextNode('-'));
                 }
 
-                var round_url = 'https://community.topcoder.com/stat?c=round_overview&rd=' + r1['rd'];
-                newRow.cells[0].innerHTML = '<a href="' + round_url + '" target="_blank">' + r1['round_name'].replace(' ', '') + '</a>';
+                var round_url = 'https://community.topcoder.com/stat?c=round_overview&rd=' + rd;
+                newRow.cells[0].innerHTML = '<a href="' + round_url + '" target="_blank">' + round_name.replace(' ', '') + '</a>';
 
                 var found = false;
                 var state_condition = [];
@@ -72,7 +80,8 @@
                         state_condition.push(i)
                     }
                 }
-                pm_db({'rd': r1.rd, 'state': state_condition}).each(function (r2) {
+                
+                pm_db({'rd': rd, 'state': state_condition}).each(function (r2) {
                     var division = parseInt(r2['division']);
                     var level = parseInt(r2['level']);
                     var index = Math.abs(division - 2) * 3 + level;     // Round列があるので1つずれる
@@ -106,7 +115,7 @@
                 if (!found) {
                     tableRef.deleteRow(-1);
                 }
-            });
+            }
 
             // 解いた問題数を表示
             $("#div2_easy_column").html("Easy<br>" + solved_num_list[0] + "/" + problem_num_list[0]);
@@ -118,7 +127,7 @@
         }
 
         $(function(){
-            rd_db = TAFFY(read_file('./data/rd_data.json'));
+        
             pm_db = TAFFY(read_file('./data/pm_data.json'));
             state_db = TAFFY(read_file('./data/pm_state.json'));
             // pm_dbとstate_dbをマージ
@@ -128,13 +137,42 @@
                 pm_db({pm: r['pm']}).update({state: r['state'], solved_date: r['date']});
             });
 
-            make_table();
+            var limit = "SRM" + form_conditions.count.value;
+            var select = {'round_name': {'>=': limit, 'left': 'SRM'}, 'division': {'==': '2'}, 'level': {'==': '1'}};
+            var order = "date desc";
+            
+            make_table(make_round_list(select, order));
 
             // 表示条件が変わった
             form_conditions.addEventListener('change', function () {
-                make_table();
+                var limit = "SRM" + form_conditions.count.value;
+                var select = {'round_name': {'>=': limit, 'left': 'SRM'}, 'division': {'==': '2'}, 'level': {'==': '1'}};
+                var order = "date desc";
+                make_table(make_round_list(select, order));
             }, false);
-
+            
+            // ソートの順番の変更
+            $(".column").click(function(){
+              var id = $(this).attr("id");
+              console.log(id, "is clicked");
+              var d = {
+                  'round_column':       {division: 2, level: 1, order: "date"},
+                  'div2_easy_column':   {division: 2, level: 1, order: "accuracy"},
+                  'div2_normal_column': {division: 2, level: 2, order: "accuracy"},
+                  'div2_hard_column':   {division: 2, level: 3, order: "accuracy"},
+                  'div1_easy_column':   {division: 1, level: 1, order: "accuracy"},
+                  'div1_normal_column': {division: 1, level: 2, order: "accuracy"},
+                  'div1_hard_column':   {division: 1, level: 3, order: "accuracy"}
+              };
+              var division = d[id]['division']
+              var level = d[id]['level']
+              var limit = "SRM" + form_conditions.count.value;
+              var select = {'round_name': {'>=': limit, 'left': 'SRM'}, 'division': {'==': division}, 'level': {'==': level}};
+              var order = d[id]['order'] + ' ' + ['desc', 'asec'][now_order];
+              now_order = 1 - now_order;
+              make_table(make_round_list(select, order));
+            });
+            
             // 問題をランダムに選択
             $("#select_problem").click(function () {
                 make_table();
@@ -147,7 +185,7 @@
             });
         });
 
-        var rd_db;
+        var now_order = 0;
         var pm_db;
         var state_db;
 
@@ -172,8 +210,8 @@
         </tr>
 
         <tr>
-            <td>count:</td>
-            <td><input type="number" name="count" value="200" style="width:50px"></td>
+            <td>SRM >= </td>
+            <td><input type="number" name="count" value="500" style="width:50px"></td>
         </tr>
     </table>
 

@@ -25,6 +25,9 @@ def make_rd_data_dict(xml_file: str) -> dict:
         for row in dom.documentElement.childNodes:
             round_id = row.getElementsByTagName("round_id")[0].firstChild.data
             round_name = row.getElementsByTagName("short_name")[0].firstChild.data
+            round = round_name.split()[1]
+            if "SRM" in round_name and round.isdigit():
+                round_name = 'SRM{0:03d}'.format(int(round))
             date = row.getElementsByTagName("date")[0].firstChild.data.split()[0]
             round_data[round_id] = (round_name, date)
     return round_data
@@ -115,12 +118,10 @@ def main():
     # データの整形と保存
     rd_data = make_rd_data_dict(os.path.join(DATA_DIR, "round_list.xml"))
     # rdのjsonデータ作成
-    rd_json_data = []
+    rd_json_data = {}
     for rd, data in rd_data.items():
         round_name, date = data
-        rd_json_data.append({"rd": rd, "round_name": round_name, "date": date})
-    with open("rd_data.json", "w") as f:
-        json.dump(rd_json_data, f)
+        rd_json_data[rd] = {"round_name": round_name, "date": date}
 
     # pmのjsonデータ作成
     pm_data = make_pm_data_dict(ROUND_OVERVIEW_DIR)
@@ -129,7 +130,9 @@ def main():
     for pm, data in pm_data.items():
         rd, division, level, problem_name = data
         accuracy = pm_accuracy[pm]
-        pm_json_data.append({"rd": rd, "pm": pm, "division": division, "level": level, "problem_name": problem_name, "accuracy": accuracy})
+        round_name = rd_json_data[rd]["round_name"]
+        date = rd_json_data[rd]["date"]
+        pm_json_data.append({"rd": rd, "pm": pm, "division": division, "level": level, "problem_name": problem_name, "accuracy": accuracy, "date": date, "round_name": round_name})
 
     with open("pm_data.json", "w") as f:
         json.dump(pm_json_data, f)
