@@ -1,4 +1,393 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title/><link>https://miti-7.github.io/</link><description>Recent content on</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title/><link>https://miti-7.github.io/</link><description>Recent content on</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Wed, 11 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>最小費用流問題の Primal Network Simplex 法</title><link>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</link><pubDate>Wed, 11 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</guid><description>&lt;img src="https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/images/%E3%83%9D%E3%83%86%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%AB%E3%81%AE%E6%9B%B4%E6%96%B0.png" alt="Featured image of post 最小費用流問題の Primal Network Simplex 法" />&lt;h2 id="最小費用流問題minimum-cost-flow-problem">最小費用流問題(Minimum Cost Flow Problem)
+&lt;/h2>&lt;p>$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br>
+1 つめの制約を流量保存則と呼び，第一項は頂点 i から出る流量，第二項は頂点 i に入る流量を表します．
+2 つめの制約を容量制約と呼びます．&lt;/p>
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{(i, j) \in A} c_{ij} x_{ij} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i &amp;&amp; \forall i \in N \\
+&amp; &amp;&amp; l_{ij} \le x_{ij} \leq u_{ij} &amp;&amp; \forall (i, j) \in A
+\end{aligned}
+$$&lt;p>以下ではコスト，流量，需要/供給，下限容量，上限容量はすべて整数とします．また，$\sum_{i \in N} b_i = 0$ を仮定します．&lt;/p>
+&lt;h2 id="primal-network-simplex-法">Primal Network Simplex 法
+&lt;/h2>&lt;p>primal network simplex 法は，ネットワーク構造を利用することで simplex 法を効率化させたアルゴリズムです．今回は primal network simplex 法で MCFP を解いていきます．&lt;br>
+MCFP が必ず 最適 spanning tree solution という解を持つことを利用し，spanning tree solution のみを探索することで効率的に最適解を見つけることができます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．&lt;/p>
+&lt;p>primal network simplex 法は，simplex 法の観点と負閉路除去法の観点から説明することができますが，今回は負閉路除去法の観点で説明します．
+節 1 で spanning tree solution の定義をします．節 2 で spanning tree solution は spanning tree structure として表せることと，spanning tree structure が最適解となる条件について示します．節 3 で primal network simplex 法の流れについて説明し，節 4 から 節 8 でアルゴリズムの各段階の詳細について述べます．節 9 から節 11 で退化について説明します．&lt;/p>
+&lt;h2 id="1-spanning-tree-solution">1. spanning tree solution
+&lt;/h2>&lt;p>ある実行可能解 $x$ に対して， $l_{ij} &amp;lt; x_{ij} &amp;lt; u_{ij}$ を満たす辺を free arc，$x_{ij} = l_{ij}$ か $x_{ij} = u_{ij}$ を満たす辺を restricted arc と呼びます．
+解 $x$ とそれに関連する全域木が以下の条件を満たすとき，spanning tree solution と呼びます．特に，$x$ が 最適解であるとき最適 spanning tree solution と呼びます．&lt;/p>
+&lt;ul>
+&lt;li>$x$ が実行可能解である&lt;/li>
+&lt;li>全域木に含まれない辺（non-tree arc）がすべて restricted arc である&lt;/li>
+&lt;/ul>
+&lt;p>具体例を示します．簡単のため，辺容量の下限はすべて 0 としコストは省略します．$b(0) = 2$，$b(3) = -2$ とします．&lt;br>
+下の図のグラフでは辺 (0, 1)，(2, 3) が free arc，辺 (0, 2)，(1, 2)，(1, 3) が restricted arc です．&lt;br>
+解 $x$ は流量保存則と容量制約を満たすため実行可能解です．全域木として，青色の辺 (0, 1)，(0, 2)，(2, 3) を選ぶ&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>と，non-tree arc は (1, 2) と (1, 3) となり，すべて restricted arc であるため spanning tree solution となります．&lt;/p>
+&lt;img src="images/spanning_tree_solutionの例1.png" width="50%">
+&lt;p>また，全域木として，青色の辺 (0, 1)，(1, 2)，(2, 3) を選んでも spanning tree solution となります．
+このように，1 つの実行可能解に複数の spanning tree solution が対応することがあります．&lt;/p>
+&lt;img src="images/spanning_tree_solutionの例2.png" width="50%">
+&lt;h2 id="2-spanning-tree-structure-と最適性条件">2. spanning tree structure と最適性条件
+&lt;/h2>&lt;p>spanning tree solution は辺集合を次の 3 つに分割します．&lt;/p>
+&lt;ul>
+&lt;li>T: 全域木の辺&lt;/li>
+&lt;li>L: non-tree arc のうち，flow が下限の辺&lt;/li>
+&lt;li>U: non-tree arc のうち，flow が上限の辺&lt;/li>
+&lt;/ul>
+&lt;p>この 3 つ組 (T, L, U) を spanning tree structure と呼びます．spanning tree structure は spanning tree solution から一意に構築されます．&lt;/p>
+&lt;p>頂点 i のポテンシャルを $\pi(i)$，辺 (i, j) の reduced cost を $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ で表します．spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となります．このような，spanning tree structure を最適 spanning tree structure と呼びます．&lt;/p>
+$$
+\begin{aligned}
+c^{\pi}_{ij} = 0 &amp;&amp; \forall (i, j) \in T \\
+c^{\pi}_{ij} \ge 0 &amp;&amp; \forall (i, j) \in L \\
+c^{\pi}_{ij} \le 0 &amp;&amp; \forall (i, j) \in U \\
+\end{aligned}
+$$&lt;p>全域木の根のポテンシャルを 0 と固定すると $T$ に属する辺 (i, j) が $c^{\pi}_{ij} = 0$ を満たすように各頂点のポテンシャル $\pi$ を定めることができます．このとき，$-\pi(i)$ は根から頂点 i への木のパスの長さとみなすことができます．
+具体例として，下の図の全域木について各頂点のポテンシャルを求めていきます．頂点 0 を根とします．&lt;/p>
+&lt;p>頂点 1 のポテンシャルを求めます．
+辺 (i, j) の reduced cost は $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ です．全域木の辺の reduced cost は 0，辺 (0, 1) のコストは 1，頂点 0 のポテンシャルは 0 であることから，$0 = 1 - 0 + \pi(1)$ となり，$\pi(1) = -1$と求められます．&lt;/p>
+&lt;p>頂点 2 のポテンシャルを求めます．
+辺 (2, 1) のコストは 5 ，頂点 1 のポテンシャルは -1 なので，$0 = 5 - \pi(2) + (-1)$ となり，$\pi(2) = 4$ と求められます．&lt;/p>
+&lt;p>同様の計算を行うことで，全頂点のポテンシャルを計算することができます．&lt;/p>
+&lt;img src="images/ポテンシャルの計算.png" width="50%">
+&lt;p>全頂点のポテンシャルを求めると，$L$ と $U$ に属する辺の reduced cost を計算することができます．すべての辺が最適性条件を満たすならば，最適 spanning tree structure と判定できます．&lt;/p>
+&lt;h2 id="3-network-simplex-法のアルゴリズムの流れ">3. Network Simplex 法のアルゴリズムの流れ
+&lt;/h2>&lt;p>spanning tree structure が与えられたとき，全域木の reduced cost が 0 となるように各頂点のポテンシャルを計算し，各辺の reduced cost を求めることで最適 spanning structure かどうか判定することができました．
+最適 spanning tree structure でない場合， $L$ に属する $c_{ij}^{\pi} \lt 0$ である辺か，$U$ に属する $c_{ij}^{\pi} \gt 0$ である辺が 1 つ以上存在することになります．
+これらの辺を $T$ に追加したときを考えます．&lt;/p>
+&lt;h3 id="l-に属する-cpi_ij-lt-0-である辺を-t-に追加">$L$ に属する $c^{\pi}_{ij} \lt 0$ である辺を $T$ に追加
+&lt;/h3>&lt;p>$L$ に属する $c_{ij}^{\pi} \lt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br>
+このとき，根から i，i から j，j から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 増加します．&lt;/p>
+&lt;p>具体例を見てみます．下の図の全域木にコスト -8 の辺 (2, 4) を追加したとします．この辺の reduced cost は $-8 - 4 + (-3) = -15$ です．&lt;br>
+辺 (0, 1)，(2, 1)，(2, 4)，(3, 4)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，1 + (-5) + (-8) + (-5) + 2 = -15 となり，目的関数値が 15 減少する（-15 増加する）ことがわかります&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．&lt;/p>
+&lt;img src="images/全域木にLの辺を追加.png" width="50%">
+&lt;h3 id="u-に属する-cpi_ij-gt-0-である辺を-t-に追加">$U$ に属する $c^{\pi}_{ij} \gt 0$ である辺を $T$ に追加
+&lt;/h3>&lt;p>$U$ に属する $c_{ij}^{\pi} \gt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br>
+このとき，根から j， j から i，i から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 減少します．&lt;/p>
+&lt;p>下の図の全域木にコスト -5 の辺 (6, 4) を追加したとします．この辺の reduced cost は $(-5) - (-11) + (-3) = 3$ です．&lt;br>
+辺 (3, 0)，(3, 4)，(6, 4)，(5, 6)，(3, 5)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，-2 + 5 + (-(-5)) + (-7) + (-6) + 2 = -3 となり，目的関数値が 3 減少することがわかります．&lt;br>
+また，辺 (0, 3) に対し，頂点 0 から 頂点 3 に flow を流し，頂点 3 から頂点 0 に flow を流すと flow は打ち消し合うため，追加した辺によって生じる閉路のみを考慮すればいいこともわかります．&lt;/p>
+&lt;img src="images/全域木にUの辺を追加.png" width="50%">
+&lt;p>以上のことから，spanning tree structure が最適でないとき，最適性条件に違反する辺を全域木に追加したことによって生じる閉路の flow を更新することで目的関数値を減少できることがわかりました．&lt;br>
+閉路の flow を限界まで増加させると，1 本以上の辺の flow が下限容量か上限容量に達するため，その辺を取り除くことによって新しい spanning tree solution を生成することができます．&lt;br>
+primal network simplex 法は これらの処理を最適性条件を満たすまで繰り返すことで最適解を求めます．&lt;/p>
+&lt;p>primal network simplex 法の流れは以下のようになります&lt;/p>
+&lt;ul>
+&lt;li>初期 spanning tree structure を構築する&lt;/li>
+&lt;li>spanning tree structure が最適性条件を満たさない間，以下を繰り返す
+&lt;ul>
+&lt;li>最適性条件に違反する辺を $U$ か $L$ から選び，全域木に追加する&lt;/li>
+&lt;li>閉路の flow を更新する&lt;/li>
+&lt;li>flow が下限容量か上限容量に達した辺を閉路から 1 つ取り除き新しく全域木を作成する&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>次節からアルゴリズムの各段階の詳細について説明していきます．&lt;/p>
+&lt;h2 id="4-初期-spanning-tree-structre-の構築">4. 初期 spanning tree structre の構築
+&lt;/h2>&lt;p>初期 spanning tree structre (T, L, U) を構築します．&lt;br>
+まず，人工頂点 $s$ を作り，$s$ と既存の各頂点 $u$ の間に以下のように辺をはります．&lt;/p>
+&lt;ul>
+&lt;li>$b(u) \ge 0$ の場合，流量 $b(u)$ の辺 $(u, s)$ を加える&lt;/li>
+&lt;li>$b(u) \lt 0$ の場合，流量 $-b(u)$ の辺 $(s, u)$ を加える&lt;/li>
+&lt;/ul>
+&lt;p>いずれの人工辺も容量とコストは十分大きい値とします．人工辺は $T$ に，もとからある辺は $L$ に，$U$ は空とします.&lt;br>
+このように作られた spanning tree structure は実行可能解です．今後はこの拡張された network 上で問題を解いていきます．人工辺のコストは十分大きいため最適解が得られたとき人工辺に flow は流れていません．&lt;/p>
+&lt;p>例として下のグラフの初期 spanning tree structure を構築します．&lt;br>
+$b(0) = 2$，$b(3) = -2$，他の頂点の需要/供給は 0 とします．また，すべての辺の下限容量は 0 とします&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>．&lt;/p>
+&lt;img src="images/初期解の問題例.png" width="50%">
+&lt;p>まず，人工頂点として，$s$ を追加します．&lt;br>
+$b(u) \ge 0$ である頂点 0, 1, 2 から s に向けて辺を追加します．$b(0) = 2$ であるため，辺 (0, s)の flow は 2 とします．&lt;br>
+s から $b(u) \lt 0$ である頂点 3 に向けて辺を追加します．$b(3) = -2$ であるため，辺 (s, 3)の flow は 2 とします．&lt;/p>
+&lt;img src="images/初期解の構築.png" width="50%">
+&lt;p>初期 spanning tree structure は以下のようになります．&lt;/p>
+&lt;ul>
+&lt;li>$T$ に属する辺：(0, s)，(1, s)，(2, s)，(s, 3)&lt;/li>
+&lt;li>$L$ に属する辺：(0, 1)，(0, 2)，(1, 2)，(1, 3)，(2, 3)&lt;/li>
+&lt;li>$U$ に属する辺：なし&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-entring-arc-の選択">5. entring arc の選択
+&lt;/h2>&lt;p>$T$ に追加する辺（entring arc）を $U$ か $L$ から選びます．&lt;br>
+このとき，以下のような最適性条件を満たさない辺（eligible arc）を選びます．また，$|c^{\pi}_{ij}|$ を violation と呼びます．&lt;/p>
+$$
+\begin{aligned}
+c^{\pi}_{ij} \lt 0 &amp;&amp; \forall (i, j) \in L \\
+c^{\pi}_{ij} \gt 0 &amp;&amp; \forall (i, j) \in U
+\end{aligned}
+$$&lt;p>代表的な辺の選択方法は以下の 3 つです．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Best eligible arc pivot rule(Dantzig&amp;rsquo;s pivot rule)&lt;/p>
+&lt;ul>
+&lt;li>violation の最も大きい eligible arc を entring arc とする&lt;/li>
+&lt;li>1 flow 単位の改善が最も大きいため，イテレーションの回数は少なくなる&lt;/li>
+&lt;li>すべての non-tree arc を調べる必要があるため，1 回のイテレーションのコストが大きい&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>First eligible arc pivot rule&lt;/p>
+&lt;ul>
+&lt;li>最初に見つけた eligible arc を entring arc とする．次のイテレーションでは，前回選択した辺の次から探索を開始する．最後の辺まで探索をしたら先頭に戻る&lt;/li>
+&lt;li>1 回のイテレーションのコストが小さい&lt;/li>
+&lt;li>1 flow 単位の改善が小さくなるので，イテレーションの回数が多くなる&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Block search pivot rule&lt;/p>
+&lt;ul>
+&lt;li>辺をブロックに分割し，ブロックの中で violation の最も大きい eligible arc を entring arc とする．ブロック内で見つからなかった場合，次のブロックを探索する&lt;/li>
+&lt;li>すべての辺を同じブロックにしたとき，Best eligible arc pivot rule と同じ挙動になる&lt;/li>
+&lt;li>すべての辺を違うブロックにしたとき，First eligible arc pivot rule と同じ挙動になる&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-flow-の更新">6. flow の更新
+&lt;/h2>&lt;p>全域木に辺を追加すると閉路 $W$ がちょうど 1 つできます．この閉路の flow を 1 単位増加するごとに，MCFP の目的関数値は $|c^{\pi}_{ij}|$ 減少するため，$W$ の flow を容量制約を満たす限界まで増加します．&lt;br>
+閉路 $W$ の向きを次のように定めます．&lt;/p>
+&lt;ul>
+&lt;li>$(k, l) \in L$ のとき，辺 (k, l) と同じ方向&lt;/li>
+&lt;li>$(k, l) \in U$ のとき，辺 (k, l) と逆方向&lt;/li>
+&lt;/ul>
+&lt;p>閉路 $W$ の順辺の集合を $\bar W$，逆辺の集合を $\underbar W$ で表したとき，$W$ の各辺の flow の増加できる量は以下のようになります．&lt;/p>
+$$
+\delta_{ij} = \left\{
+\begin{array}{ll}
+u_{ij} - x_{ij} &amp; (i, j) \in \bar{W}\\
+x_{ij} - l_{ij} &amp; (i, j) \in \underbar{W}
+\end{array}
+\right.
+$$&lt;p>$\delta = min \lbrace \delta_{ij} : (i, j) \in W \rbrace$ とし，$W$ の各辺の flow を以下のように更新します．&lt;/p>
+$$
+x_{ij} = \left\{
+\begin{array}{ll}
+x_{ij} + \delta &amp; (i, j) \in \bar{W}\\
+x_{ij} - \delta &amp; (i, j) \in \underbar{W}
+\end{array}
+\right.
+$$&lt;p>具体例を見ます．すべての辺の下限は 0 とします．&lt;br>
+$U$ に属する辺 (6, 4) を $T$ に追加すると，辺 (6, 4)，(5, 6)，(3, 5)，(3, 4) からなる閉路ができます．&lt;br>
+辺 (6, 4) は $U$ に属するので，(6, 4) と逆方向である反時計回りを $W$ の向きとします．$\bar W$ に属する辺は，(3, 4)，$\underbar W$ に属する辺は，(6, 4)，(5, 6)，(3, 5) です．&lt;br>
+各辺の $\delta_{ij}$ と $\delta$ は以下の通りです．&lt;/p>
+&lt;ul>
+&lt;li>$\delta_{64} = 6 - 0 = 6$&lt;/li>
+&lt;li>$\delta_{56} = 2 - 0 = 2$&lt;/li>
+&lt;li>$\delta_{35} = 4 - 0 = 4$&lt;/li>
+&lt;li>$\delta_{34} = 3 - 1 = 2$&lt;/li>
+&lt;li>$\delta = min \lbrace 6, 2, 4, 2 \rbrace = 2$&lt;/li>
+&lt;/ul>
+&lt;img src="images/閉路のflowの更新.png" width="50%">
+&lt;p>閉路 $W$ の flow を 2 増加すると以下のようになります．&lt;/p>
+&lt;img src="images/閉路のflowの更新結果.png" width="50%">
+&lt;p>別の例をみます．
+辺 (3, 4) の flow が 3 のとき，各辺の $\delta_{ij}$は以下のようになります．&lt;/p>
+&lt;ul>
+&lt;li>$\delta_{64} = 6 - 0 = 6$&lt;/li>
+&lt;li>$\delta_{56} = 2 - 0 = 2$&lt;/li>
+&lt;li>$\delta_{35} = 4 - 0 = 4$&lt;/li>
+&lt;li>$\delta_{34} = 3 - 3 = 0$&lt;/li>
+&lt;li>$\delta = min \lbrace 6, 2, 4, 0 \rbrace = 0$&lt;/li>
+&lt;/ul>
+&lt;p>このように全域木に $x_{ij} = l_{ij}$ や $x_{ij} = u_{ij}$ の辺があると flow が更新できないことがあります．&lt;/p>
+&lt;img src="images/閉路のflowを更新できない例.png" width="50%">
+&lt;h2 id="7-leaving-arc-の選択">7. leaving arc の選択
+&lt;/h2>&lt;p>閉路の flow を限界まで増加したとき 1 本以上の辺が $\delta = \delta_{ij}$ となります．この辺を blocking arc と呼びます．&lt;br>
+blocking arc を取り除く辺（leaving arc）として選びます（複数ある場合は任意の辺を選びます）．&lt;br>
+辺 (i, j) が $x_{ij}$ = $l_{ij}$ になったときは $L$ に，$x_{ij} = u_{ij}$ になったときは $U$ に入ります．&lt;/p>
+&lt;p>閉路 $W$ の flow を更新した結果，辺 (5, 6) の flow が下限容量に，辺 (3, 4) の flow が上限容量になった場合を考えます．&lt;/p>
+&lt;img src="images/閉路のflowの更新結果.png" width="50%">
+&lt;p>辺 (5, 6) と辺 (3, 4) のどちらかを取り除くことができます．辺 (5, 6) を取り除き $L$ に追加すると下の全域木 $T$ が得られます．&lt;/p>
+&lt;img src="images/閉路の辺の削除.png" width="50%">
+&lt;h2 id="8-ポテンシャルの更新">8. ポテンシャルの更新
+&lt;/h2>&lt;p>辺 (p, q) を削除したとき，木は 2 つの部分木に分割されます．根がある方の部分木を $T_1$，ない方の部分木を $T_2$ とします．&lt;br>
+木の根のポテンシャルを 0 に固定し， 辺の reduced cost が 0 になるようにポテンシャルを算出していたことを考えると，$T_1$ に含まれる頂点のポテンシャルは変化せず，$T_2$ に含まれる頂点のポテンシャルのみ変化することがわかります．&lt;/p>
+&lt;p>全域木に辺 (k, l) が追加され，頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合を考えます．&lt;br>
+$T_2$ は頂点 q を根とする部分木から頂点 l を根とする部分木に変化するため，$T_2$ に属する頂点のポテンシャルを更新する必要があります．&lt;br>
+木のすべての頂点のポテンシャルに定数を加算しても reduced cost は保たれるため，新しい $\pi(l)$ と現在の $\pi(l)$ の差分 $d$ が求められれば，$T_2$ に属するすべての頂点に $d$ を加算することでポテンシャルを正しい値に更新できます．&lt;br>
+頂点 k のポテンシャルは変化しないことから，頂点 l の新しいポテンシャル $\pi^{\prime}(l)$ は $0 - c_{kl} + \pi(k)$ となります．&lt;br>
+よって，頂点 l の新しいポテンシャルとの現在のポテンシャルの差は $\pi^{\prime}(l) - \pi(l) = 0 - c_{kl} + \pi(k) - \pi(l) = -(c_{kl} - \pi(k) + \pi(l))$ となり，これは $-c_{kl}^{\pi}$ です．&lt;br>
+以上のことから，$T_2$ に属するすべての頂点に $-c_{kl}^{\pi}$ を加算することでポテンシャルを正しい値に更新できることがわかりました．&lt;br>
+頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合も同様の議論により，$c_{kl}^{\pi}$ 増加することが示せます．&lt;/p>
+&lt;p>まとめると，辺 (k, l)を追加したとき $T_2$ に含まれる頂点のポテンシャルは以下のように更新されます．&lt;/p>
+&lt;ul>
+&lt;li>頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合
+&lt;ul>
+&lt;li>$T_2$ に含まれる頂点のポテンシャルは $-c^{\pi}_{kl}$ 増加&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合
+&lt;ul>
+&lt;li>$T_2$ に含まれる頂点のポテンシャルは $c^{\pi}_{kl}$ 増加&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;img src="images/ポテンシャルの更新.png" width="75%">
+&lt;h2 id="9-strongly-feasible-spanning-tree">9. Strongly Feasible Spanning Tree
+&lt;/h2>&lt;p>primal network simplex 法が有限回で終了するのかを考えます．&lt;br>
+アルゴリズムの各イテレーションでは，全域木に辺を追加するこことで閉路を作り，この閉路の flow を更新することで目的関数値を減少させます．&lt;br>
+目的関数値は flow 1 単位あたり $|c^{\pi}_{ij}|$ 減少するため，常に正の量の flow を流せるならアルゴリズムは有限回で終了します．&lt;br>
+しかし，節 6 の最後の例のように閉路に restricted arc があると flow が増加できないイテレーションが発生することがあります．このイテレーションを degenerate iteration といいます．&lt;br>
+実は primal network simplex 法は entring arc と leaving arc を任意に選ぶと degenerate iteration が無限に発生しアルゴリズムが有限回で終了しないことがあります．&lt;/p>
+&lt;p>そこで，strongly feasible spanning tree という概念を導入します．&lt;br>
+常に strongly feasible spanning tree を維持することによって，アルゴリズムが有限回で終了することが保証できます．&lt;/p>
+&lt;h3 id="strongly-feasible-spanning-tree">strongly feasible spanning tree
+&lt;/h3>&lt;p>次の条件を満たす spanning tree を strongly feasible spanning tree と呼びます．&lt;/p>
+&lt;ul>
+&lt;li>任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる&lt;/li>
+&lt;/ul>
+&lt;p>下の図は strongly feasible spanning tree の例です．&lt;br>
+すべての頂点から頂点 0 に向かって 1 以上の flow を送ることができます．&lt;br>
+strongly feasible spanning tree は flow が下限の辺のは根に向いていて，flow が上限の辺は根と反対を向いている全域木とみなすこともできます．&lt;/p>
+&lt;img src="images/strongly_feasible_spanning_treeの例.png" width="50%">
+&lt;p>下の図は strongly feasible spanning tree ではない例です．&lt;br>
+辺 (2, 1) の flow は上限容量であるため，頂点 2 から根に flow を送ることはできません．また，辺 (3, 4) の flow は下限容量であるため，頂点 4 から根に flow を送ることはできません．&lt;/p>
+&lt;img src="images/strongly_feasible_spanning_treeではない例.png" width="50%">
+&lt;p>節 4 の「初期 spanning tree structure の構築」は strongly feasible spanning tree を構築します．次の節で leaving arc をどのように選べば strongly feasible spanning tree を維持できるのか見ていきます．&lt;/p>
+&lt;h2 id="10-strongly-feasible-spanning-tree-を保つ-leaving-arc-の選び方">10. Strongly Feasible Spanning Tree を保つ leaving arc の選び方
+&lt;/h2>&lt;p>辺 (k, l) を entring arc とします．頂点 k と l の最小共通祖先を頂点 w とします．&lt;br>
+このとき閉路 $W$ に沿って，頂点 w から開始して最後に見つけた blocking arc を leaving arc とすると，spanning tree は strongly feasible を維持できます．&lt;/p>
+&lt;p>具体例をみます．&lt;br>
+$L$ に属する辺 (k, l) が追加され閉路 $W$ が生成されたとします．閉路の向きは辺 (k, l) と同じ向きです．&lt;br>
+この閉路には flow を流すことができず，辺 (w, 1) と辺 (p, q) が blocking arc になります．&lt;br>
+頂点 w から閉路の向きに沿って探索し，最後に見つかる blocking arc は辺 (p, q) であるため，この辺を leaving arc とします．&lt;/p>
+&lt;img src="images/strongly_feasible_spanning_treeを維持するようなleaving_arcの選び方.png" width="30%">
+&lt;p>strongly feasible spanning tree から上記の方法で leaving arc を選んだとき，strongly feasible spanning tree が維持されることを示します．pivot 操作の直前は strongly feasible spanning tree であるという前提を利用します．&lt;/p>
+&lt;p>頂点 w から頂点 q のパスを $W_1$，頂点 p から頂点 w のパスを $W_2$ とします．&lt;br>
+「$W_1$」，「$W_2$」，「閉路以外の頂点」の 3 つについて，「任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる」という条件を満たすか確認します．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>$W_1$ 内の頂点&lt;/p>
+&lt;ul>
+&lt;li>直前が non-degenerate pivot&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup> の場合
+&lt;ul>
+&lt;li>$\delta \gt 0$ であるため，頂点 w から$W_1$ 内の頂点に flow が送られている．$W_1$ の各頂点からは頂点 w まで $\delta$ の flow を押し戻すことができるため条件を満たす&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>直前が degenerate pivot&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup> の場合
+&lt;ul>
+&lt;li>前提から，pivot の直前では頂点 l から頂点 w のパスで flow を送れていたため，このパス内に blocking arc は存在しない．よって $W_1$ は頂点 w と頂点 k の間にある&lt;/li>
+&lt;li>$\delta = 0$ であり，頂点 w から頂点 k のどの辺の flow にも変化はないため条件を満たす&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>$W_2$ 内の頂点&lt;/p>
+&lt;ul>
+&lt;li>leaving arc の選び方を考えると，$W_2$ 内に blocking arc はないため条件を満たす&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>$W$ 以外の頂点&lt;/p>
+&lt;ul>
+&lt;li>頂点 u から根へのパスに閉路 $W$ が含まれないとき
+&lt;ul>
+&lt;li>前提から，閉路以外の flow に変化はないため，条件を満たす&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>頂点 u から根へのパスに閉路 $W$ が含まれるとき
+&lt;ul>
+&lt;li>u から閉路までのパスは，flow に変化がないため条件を満たす．閉路に到達したとき閉路から根まで条件を満たすので全体として条件を満たす&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>以上のことから，leaving arc に $W$ に沿って最後に見つけた blocking arc を選ぶことで，常に strongly feasible spanning tree を維持できることがわかりました．&lt;/p>
+&lt;h2 id="11-アルゴリズムが有限回で終了することの証明">11. アルゴリズムが有限回で終了することの証明
+&lt;/h2>&lt;p>2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることを示します．&lt;/p>
+&lt;p>degenerate pivot が発生したとき，ノードのポテンシャルが単調減少することを示します．$n$ を頂点の数，$C$ をコストの絶対値の最大値としたとき，ノードのポテンシャルの下界は $-nC$ であるため連続する degenerate pivot は有限回で終了します．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>entring arc (k, l) が $L$ に属していた場合&lt;/p>
+&lt;ul>
+&lt;li>辺 (k, l) は $L$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \lt 0$ です．&lt;/li>
+&lt;li>全域木は常に strongly feasible spanning tree を維持していることを考えると，degenerate pivot の場合は頂点 l から頂点 w の間に blocking arc は存在しないため，新しく作成される木は頂点 l に 頂点 k がぶら下がる形になります．&lt;/li>
+&lt;li>頂点 k を根とする部分木のポテンシャルは $c^{\pi}_{kl} \lt 0$ 増加するため，ノードのポテンシャルは単調減少します&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>entring arc (k, l) が $U$ に属していた場合&lt;/p>
+&lt;ul>
+&lt;li>辺 (k, l) は $U$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \gt 0$ です．&lt;/li>
+&lt;li>新しく作成される木は頂点 k に 頂点 l がぶら下がる形になります．&lt;/li>
+&lt;li>頂点 l を根とする部分木のポテンシャルは $c^{\pi}_{kl} \gt 0$ 減少するため，ノードのポテンシャルは単調減少します&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>以上のことから 2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることがわかりました．
+non-degenerate pivot は目的関数値を厳密に減少させるため，アルゴリズムは有限回で終了します．&lt;/p>
+&lt;h2 id="補足-1-最適-spanning-tree-solution-が必ず存在することについて">補足 1. 最適 spanning tree solution が必ず存在することについて
+&lt;/h2>&lt;h3 id="cycle-free-solution">cycle free solution
+&lt;/h3>&lt;p>free arc のみからなる閉路を持たないような実行可能解 $x$ を cycle free solution といいます．&lt;/p>
+&lt;p>下の図は cycle free solution の例です．辺の上に (流量，コスト) を示し，下限容量は 0，上限容量は無限とします．&lt;br>
+青色の辺 (0, 1)，(1, 3)，(3, 4) が free arc です．free arc のみからなる閉路がないため cycle free solution です．この解の目的関数値は $(2 \times 0) + (2 \times 1) + (2 \times 0) = 2$ です．&lt;/p>
+&lt;img src="images/cycle_free_solutionの例.png" width="50%">
+&lt;p>下の図は cycle free solution ではない例です．&lt;br>
+青色の辺 (0, 1)，(1, 2)，(1, 3)，(2, 4)，(3, 4) が free arc です．free arc のみからなる閉路があるため cycle free solution ではありません．この解の目的関数値は $(2 \times 0) + (1 \times 3) + (1 \times 1) + (1 \times -1) + (1 \times 0) = 3$ です．&lt;/p>
+&lt;img src="images/cycle_free_solutionではない例.png" width="50%">
+&lt;p>cycle free solution でない解が与えられたとき，閉路の flow を操作することで，目的関数値が大きくならないように cycle free solution にすることができます．&lt;br>
+この解の場合，時計回りに flow を 1 増加すると，辺 (2, 4)，(1, 2) の flow が 1 減り，辺(1, 3)，(3, 4) の flow が 1 増えます．結果，この解の目的関数値は $(2 \times 0) + (0 \times 3) + (2 \times 1) + (0 \times -1) + (2 \times 0) = 2$ と 1 小さくなり，さらに cycle free solution になりました．&lt;/p>
+&lt;img src="images/cycle_free_solutionに変形.png" width="50%">
+&lt;p>このように，cycle free でない解は閉路の flow を操作することで目的関数値が大きくならないように cycle free solution にできるため，MCFP に最適解があるとき，常に同じ目的関数値である cycle free solution を持つことがわかります．&lt;/p>
+&lt;h3 id="cycle-free-solution-から-spanning-tree-solution-を求める">cycle free solution から spanning tree solution を求める
+&lt;/h3>&lt;p>cycle free solution は辺を適切に選ぶことで spanning tree solution を求めるとができます．&lt;br>
+下の図では，青色の辺(0, 1)，(1, 2)，(1, 3)，(3, 4) を全域木として選んでいます．&lt;/p>
+&lt;img src="images/cycle_free_solutionをspanning_tree_solutionに.png" width="50%">
+&lt;p>以上のことから，MCFP に最適解があるとき，常に同じ目的関数値である最適 spanning tree solution を持つことがわかりました．&lt;/p>
+&lt;h2 id="補足-2-spanning-tree-structure-の最適性条件">補足 2. Spanning Tree Structure の最適性条件
+&lt;/h2>&lt;p>spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となることを示します．&lt;/p>
+$$
+\begin{aligned}
+c^{\pi}_{ij} = 0 &amp;&amp; \forall (i, j) \in T \\
+c^{\pi}_{ij} \ge 0 &amp;&amp; \forall (i, j) \in L \\
+c^{\pi}_{ij} \le 0 &amp;&amp; \forall (i, j) \in U \\
+\end{aligned}
+$$&lt;p>まず，$\sum_{(i, j) \in A} c_{ij} x_{ij}$ を最小化することは $\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することと等しいことを示します．&lt;/p>
+&lt;p>$z(\pi) = \sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ とします．$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，$z(0) = \sum_{(i, j) \in A} c_{ij} x_{ij}$ です．&lt;br>
+頂点 k のポテンシャルを $0$ から $\pi(k)$ まで増加したとします．&lt;br>
+$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，reduced cost は頂点 k から流出する flow 1 単位あたり $\pi(k)$ 減少し，頂点 k に流入する flow 1 単位あたり $\pi(k)$ 増加します．よって，全体の reduced cost は $ - \pi(k) \times k$ からの流出量 + $\pi(k) \times k$ への流入量だけ変化します．&lt;/p>
+&lt;p>MCFP の制約条件から，各頂点 i の流出量と流入量の関係は $\sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i$ です．&lt;br>
+よって，頂点 k のポテンシャルを $\pi(k)$ 増加すると，目的関数値は $\pi(k)b(k)$ 減少することになります．&lt;br>
+すべての頂点に同様のことがいえるので，$z(0) - z(\pi) = \sum_{i \in N} \pi(i)b(i) = \pi b$ となります．&lt;br>
+$\pi b$ は定数のため，$z(\pi)$ を最小化する flow は $z(0)$ を最小化することがわかりました．&lt;/p>
+&lt;p>次に，$x^{\ast}$ を上の最適性条件を満たす (T, L, U) に対応する解としたとき，これが最適解であることを示します．&lt;br>
+最適性条件を満たすポテンシャルを $\pi$ としたとき，$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ の最小化を考えます．&lt;br>
+$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することは $\sum_{(i, j) \in L} c_{ij}^{\pi} x_{ij} - \sum_{(i, j) \in U} |c_{ij}^{\pi}| x_{ij}$ を最小化すること等しいです．&lt;/p>
+&lt;p>$\forall (i, j) \in L$ に対して $x_{ij} \ge x_{ij}^{\ast} = l_{ij}$ であり，$\forall (i, j) \in U$ に対して $x_{ij} \le x_{ij}^{\ast} = u_{ij}$ であるため，$x^{\ast}$ の目的関数値は $x$ の目的関数値以下となります．&lt;br>
+以上のことから，最適性条件を満たす spanning tree structure は最適解となることがわかりました．&lt;/p>
+&lt;h2 id="参考">参考
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
+>Network Flows: Pearson New International Edition&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://homes.di.unimi.it/righini/Didattica/OttimizzazioneCombinatoria/MaterialeOC/9b%20-%20NetworkSimplex.pdf" target="_blank" rel="noopener"
+>The network simplex algorithm&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://coral.ise.lehigh.edu/~ted/teaching/ie411/" target="_blank" rel="noopener"
+>IE 411: Graphs and Network Flows (Python)&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>正確には，実行可能領域に下界が存在するならば最適 spanning tree solution が少なくとも 1 つ存在します．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>全域木の辺として restricted arc を選ぶこともできます&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3">
+&lt;p>辺 (i, j) に対し頂点 j から頂点 i に flow を流すと，辺 (i, j) の flow を減らすことになります．例えば，辺 (2, 1) に対して頂点 1 から頂点 2 に flow を流すと，辺 (2, 1) の flow は 1 減り，コストは 5 下がります．&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:4">
+&lt;p>辺の lower が 0 でない場合，先に lower 分の flow を流しておきます．&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:5">
+&lt;p>$\delta \gt 0$ である pivot&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:6">
+&lt;p>$\delta = 0$ である pivot&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
 &lt;/h2>&lt;p>Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p>
 &lt;ul>
 &lt;li>点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li>
