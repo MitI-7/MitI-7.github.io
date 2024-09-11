@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>競技プログラミング on</title><link>https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/</link><description>Recent content in 競技プログラミング on</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Mon, 09 Sep 2024 19:31:39 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Mon, 09 Sep 2024 19:31:39 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>競技プログラミング on</title><link>https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/</link><description>Recent content in 競技プログラミング on</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
 &lt;/h2>&lt;p>Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p>
 &lt;ul>
 &lt;li>点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li>
@@ -10,30 +10,12 @@
 節 2 と 節 3 では Green Hackenbush で一般に適用できる性質を確認します．節 4 と 節 5 ではこの性質を利用し具体的な図形のグランディ数を求める方法を示します．&lt;br>
 最後に節 6 で Green Hackenbush の木のグランディ数を求める問題を紹介します．&lt;/p>
 &lt;h2 id="2-地面の点の移動">2. 地面の点の移動
-&lt;/h2>&lt;p>地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E9%9D%A2%E3%81%AE%E7%82%B9%E3%81%AE%E7%A7%BB%E5%8B%95.png"
-width="1904"
-height="1116"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E9%9D%A2%E3%81%AE%E7%82%B9%E3%81%AE%E7%A7%BB%E5%8B%95_hu7391835916525914904.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E9%9D%A2%E3%81%AE%E7%82%B9%E3%81%AE%E7%A7%BB%E5%8B%95_hu14331313452374257278.png 1024w"
-loading="lazy"
-alt="地面の点の移動"
-class="gallery-image"
-data-flex-grow="170"
-data-flex-basis="409px"
->&lt;/p>
+&lt;/h2>&lt;p>地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．&lt;/p>
+&lt;img src="images/地面の点の移動.png" width="50%">
 &lt;h2 id="3-コロン原理colon-principle">3. コロン原理(Colon Principle)
 &lt;/h2>&lt;p>コロン原理&lt;br>
-図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86.png"
-width="2104"
-height="1156"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86_hu7545664069574858955.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86_hu15394478922741812538.png 1024w"
-loading="lazy"
-alt="コロン原理"
-class="gallery-image"
-data-flex-grow="182"
-data-flex-basis="436px"
->&lt;/p>
+図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．&lt;/p>
+&lt;img src="images/コロン原理.png" width="50%">
 &lt;details>&lt;summary>証明&lt;/summary>
 &lt;p>$g(H \cup_a G) = g(K \cup_a G)$ ということは，$g(H \cup_a G) \ xor \ g(K \cup_a G) = 0$ なので，$H \cup_a G と K \cup_a G$ の直和ゲームは後手必勝と言い換えることができます．よって，「$g(H) = g(K)$ を満たすならば後手必勝」を示します．
 また，$H \cup_a G$ と $K \cup_a G$ は対称なので，$H \cup_a G$ から辺を取り除く場合のみ考えます．&lt;/p>
@@ -65,84 +47,30 @@ data-flex-basis="436px"
 &lt;/li>
 &lt;/ol>
 &lt;/details>
-&lt;p>コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;br>
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png"
-width="1976"
-height="1028"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B_hu6867694735370805482.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B_hu14051368684987186910.png 1024w"
-loading="lazy"
-alt="コロン原理の例"
-class="gallery-image"
-data-flex-grow="192"
-data-flex-basis="461px"
->&lt;/p>
+&lt;p>コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;/p>
+&lt;img src="images/コロン原理の例.png" width="50%">
 &lt;h2 id="4-棒のグランディ数">4. 棒のグランディ数
 &lt;/h2>&lt;p>まず，1 つの棒のみからなるゲームのグランディ数について考えます．&lt;br>
-長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0.png"
-width="1612"
-height="964"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0_hu10901324364553466500.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0_hu11330580920261939063.png 1024w"
-loading="lazy"
-alt="棒のグランディ数"
-class="gallery-image"
-data-flex-grow="167"
-data-flex-basis="401px"
->&lt;/p>
+長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．&lt;/p>
+&lt;img src="images/棒のグランディ数.png" width="50%">
 &lt;p>次に，複数の棒からなるゲームのグランディ数を考えます．&lt;br>
 各棒は独立したゲームの局面とみなすことができるので，複数の棒からなるゲームのグランディ数は各棒のグランディ数の xor で求めることができます．&lt;br>
-例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \ xor \ 1 \ xor \ 2 = 2$ となります．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0.png"
-width="1212"
-height="644"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0_hu12398555151167474853.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0_hu17319083050896853801.png 1024w"
-loading="lazy"
-alt="複数の棒のグランディ数"
-class="gallery-image"
-data-flex-grow="188"
-data-flex-basis="451px"
->&lt;/p>
+例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \ xor \ 1 \ xor \ 2 = 2$ となります．&lt;/p>
+&lt;img src="images/複数の棒のグランディ数.png" width="50%">
 &lt;p>最後に，地面のある一点から複数の棒が伸びる図形のグランディ数を考えます．&lt;br>
 地面の点は自由に移動することができるため，地面のある一点から複数の棒が伸びる図形は，複数の棒からなるゲームに帰着することができます．&lt;br>
-よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E4%B8%8A%E3%81%AE%E7%82%B9%E3%81%8B%E3%82%89%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92.png"
-width="3224"
-height="480"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E4%B8%8A%E3%81%AE%E7%82%B9%E3%81%8B%E3%82%89%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92_hu7460246976421562768.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E5%9C%B0%E4%B8%8A%E3%81%AE%E7%82%B9%E3%81%8B%E3%82%89%E8%A4%87%E6%95%B0%E3%81%AE%E6%A3%92_hu10206093372891447799.png 1024w"
-loading="lazy"
-alt="地上から棒"
-class="gallery-image"
-data-flex-grow="671"
-data-flex-basis="1612px"
->&lt;/p>
+よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．&lt;/p>
+&lt;img src="images/地上の点から複数の棒.png" width="75%">
 &lt;h2 id="5-木のグランディ数">5. 木のグランディ数
 &lt;/h2>&lt;p>コロン原理を順次適用していくことによって，木のグランディ数を求めることができます．&lt;br>
-地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86_%E6%9C%A8.png"
-width="1904"
-height="796"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86_%E6%9C%A8_hu10553815131654796412.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86_%E6%9C%A8_hu878640999952669754.png 1024w"
-loading="lazy"
-alt="コロン原理(木)"
-class="gallery-image"
-data-flex-grow="239"
-data-flex-basis="574px"
->&lt;/p>
+地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．&lt;/p>
+&lt;img src="images/コロン原理_木.png" width="50%">
 &lt;p>以下に例を示します．&lt;br>
 点 a からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
 点 b からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
 点 c からは，長さ 2 の棒と長さ 3 の棒と長さ 1 の棒が伸びています．よって，長さ 2 xor 3 xor 1 = 0 の棒に置き換えることができます．&lt;br>
-以上のことからこの木のグランディ数は 0 と求めることができました．
-&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0%E3%81%AE%E4%BE%8B.png"
-width="4824"
-height="1172"
-srcset="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0%E3%81%AE%E4%BE%8B_hu14616092643378067908.png 480w, https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0%E3%81%AE%E4%BE%8B_hu9825720553716665752.png 1024w"
-loading="lazy"
-alt="例"
-class="gallery-image"
-data-flex-grow="411"
-data-flex-basis="987px"
->&lt;/p>
+以上のことからこの木のグランディ数は 0 と求めることができました．&lt;/p>
+&lt;img src="images/木のグランディ数の例.png" width="75%">
 &lt;h2 id="6-agc017-d---game-on-tree">6. AGC017 D - Game on Tree
 &lt;/h2>&lt;p>Green Hackenbush の木のグランディ数を求める問題として，&lt;a class="link" href="https://atcoder.jp/contests/agc017/tasks/agc017_d" target="_blank" rel="noopener"
 >D - Game on Tree&lt;/a> があります．&lt;br>
