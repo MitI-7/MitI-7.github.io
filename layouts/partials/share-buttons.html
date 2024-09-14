@@ -1,0 +1,15 @@
+{{ if ne .Params.share false}}
+<!-- use font awsome -->
+<section class="section sns_parent">
+    <div class="container sns_section">
+        <div class="sns_button twitter">
+            <a href="http://x.com/intent/tweet?url={{ .Permalink }}&text={{ .Title }}" target="_blank"
+                title="twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+        <div class="sns_button hatena">
+            <a href="http://b.hatena.ne.jp/add?mode=confirm&url={{ .Permalink }}&title={{ .Title }}" target="_blank"
+                title="hatena"><i class="fab fa-hatena"></i></i></a>
+        </div>
+    </div>
+</section>
+{{ end }}
