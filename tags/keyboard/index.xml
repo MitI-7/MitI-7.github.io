@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Keyboard on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/keyboard/</link><description>Recent content in Keyboard on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Sat, 26 Oct 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/keyboard/index.xml" rel="self" type="application/rss+xml"/><item><title>Kinesis Advantage 360 Pro の設定</title><link>https://miti-7.github.io/post/kinesis-advantage-360-pro-%E3%81%AE%E8%A8%AD%E5%AE%9A/</link><pubDate>Sat, 26 Oct 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/kinesis-advantage-360-pro-%E3%81%AE%E8%A8%AD%E5%AE%9A/</guid><description>&lt;h2 id="設定">設定
+&lt;/h2>&lt;p>Kinesis Advantage 360 Pro の設定をメモしておきます&lt;/p>
+&lt;h2 id="バックライト">バックライト
+&lt;/h2>&lt;p>デフォルトだと「Mod + Enter」で on/off，「Mod + ↑/↓」で明るさの調整ができる&lt;br>
+バックライトをつけておくとすぐにバッテリーがなくなるらしいので off にした&lt;/p>
+&lt;h2 id="keymap">Keymap
+&lt;/h2>&lt;p>&lt;a class="link" href="https://kinesiscorporation.github.io/Adv360-Pro-GUI/" target="_blank" rel="noopener"
+>Kinesis ADV360 Pro Keymap Editor&lt;/a> で設定できる．&lt;/p>
+&lt;img src="images/Layer1.png" width="100%">
+&lt;ul>
+&lt;li>Windows キーはあまりつかわないので ALT を配置
+&lt;ul>
+&lt;li>代わりに Caps を Windwos キーにした&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>PgUp を ESC に，PgDn を 「CTRL + PG_DN」 にした
+&lt;ul>
+&lt;li>「CTRL + PG_DN」 で IME の切り替えをしているので&lt;/li>
+&lt;li>「LC」を選ぶと，LCTRL + PG_DN を選択できる&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>① と ② は迷い中&lt;/li>
+&lt;li>③ と ④ に PG_UP と PG_DN を配置&lt;/li>
+&lt;/ul>
+&lt;img src="images/Layer2.png" width="100%">
+&lt;ul>
+&lt;li>キーキャップの数字とファンクションキーがずれていて迷うので数字と同じになるようにひとつずらした
+&lt;ul>
+&lt;li>F12 と F13 の位置がひどいことになった&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="バッテリー">バッテリー
+&lt;/h2>&lt;ul>
+&lt;li>バックライトをオフにしていると 数ヶ月はもつらしい&lt;/li>
+&lt;li>「Mod + ④」で充電レベルを確認できる
+&lt;ul>
+&lt;li>Green: 80% 以上&lt;/li>
+&lt;li>Yellow: 51% - 79%&lt;/li>
+&lt;li>Orange: 21% - 50%&lt;/li>
+&lt;li>Red: 20% 以下&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="高さ">高さ
+&lt;/h2>&lt;p>LOW/MEDIUM/HIGH の 3 段階に調整できる&lt;br>
+今は MEDIUM を使っている&lt;/p>
+&lt;h2 id="bluetooth-の接続や遅延">Bluetooth の接続や遅延
+&lt;/h2>&lt;p>特に問題なく使えている&lt;/p>
+&lt;h2 id="参考">参考
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a class="link" href="https://kinesis-ergo.com/support/kb360pro/" target="_blank" rel="noopener"
+>Advantage 360 Professional (ZMK Bluetooth) Support Resources&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
