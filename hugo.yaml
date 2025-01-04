@@ -42,7 +42,7 @@ services:
     id: G-5V27L45K60
 
 pagination:
-  pagerSize: 3
+  pagerSize: 32
 
 permalinks:
   post: /post/:slug/
@@ -232,7 +232,7 @@ menu:
         icon: rss
 
     - identifier: mail
-      name: 04_mail
+      name: 05_mail
       url: mailto:miti_7@outlook.com
       params:
         icon: mail
