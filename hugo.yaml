@@ -231,14 +231,8 @@ menu:
       params:
         icon: rss
 
-    - identifier: peing
-      name: 04_peing
-      url: https://peing.net/ja/miti_7
-      params:
-        icon: box
-
     - identifier: mail
-      name: 05_mail
+      name: 04_mail
       url: mailto:miti_7@outlook.com
       params:
         icon: mail
