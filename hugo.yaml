@@ -80,8 +80,8 @@ params:
       default: Licensed under CC BY-NC-SA 4.0
 
   comments:
-    enabled: false
-    provider: disqus
+    enabled: true
+    provider: giscus
 
     disqusjs:
       shortname:
@@ -142,13 +142,13 @@ params:
       siteName: "" # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
     giscus:
-      repo:
-      repoID:
-      category:
-      categoryID:
-      mapping:
-      lightTheme:
-      darkTheme:
+      repo: MitI-7/MitI-7.github.io
+      repoID: R_kgDOMu10ww
+      category: Announcements
+      categoryID: DIC_kwDOMu10w84Cltew
+      mapping: pathname
+      lightTheme: light
+      darkTheme: dark
       reactionsEnabled: 1
       emitMetadata: 0
 
