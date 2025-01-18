@@ -57,7 +57,7 @@ $E(\bold x)$ が一般の関数の場合，これを最小化する問題は NP-
 &lt;/div>
 &lt;/div>
 &lt;h2 id="1-s-t-cut">1. s-t cut
-&lt;/h2>&lt;p>頂点集合 $V$ と 有向辺 $E$ からなる有向グラフ $G = (V, E)$ が与えられます．辺 (i, j) には容量 $c_{i, j} \ge 0$ が定まっているものとします．&lt;br>
+&lt;/h2>&lt;p>頂点集合 $V$ と 有向辺 $E$ からなる有向グラフ $G = (V, E)$ が与えられます．辺 (i, j) には容量 $c_{ij} \ge 0$ が定まっているものとします．&lt;br>
 頂点集合 $V$ を 2 つの部分集合 $S$ と $T = V \backslash S$ に分割します．2 つのノード $s$ と $t$ について $s \in S$，$t \in T$ となるようなカットを s-t cut と呼びます．&lt;br>
 $S$ から出て $T$ に入るような辺の容量の総和を s-t cut の容量と呼び，以下で定義されます．すべての s-t cut のうち最小のものを minimum s-t cut と呼びます．&lt;/p>
 $$
@@ -126,7 +126,7 @@ $$&lt;p>上記仮定を満たす関数の場合は下の表のルールに従っ
 &lt;/div>
 &lt;/div>
 &lt;p>具体例として，変数が $a$ と $b$ の 2 つだけの場合を見てみます．&lt;br>
-各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．$\theta_{ab}(0, 0)$ と $\theta_{ab}(1, 1)$ は $0$ なので省略しています．&lt;/p>
+各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．$\theta_{ab}(0, 0)$ と $\theta_{ab}(1, 1)$ の値は $0$ なので省略しています．&lt;/p>
 &lt;div style="display: flex; gap: 20px;">
 &lt;div>
 &lt;table>
@@ -178,8 +178,7 @@ $S = \lbrace s, a \rbrace$ とします．この s-t cut の容量は $\theta_{a
 minimum s-t cut を計算し，$S$ に属する頂点に対応する変数の値を $0$，$T$ に属する頂点に対応する変数の値を $1$ と設定することで $\bold x$ を構成できます．&lt;/p>
 &lt;h2 id="3-劣モジュラ関数の場合">3. 劣モジュラ関数の場合
 &lt;/h2>&lt;p>「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」では，$\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ とし，どの関数も $0$ 以上の値を返すことを仮定していました．&lt;br>
-この節では関数は劣モジュラを仮定します．今回は 2 値変数を考えているので，$\theta_{pq}(0, 1) + \theta_{pq}(1, 0) \ge \theta_{pq}(0, 0) + \theta_{pq}(1, 1)$ を満たすものとします．&lt;br>
-「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」は劣モジュラ関数の特殊な場合だったといえます．&lt;/p>
+この節では関数は劣モジュラを仮定します．今回は 2 値変数を考えているので，$\theta_{pq}(0, 1) + \theta_{pq}(1, 0) \ge \theta_{pq}(0, 0) + \theta_{pq}(1, 1)$ を満たすものとします．&lt;/p>
 &lt;p>$\theta_{pq}(0, 0)$ や $\theta_{pq}(1, 1)$ が $0$ 以外の値をとったり関数値が負の値をとる場合があるので，今回はルール通りにグラフを作ることはできません．そこで再パラメータ化という操作を行います．再パラメータ化によって関数を標準形に変形します．以下の条件を満たす関数を標準形(normal form)と呼びます&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．標準形ではどの関数も $0$ 以上の値をとります．&lt;/p>
 &lt;ul>
 &lt;li>$min \lbrace \theta_{p;0}, \theta_{p;1} \rbrace = 0$&lt;/li>
@@ -187,7 +186,7 @@ minimum s-t cut を計算し，$S$ に属する頂点に対応する変数の値
 &lt;li>$min \lbrace \theta_{pq;01}, \theta_{pq;11} \rbrace = 0$&lt;/li>
 &lt;/ul>
 &lt;p>再パラメータ化をすると，関数 $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラの場合は $\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ に，関数 $\theta_{pq}(x_{p}, x_{q})$ が優モジュラの場合は $\theta_{pq}(0, 1) = \theta_{pq}(1, 0) = 0$ になります&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>．&lt;br>
-よって，すべての $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラ関数の場合は「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」に帰着することができます．&lt;br>
+よって，すべての $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラ関数の場合は，再パラメータ化をすることで「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」に帰着することができます．&lt;br>
 再パラメータ化の手続きは以下の通りです．&lt;/p>
 &lt;ul>
 &lt;li>step1
@@ -396,8 +395,7 @@ minimum s-t cut を計算し，$S$ に属する頂点に対応する変数の値
 &lt;/div>
 &lt;/details>
 &lt;h1 id="4-一般の関数の場合">4. 一般の関数の場合
-&lt;/h1>&lt;p>一般の関数の場合を考えます．&lt;br>
-関数に何も仮定を置かない場合は $E(\bold x)$ の最小化は NP-hard なので，minimum s-t cut 問題に帰着できない場合があります．&lt;br>
+&lt;/h1>&lt;p>関数に何も仮定を置かない場合は $E(\bold x)$ の最小化は NP-hard なので，minimum s-t cut 問題に帰着できない場合があります．&lt;br>
 この場合でも最適解はだせなくても問題を解けるだけ解く QPBO 法というアルゴリズムがあります&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>．QPBO 法は解として $x_p = \lbrace 0, 1, \emptyset \rbrace$ のいずれかを与えます．$\emptyset$ は解が不明であることを表します．$0$ か $1$ の値が与えられたとき，ラベル付けされたといいます．&lt;br>
 このアルゴリズムは次のような性質があります．&lt;/p>
 &lt;ol>
