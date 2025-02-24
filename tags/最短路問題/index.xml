@@ -73,7 +73,7 @@ Johnson&amp;rsquo;s algorithm は全点対最短路問題を解くアルゴリ�
 実装では人工頂点を追加するのではなく， Bellman-Ford の初期解をすべて 0 とすることで対応しています．&lt;br>
 &lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9647270#1" target="_blank" rel="noopener"
 >提出コード&lt;/a>&lt;/p>
-&lt;h2 id="abc237-e---skiinghttpsatcoderjpcontestsabc237tasksabc237_e">&lt;a class="link" href="https://atcoder.jp/contests/abc237/tasks/abc237_e" target="_blank" rel="noopener"
+&lt;h2 id="abc237-e---skiing">&lt;a class="link" href="https://atcoder.jp/contests/abc237/tasks/abc237_e" target="_blank" rel="noopener"
 >ABC237 E - Skiing&lt;/a>
 &lt;/h2>&lt;p>問題概要&lt;br>
 $N$ 頂点，$M$ 辺の強連結の有向グラフと各頂点 u の高さ $H(u)$ が与えられる．$H(u) \ge H(v)$ としたとき，頂点 u から頂点 v にはコスト $H(v) - H(u)$ の辺が，頂点 v から頂点 u にはコスト $2(H(u) - H(v))$ の辺が張られている．頂点 1 から各頂点への最短距離の中で最も小さいものを求めよ．&lt;/p>
