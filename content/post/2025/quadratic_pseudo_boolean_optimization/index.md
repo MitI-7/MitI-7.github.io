@@ -1,7 +1,7 @@
 +++
 title = "Quadratic Pseudo-Boolean Optimization"
 date = 2025-01-09T00:00:00+09:00
-draft = false
+draft = true
 image = "images/general_sample_ab_1.png"
 categories = "組合せ最適化"
 tags = ["QPBO", "最小カット", "劣モジュラ", "競技プログラミング", "ライブラリ"]
