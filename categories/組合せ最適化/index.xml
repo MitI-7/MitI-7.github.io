@@ -1,4 +1,208 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>組合せ最適化 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/</link><description>Recent content in 組合せ最適化 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Thu, 09 Jan 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Quadratic Pseudo-Boolean Optimization</title><link>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</link><pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</guid><description>&lt;img src="https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/images/general_sample_ab_1.png" alt="Featured image of post Quadratic Pseudo-Boolean Optimization" />&lt;h2 id="quadratic-pseudo-boolean-optimization">Quadratic Pseudo-Boolean Optimization
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>組合せ最適化 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/</link><description>Recent content in 組合せ最適化 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Primal Dual Algorithm(厳密解)</title><link>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</link><pubDate>Fri, 14 Mar 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</guid><description>&lt;h2 id="はじめに">はじめに
+&lt;/h2>&lt;p>厳密解を求める primal dual algorithm の話です．&lt;br>
+primal dual algorithm の一般的な説明をしたあと，具体例としてハンガリアン法を導出します．&lt;/p>
+&lt;h2 id="準備">準備
+&lt;/h2>&lt;p>以下の等式標準形の線形計画問題を考えます．簡単のため $\bold b \ge 0$ を仮定します．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>主問題&lt;/p>
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \bold c^{T} \bold x \\
+&amp;\text{subject to}
+&amp;&amp; \bold A \bold x = \bold b \\
+&amp; &amp;&amp; \bold x \geq 0
+\end{aligned}
+$$&lt;/li>
+&lt;li>
+$$
+\begin{aligned}
+&amp;\text{maxiimize} &amp;&amp; \bold b^{T} \bold y \\
+&amp;\text{subject to}
+&amp;&amp; \bold A^{T} \bold y \leq \bold c
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;p>$\bold x$ と $\bold y$ が主問題と双対問題の最適解であるための必要十分条件は，以下の 2 つの条件をともに満たすことです．&lt;br>
+$A_i$ は行列 $\bold A$ の $i$行目を，$A^{j}$ は行列 $\bold A$ の $j$ 列目の転置をとったものを表します．今回は主問題の制約条件に $\bold A \bold x = \bold b$ があるため，双対相補性条件を常に満たします．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>主相補性条件&lt;/p>
+$$
+\begin{aligned}
+&amp;&amp; x_{j} \gt 0 \Rightarrow \bold A^{j} \bold y = c_{j} &amp;&amp;&amp; \forall j \\
+\end{aligned}
+$$&lt;/li>
+&lt;li>
+$$
+\begin{aligned}
+&amp;&amp; y_{i} \gt 0 \Rightarrow \bold A_{i} \bold x = b_{i} &amp;&amp;&amp; \forall i \\
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;p>${\bold x}^{\star}$ と ${\bold y}^{\star}$ が主問題と双対問題の最適解であるとき以下が成立します．&lt;/p>
+$$
+\begin{aligned}
+&amp;&amp; \bold c^{T} \bold x^{\star} = \bold b^{T} \bold y^{\star} \\
+\end{aligned}
+$$&lt;h2 id="primal-dual-algorithm">Primal Dual Algorithm
+&lt;/h2>&lt;p>primal dual algorithm は線形計画問題を解くための一般的なアルゴリズムです．&lt;br>
+primal dual algorithm を用いて主問題の最適解 ${\bold x}^{\star}$ を求めます．簡単のため，主問題には実行可能解があると仮定します．primal dual algorithm は以下のように実行されます．双対問題の実行可能性が常に維持されていることに注意してください．&lt;/p>
+&lt;ol>
+&lt;li>双対問題の実行可能解 $\bold y$ を求める&lt;/li>
+&lt;li>$\bold y$ をもとに構築した restricted primal problem を解く&lt;/li>
+&lt;li>restricted primal problem の最適解の値が $0$ ならば，最適解 $\bold {x}^{\star}$ が判明したということなのでアルゴリズムを終了する&lt;/li>
+&lt;li>restricted primal problem の最適解の値が $0$ でないならば，restricted primal problem の双対問題である dual restricted primal の最適解を求める．この解を $\bold z$ とする&lt;/li>
+&lt;li>ある $\epsilon$ を求め，${\bold y}^{\prime} = {\bold y} + \epsilon {\bold z}$ を新たな双対問題の実行可能解として採用し，2 に戻る&lt;/li>
+&lt;/ol>
+&lt;p>順に詳しくみていきます．&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>双対問題の実行可能解 $\bold y$ を適当に求めます．$\bold c \ge 0$ を仮定しているため $\bold y = \bold 0$ とおくことができます．&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ある双対問題の解 $\bold y$ が与えられたときに，「主問題の制約の違反」と「相補性条件の違反」を最小にするような主問題の解 $\bold x$ を見 つける問題を考えます．もしこれらの違反量が 0 の $\bold x$ を見つけることができたら，相補性条件よりこの $\bold x$ と $\bold y$ は最適解だということになります．&lt;br>
+$J = \lbrace j \mid \bold A^{j} \bold y = c_{j} \rbrace$ とします．これは正になることのできる主問題の変数の index の集合です．すると，この問題は以下のような線形計画問題となります．これを restricted primal(以下 RP)とよびます．&lt;/p>
+&lt;ul>
+&lt;li>Restricted Primal
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_i s_i \\\
+&amp;\text{subject to}
+&amp;&amp; \sum_{j \in J} \bold A_{ij} \bold x_j + \bold s_i = \bold b_i &amp;&amp;&amp; \forall i\\\
+&amp; &amp;&amp; \bold x \geq \bold 0 &amp;&amp;&amp; j \in J\\\
+&amp; &amp;&amp; \bold x = \bold 0 &amp;&amp;&amp; j \notin J\\\
+&amp; &amp;&amp; \bold s \geq \bold 0
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>もし RP の最適解の値が $0$ なら，この $(\bold x, \bold y)$ が主問題と双対問題の最適解ということになりアルゴリズムは終了します．&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>そうでない場合は相補性条件を満たすような実行可能解 $\bold x$ が見つからなかったということなので，$\bold y$ は双対問題の最適解ではなかったということがわかります．&lt;br>
+そこで，$\bold y$ よりも良い双対問題の解を探すことにします．&lt;br>
+そのために RP の双対問題である Dual Restricted Primal(以下 DRP)を考えます．これは以下のようになります．&lt;/p>
+&lt;ul>
+&lt;li>Dual Restricted Primal
+$$
+\begin{aligned}
+&amp;\text{maxmize} &amp;&amp; \bold b^{T} \bold z \\\
+&amp;\text{subject to}
+&amp;&amp; \bold A^{j} \bold z \leq 0 &amp;&amp;&amp; j \in J \\\
+&amp; &amp;&amp; z_{i} \leq 1 &amp;&amp;&amp; \forall i \\\
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DRP の最適解を $\bold z^{\star}$ とします．
+双対問題の実行可能解 $\bold y$ に $\bold z^{\star}$ を $\epsilon(\epsilon \gt 0)$ 倍して足し合わせた解 ${\bold y}^{\prime} = \bold y + \epsilon \bold z^{\star}$ を考えます．
+実はうまく $\epsilon$ を選ぶことで $\bold y^{\prime}$ は元の解 $\bold y$ よりも良い目的関数値をとり，さらに実行可能解となっています．&lt;br>
+$\bold y$ よりも良い解 $\bold y^{\prime}$ が手に入れば，これを新たな双対問題の解として採用し，また 2 に戻り RP を考え&amp;hellip;と手順を繰り返していくことで，やがて最適解を得ることができます．&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>最後に，$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良い解となることと $\bold y^{\prime}$ が実行可能解となるような $\epsilon$ の選び方を示します．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良くなることを示します．&lt;br>
+$\bold y^{\prime} = \bold y + \epsilon \bold z$ を双対問題の目的関数に当てはめると $\bold b^{T} \bold y^{\prime} = \bold b^{T} \bold y + \epsilon \bold b^{T} \bold z^{\star}$ となります．&lt;br>
+$\epsilon \bold b^{T} \bold z^{\star} \gt 0$ となることを確認します．&lt;br>
+$\epsilon$ は $0$ より大きい値をとるため，$\epsilon \gt 0$ となります．&lt;br>
+RP の最適解の値は 0 より大きかったため，その双対問題である DRP の最適解の値も 0 より大きいことになります．よって，$\bold b^{T} \bold z^{\star} \gt 0$ といえます．&lt;br>
+以上のことから，$\bold y^{\prime}$ が $\bold y$ より良い目的関数値をとることがわかりました．&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が双対問題の実行可能解となるような $\epsilon$ の選び方を示します．&lt;br>
+双対問題の実行可能解になるように制約条件 $\bold A^{T} \bold y^{\prime} \leq \bold c$ を満たすような $\epsilon$ を求めます．&lt;br>
+まず，双対問題の制約条件より $\bold A^{T} \bold y \le \bold c$ です．&lt;br>
+次に，DRP の制約条件より $j \in J$ については $\bold A^{j} \bold z^{\star} \le 0$ となります．
+よって，$j \in J$ であるような $j$ については制約条件を満たすため，$j \notin J$ のうち $\bold A^{j} \bold z^{\star} \gt 0$ である $j$ についてのみ考えます．&lt;br>
+このような $j$ は $\epsilon \le \min_{j \notin J: A^{j} \bold z^{\star} \gt 0} \frac{c_j - \bold A^{j} \bold y}{\bold A^{j} \bold z^{\star}}$ を満たす必要があります．&lt;br>
+$\epsilon$ は大きい方がいいので，この条件を満たす最大の値を $\epsilon$ として選びます．&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="ハンガリアン法">ハンガリアン法
+&lt;/h2>&lt;p>Primal Dual Algorighm を使ってハンガリアン法を導出します．
+頂点 $a$ と頂点 $b$ を結ぶ辺を $(a, b) \in E$ とし，その容量を $c_{ab}$ とします．簡単のため $\bold c \ge \bold 0$ とし完全マッチングが存在するものとします．&lt;/p>
+&lt;p>以下では，有向グラフを接続行列 $\bold A$ で表します．また，ノードの数を $n$，辺の数を $m$ とします．
+二部グラフの最小重み完全マッチングを線形緩和した主問題と双対問題を定義します．&lt;/p>
+&lt;ul>
+&lt;li>主問題&lt;/li>
+&lt;/ul>
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{(a, b) \in E} c_{ab} x_{ab} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{b:(a, b) \in E} x_{ab} = 1 &amp;&amp;&amp; a \in A \\
+&amp; &amp;&amp; \sum_{a:(a, b) \in E} x_{ab} = 1 &amp;&amp;&amp; b \in B \\
+&amp; &amp;&amp; x_{ab} \ge 0 &amp;&amp;&amp; (a, b) \in E\\
+\end{aligned}
+$$&lt;ul>
+&lt;li>双対問題&lt;/li>
+&lt;/ul>
+$$
+\begin{aligned}
+&amp;\text{maxiimize} &amp;&amp; \sum_{a \in A} u_{a} + \sum_{b \in B} v_{b} \\
+&amp;\text{subject to}
+&amp;&amp; u_{a} + v_{b} \le c_{ab} &amp;&amp;&amp; (a, b) in E\\
+\end{aligned}
+$$&lt;h3 id="ハンガリアン法の導出">ハンガリアン法の導出
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>双対問題の適当な実行可能解を求めます．$C \ge 0$ を仮定しているため，$\bold u = \bold v = \bold 0$ とすることができます．&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>restricted primal を考えます．$J = \lbrace(a, b) \in E : u_{a} + v_{b} = c_{ab} \rbrace$ とすると以下のようになります．これは $J$ の辺のみを使って完全マッチングを求める問題です．&lt;/p>
+&lt;ul>
+&lt;li>Restricted Primal
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{a \in A} s_{a} + \sum_{b \in B} s_{b} \\\
+&amp;\text{subject to}
+&amp;&amp; \sum_{b:(a, b) \in E} x_{ab} + s_{a} = 1 &amp;&amp;&amp; a \in A\\\
+&amp; &amp;&amp; \sum_{a:(a, b) \in E} x_{ab} + s_{b} = 1 &amp;&amp;&amp; b \in B\\\
+&amp; &amp;&amp; x_{ab} >= 0 &amp;&amp;&amp; (a, b) \in J \\\
+&amp; &amp;&amp; x_{ab} = 0　&amp;&amp;&amp; (a, b) \in (E - J) \\\
+&amp; &amp;&amp; s \ge 0
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>$J$ の辺のみをつかって完全マッチングを作ることができれば，RP の目的関数値を 0 にすることができます．
+辺の重みを考えなくてよくなったため，2 部グラフの最大マッチングを求めるアルゴリズムを使うことができます．
+もし完全マッチングがみつかればアルゴリズムは終了します．&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>見つからない場合は dual restricted primal を考えます．DRP は $J$ の辺のみを使ったグラフ上で最小点被覆を求める問題です．これは RP で求めた最大マッチングの解を使って求めることができます ．&lt;/p>
+&lt;ul>
+&lt;li>Dual Restricted Primal
+$$
+\begin{aligned}
+&amp;\text{maximize} &amp;&amp; \sum_{a \in A} u^{\prime}_{a} + \sum_{b \in B} v^{\prime}_{b} \\\
+&amp;\text{subject to}
+&amp;&amp; u^{\prime}_{a} + v^{\prime}_{b} \le 0 &amp;&amp;&amp; (a, b) \in J \\\
+&amp; &amp;&amp; u^{\prime}_{a} \le 1 &amp;&amp;&amp; a \in A\\\
+&amp; &amp;&amp; v^{\prime}_{b} \le 1 &amp;&amp;&amp; b \in B
+\end{aligned}
+$$&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DRP の解を求め，$u^{\prime \prime} = u + \epsilon u^{\prime}$，$v^{\prime \prime} = v + \epsilon v^{\prime}$とします．ここで $\epsilon = \min_{(a, b) \in (E - J)}(c_{ab} - u_{a} - v_{b})$ とすることができます．あとは，$u^{\prime}$ と $v^{\prime}$ を新しい双対問題の解として採用し，2 に戻ります．&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="参考文系">参考文系
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/B00C8UQZAO/" target="_blank" rel="noopener"
+>Combinatorial Optimization: Algorithms and Complexity&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://ocw.mit.edu/courses/18-433-combinatorial-optimization-fall-2003/92c255b407a6ad7d75c9ea55de2fdf33_l15.pdf" target="_blank" rel="noopener"
+>18.433 Combinatorial Optimization The Primal-dual Algorithm&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://math.mit.edu/~goemans/PAPERS/book-ch4.pdf" target="_blank" rel="noopener"
+>CHAPTER 4 THE PRIMAL-DUAL METHOD FOR APPROXIMATION ALGORITHMS AND ITS APPLICATION TO NETWORK DESIGN PROBLEMS&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Quadratic Pseudo-Boolean Optimization</title><link>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</link><pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</guid><description>&lt;img src="https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/images/general_sample_ab_1.png" alt="Featured image of post Quadratic Pseudo-Boolean Optimization" />&lt;h2 id="quadratic-pseudo-boolean-optimization">Quadratic Pseudo-Boolean Optimization
 &lt;/h2>&lt;p>次の関数 $E(\bold x)$ を最小化する問題を考えます．$x_{p} \in \lbrace 0, 1 \rbrace$ とし，$\theta_{const}$ は定数を表します．この問題を &lt;a class="link" href="https://en.wikipedia.org/wiki/Quadratic_pseudo-Boolean_optimization" target="_blank" rel="noopener"
 >Quadratic Pseudo-Boolean Optimization&lt;/a>(以下 QPBO)と呼びます．&lt;/p>
 $$
