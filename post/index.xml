@@ -251,7 +251,15 @@ $$&lt;/li>
 &lt;/tr>
 &lt;tr>
 &lt;td>8 ～ 34&lt;/td>
-&lt;td>目薬&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>を 1 日 4 回点眼する．保護メガネは外していい&lt;/td>
+&lt;td>目薬&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>を 1 日 4 回点眼する．以降保護メガネは外していい&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>35&lt;/td>
+&lt;td>手術 1 ヶ月後検査をする&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>36 ～&lt;/td>
+&lt;td>目薬&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>を 1 日 3 回点眼する．&lt;/td>
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
@@ -363,7 +371,18 @@ $$&lt;/li>
 &lt;li>特に問題なし&lt;/li>
 &lt;li>両目とも 1.5 のまま&lt;/li>
 &lt;li>リンデロン点眼からフルメトロン点眼液 0.1% に変更&lt;/li>
-&lt;li>ドライアイがあるのでドライアイ用の目薬&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>を出してもらう&lt;/li>
+&lt;li>ドライアイがあるのでドライアイ用の目薬&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>を出してもらう&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-ヶ月後検査">1 ヶ月後検査
+&lt;/h2>&lt;ul>
+&lt;li>眼圧検査，レンズのズレの検査，角膜内皮細胞数検査，視力検査，検診をした
+&lt;ul>
+&lt;li>特に問題なし&lt;/li>
+&lt;li>両目とも 1.5 のまま&lt;/li>
+&lt;li>フルメトロン点眼液は使い切ったら終了で，クラビット点眼液とジクロフェナク Na 点眼液を 1 本ずつ処方された．これらを使い切ったら終了&lt;/li>
+&lt;li>問題がなく順調ですねと言われて一瞬で終わってしまった．細胞数がどうなっているのかとか聞いたら教えてもらえるのだろうか？&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
@@ -407,10 +426,10 @@ $$&lt;/li>
 &lt;li>そもそも書類を貰えるのか不明だが&lt;/li>
 &lt;/ul>
 &lt;/li>
+&lt;li>Google のレビューにも書いてあるのだけど，診察のとにかくはやく終わらせよう感がすごいので頑張って自分でいろいろ聞く必要がある．&lt;/li>
 &lt;/ul>
 &lt;h2 id="todo">TODO
 &lt;/h2>&lt;ul>
-&lt;li>1 ヶ月後検査&lt;/li>
 &lt;li>3 ヶ月後検査&lt;/li>
 &lt;li>確定申告&lt;/li>
 &lt;/ul>
@@ -427,7 +446,10 @@ $$&lt;/li>
 &lt;p>クラビット点眼液 1.5%，フルメトロン点眼液 0.1%，ジクロフェナク Na 点眼液 0.1%&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:4">
-&lt;p>ヒアルロン酸ナトリウム点眼液 0.1％&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;p>クラビット点眼液 1.5%，ジクロフェナク Na 点眼液 0.1%&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:5">
+&lt;p>ヒアルロン酸ナトリウム点眼液 0.1％&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
 &lt;/div></description></item><item><title>Quadratic Pseudo-Boolean Optimization</title><link>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</link><pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</guid><description>&lt;img src="https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/images/general_sample_ab_1.png" alt="Featured image of post Quadratic Pseudo-Boolean Optimization" />&lt;h2 id="quadratic-pseudo-boolean-optimization">Quadratic Pseudo-Boolean Optimization
