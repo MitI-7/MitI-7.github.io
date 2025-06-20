@@ -140,7 +140,7 @@ $G^{\prime}$ の最適 branching から構成した $G$ の branching も最適 
 外部から閉路に入る辺を $e = (u, v)$，$v$ に入る閉路内唯一の辺を $\tilde e$，閉路の最小の重みを持つ辺を $e^{0}$ とします．
 この条件を満たすためには，閉路に入る辺 $e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0})$ と設定すればいいです．&lt;br>
 閉路に入る辺以外の重みは $w$ のままとします．&lt;/p>
-&lt;details open>&lt;summary>証明&lt;/summary>
+&lt;details>&lt;summary>証明&lt;/summary>
 &lt;hr>
 &lt;p>$w(B) = w^{\prime}(B^{\prime}) + const$ となることを示します．&lt;br>
 $B^{\prime}$ の超頂点を展開したときの重みの増加分を考えます．&lt;/p>
