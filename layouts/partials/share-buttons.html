@@ -8,6 +8,9 @@
         <div class="sns_button hatena">
             <a href="http://b.hatena.ne.jp/add?mode=confirm&url={{ .Permalink }}&title={{ .Title }}" target="_blank" title="hatena"><i class="hatena-icon"></i></i></a>
         </div>
+        <div class="sns_button bluesky">
+            <a href="https://bsky.app/intent/compose?text={{ urlquery (printf "%s %s" .Title .Permalink) }}" target="_blank" title="Share on Bluesky"> <i class="fab fa-bluesky"></i></a>
+        </div>
     </div>
 </section>
 {{ end }}
