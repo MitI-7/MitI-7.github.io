@@ -365,7 +365,7 @@ $G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削
 &lt;p>最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>最小費用流問題の最短路繰り返し法</title><link>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E7%9F%AD%E8%B7%AF%E7%B9%B0%E3%82%8A%E8%BF%94%E3%81%97%E6%B3%95/</link><pubDate>Mon, 21 Oct 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E7%9F%AD%E8%B7%AF%E7%B9%B0%E3%82%8A%E8%BF%94%E3%81%97%E6%B3%95/</guid><description>&lt;h2 id="最小費用流問題minimum-cost-flow-problem">最小費用流問題(Minimum Cost Flow Problem)
+&lt;/div></description></item><item><title>最小費用流問題の最短路繰り返し法</title><link>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</link><pubDate>Mon, 21 Oct 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</guid><description>&lt;h2 id="最小費用流問題minimum-cost-flow-problem">最小費用流問題(Minimum Cost Flow Problem)
 &lt;/h2>&lt;p>$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br>
 1 つめの制約を流量保存則と呼び，第一項は頂点 $i$ から出る流量，第二項は頂点 $i$ に入る流量を表します．
 2 つめの制約を容量制約と呼びます．&lt;/p>
