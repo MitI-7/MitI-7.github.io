@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>組合せ最適化 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/</link><description>Recent content in 組合せ最適化 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 20 Jun 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-%E3%81%A8-edmonds-%E3%81%AE%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-%E3%81%A8-edmonds-%E3%81%AE%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-%E3%81%A8-edmonds-%E3%81%AE%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" />&lt;h2 id="optimum-branchings">Optimum Branchings
-&lt;/h2>&lt;p>有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺$e$ の重みを $w(e)$，辺集合 $E$ の重みの合計を $w(E)$ で表します．&lt;br>
+&lt;/h2>&lt;p>有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br>
 $G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p>
 &lt;ul>
 &lt;li>閉路を含まない&lt;/li>
 &lt;li>同じ頂点に入る辺は高々 $1$ 本&lt;/li>
 &lt;/ul>
-&lt;p>$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;br>
-すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．&lt;br>
-今回は辺の重みの合計が最大の branching を考えますが，重みが最小の branching を求めたいときは重みの正負を反転すればいいです．&lt;/p>
-&lt;p>下の図は有向グラフと対応する 最適 branching の例です．&lt;/p>
+&lt;p>すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>．&lt;br>
+この問題は，最小全域木問題の有向辺バージョンである最小全域有向木問題と等価の問題で，互いに線形時間で変換することができます．&lt;br>
+下の図は有向グラフと対応する 最適 branching の例です．$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;/p>
 &lt;img src="images/branchingの例.png" width="50%">
-&lt;p>以下ではいくつかの定義と定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br>
-最後に，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法を説明します．&lt;/p>
+&lt;p>以下ではいくつかの定義，補題，定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．&lt;br>
+このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br>
+また，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法と説明します．&lt;br>
+最後に実装例として&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
+>AOJ - 最小全域有向木&lt;/a>の提出コードへのリンクをはっておきます．&lt;/p>
 &lt;h2 id="定義">定義
 &lt;/h2>&lt;h3 id="critical">critical
 &lt;/h3>&lt;p>辺 $e = (u, v)$ が以下の 2 条件を満たすとき critical という．&lt;/p>
@@ -24,6 +26,8 @@ $G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条�
 &lt;li>$H$ のすべての辺は critical&lt;/li>
 &lt;li>$H$ の各頂点の入次数は高々 $1$&lt;/li>
 &lt;/ul>
+&lt;p>下の図は maximal critical subgraph の例です．critical な辺を赤線で示しています．&lt;/p>
+&lt;img src="images/maximal_critical_subgraph.png" width="25%">
 &lt;h3 id="eligible">eligible
 &lt;/h3>&lt;p>辺 $e$ が入る頂点を $head(e)$ と表す．$G = (V, E)$ の branching $B$ に対して，$(B \backslash \lbrace (u, v) \in B : v = head(e) \rbrace) \cup \lbrace e \rbrace$ も branching になるとき，$e$ を eligible という．&lt;/p>
 &lt;h2 id="補題-1">補題 1
@@ -94,7 +98,10 @@ $|C \backslash B| = 2$ に帰着します．&lt;/p>
 &lt;ul>
 &lt;li>$H$ に含まれるすべての有向閉路 $C_i$ について，$| C_i \backslash B| = 1$．&lt;/li>
 &lt;/ul>
-&lt;p>つまり，各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;/p>
+&lt;p>つまり，$H$ の各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;br>
+下の図は $G$ に対する maximul critical subgraph $H$ と最適 branching です．&lt;br>
+$H$ の閉路から $(0, 1)$ と $(3, 5)$ を取り除いた最適 branching が存在することがわかります．&lt;/p>
+&lt;img src="images/theorem1_0.png" width="50%">
 &lt;details>&lt;summary>証明&lt;/summary>
 &lt;hr>
 &lt;p>最適 branching のうち，$H$ の辺を最も多く含んでいるものを $B$ と仮定します．&lt;br>
@@ -107,7 +114,7 @@ $e$ は eligible なので，新しい branching $B^{\prime} = \lbrace B \backsl
 &lt;hr>
 &lt;/details>
 &lt;h2 id="定理-2">定理 2
-&lt;/h2>&lt;p>定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}$ は $C_i$ で最も重みの小さい辺である．&lt;/p>
+&lt;/h2>&lt;p>定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}_i$ は $C_i$ で最も重みの小さい辺である．&lt;/p>
 &lt;ol>
 &lt;li>各有向閉路 $C_i$ で $|C_i \backslash B| = 1$&lt;/li>
 &lt;li>もし有向閉路 $C_i$ へ外部から入る辺が $B$ に存在しないなら，$C_i \backslash B = \lbrace e^{0}_i \rbrace$ である．&lt;/li>
@@ -123,9 +130,9 @@ $B^{\prime} = (B \backslash \lbrace e^{0}_i \rbrace) \cup \lbrace e \rbrace$ と
 &lt;hr>
 &lt;/details>
 &lt;h2 id="edmonds-のアルゴリズム">Edmonds のアルゴリズム
-&lt;/h2>&lt;p>グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>．&lt;/p>
+&lt;/h2>&lt;p>グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．&lt;/p>
 &lt;p>まず，maximal critical subgraph を求め，この辺集合を $H$ とします．&lt;br>
-maximal critical subgraph の性質から $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p>
+補題 1 により $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p>
 &lt;p>$(V, H)$ が branching でない場合を考えます．&lt;br>
 この場合，$(V, H)$ には有向閉路が 1 つ以上存在します．&lt;br>
 定理 1 により，各閉路から 1 本辺を削除した辺集合を含む最適 branching $B^{\star}$ が存在することがわかります．今後はこの $B^{\star}$ を求めていきます．&lt;/p>
@@ -313,7 +320,7 @@ $G = (V, E)$ に対し，$K = 1 + \sum_{e \in E} |w(e)|$ とします．&lt;br>
 $w^{\prime}(e) = K - w(e)$ と重みを変更した $G$ で最適 branching 問題を解きます．&lt;/p>
 &lt;p>木 $B$ の辺の数を $|B|$ と表します．$|B| \gt |B^{\prime}|$ である任意の $2$ つの有向木 $B$，$B^{\prime}$ に対して，$w^{\prime}(B) - w^{\prime}(B^{\prime}) = (|B| - |B^{\prime}|)K - (w(B) - w(B^{\prime})) \ge 0$ が成り立ちます．&lt;br>
 よって，$|B| \gt |B^{\prime}|$ ならば $w^{\prime}(B) \gt w^{\prime}(B^{\prime})$ であるため，最小重み有向木問題の解を求めることができます．&lt;/p>
-&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem">最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>
+&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem">最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>
 &lt;/h3>&lt;p>最小重み有向木問題で，全域木の根 $r$ が指定されている問題です．&lt;br>
 $G$ に $r$ を根とする全域有向木が存在すると仮定します．&lt;br>
 超頂点 $s$ を用意し，$G^{\prime} = (V(G) \cup \lbrace s \rbrace, E \cup \lbrace (s, r) \rbrace)$，$w(s, r) = 0$ とします．&lt;br>
@@ -349,10 +356,13 @@ $G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削
 >組合せ最適化&lt;/a>では最大重み有向森問題（Maximum Weight Branching Problem）と表記されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:2">
-&lt;p>辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;p>重みが最小の branching を求めたいときは重みの正負を反転します&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:3">
-&lt;p>最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;p>辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:4">
+&lt;p>最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
 &lt;/div></description></item><item><title>Primal Dual Algorithm(厳密解)</title><link>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</link><pubDate>Fri, 14 Mar 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</guid><description>&lt;h2 id="はじめに">はじめに
