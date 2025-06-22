@@ -4,6 +4,7 @@ date = {{ .Date }}
 image = "sample.jpg"
 categories = "" 
 tags = ["", ""]
+slug = "optimum-branchings-tarjan"
 +++
 
 ##
