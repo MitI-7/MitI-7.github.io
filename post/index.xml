@@ -1,4 +1,208 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Eating Your Own Cat Food</title><link>https://miti-7.github.io/post/</link><description>Recent content in Posts on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 20 Jun 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" />&lt;h2 id="optimum-branchings">Optimum Branchings
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Eating Your Own Cat Food</title><link>https://miti-7.github.io/post/</link><description>Recent content in Posts on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" />&lt;h2 id="optimum-branchings-の-tarjan-の実装">Optimum Branchings の Tarjan の実装
+&lt;/h2>&lt;p>&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
+>Optimum Branchings と Edmonds のアルゴリズム&lt;/a>の続きです．&lt;br>
+Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p>
+&lt;p>Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．&lt;/p>
+&lt;p>これに対し，Tarjan の実装はおおむね以下のような流れになります．&lt;br>
+まだ処理されていない頂点について，その頂点に入る最大の重みを持つ辺を採用します．この辺は最適 branching の構築に必要な構造（森）に記録していきます．もし採用した辺によって閉路が形成された場合，閉路を $1$ つの超頂点に縮約します．その際，閉路の外から閉路に入る辺の重みを修正します．最終的な最適 branching は森から $O(|V|)$ で構築することができます．&lt;br>
+Tarjan の実装は，縮約のたびにグラフを再構築することを避け，閉路の展開処理を主アルゴリズムから切り離したことで，計算量を改善しているといえます．&lt;/p>
+&lt;p>Tarjan の実装では，「閉路の検出」，「超頂点の管理」，「各頂点に入る辺の管理」が必要です．
+これらを効率的に行うために，Union Find と 遅延伝播マージ可能ヒープを使います．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>閉路の検出&lt;/p>
+&lt;ul>
+&lt;li>アルゴリズムでは各頂点についてその頂点に入る重み最大の辺を採用していきます．頂点を Union Find で管理し，辺が採用されるたびにその端点をマージしていきます．各頂点は最大でも 1 本の入力辺しかもたないため，採用された辺 $(u, v)$ の $u$ と $v$ が同じ集合なら閉路が形成されたことになります．&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>超頂点の管理&lt;/p>
+&lt;ul>
+&lt;li>閉路が超頂点に縮約されたとき，各頂点がどの超頂点に所属しているかを管理する必要があります．これは，Union Find で管理することができます．ただし，この Union Find は閉路の検出用の Union Find とは別でもつ必要があります．&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>各頂点に入る辺の管理&lt;/p>
+&lt;ul>
+&lt;li>各頂点に入る辺を管理するデータ構造には，以下の $4$ つの操作が必要です．
+&lt;ol>
+&lt;li>要素の追加&lt;/li>
+&lt;li>最大要素の抽出&lt;/li>
+&lt;li>$2$ つの集合のマージ&lt;/li>
+&lt;li>集合内の全要素の重みの定数変更&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>これらの操作がすべて対数時間で実行できる場合，Tarjan の実装は $O(|E| \log |V|)$ で動作します．&lt;br>
+&lt;a class="link" href="https://en.wikipedia.org/wiki/Skew_heap" target="_blank" rel="noopener"
+>Skew Heap&lt;/a> は操作 1, 2, 3 を償却 $O(\log |N|)$ で実行できます．これに遅延伝播機能をつけることで操作 4 を定数時間で実行できます．&lt;/li>
+&lt;li>密グラフの場合は，隣接行列を使うことで操作 2, 3, 4 を $O(|V|)$ で実行できます．この場合 Tarjan の実装は $O(|V|^2)$ で動作します．&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="tarjan-の実装">Tarjan の実装
+&lt;/h2>&lt;p>アルゴリズムは，森 $F$ を構築する Algorithm BRANCH と，森 $F$ から branching を構築する Algorithm LEAF の $2$ つからなります．&lt;br>
+森 $F$ は採用された $G$ の辺を頂点とし，縮約過程を親子関係として記録するデータ構造です．&lt;/p>
+&lt;h3 id="algorithm-branch">Algorithm BRANCH
+&lt;/h3>&lt;p>このアルゴリズムは，森 $F$ を構築します．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>変数&lt;/p>
+&lt;ul>
+&lt;li>S: 強連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ強連結成分となる．&lt;/li>
+&lt;li>W: 弱連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ弱連結成分となる．&lt;/li>
+&lt;li>$min[v]$: 超頂点 $v$ 内で最終的に根に選ばれる頂点&lt;/li>
+&lt;li>$roots$: 入辺のない強連結成分の集合&lt;/li>
+&lt;li>$rset$: 正の重みを持つ入辺がない（超）頂点の集合&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>$roots$ に要素がある間，以下の処理を繰り返す&lt;/p>
+&lt;ul>
+&lt;li>$roots$ から任意の（超）頂点 $r$ を取り出す&lt;/li>
+&lt;li>$r$ に入る重みが $0$ より大きい辺がなければ，$r$ を $rset$ に格納する&lt;/li>
+&lt;li>そうでなければ，$r$ に入る重み最大の辺 $(u, v)$ を選ぶ&lt;/li>
+&lt;li>$(u, v)$ を表す頂点を $F$ に追加する
+&lt;ul>
+&lt;li>$r$ が超頂点なら，$F$ の $r$ が属する閉路の各頂点を $(u, v)$ の子とする&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>$u$ と $v$ が異なる弱連結成分に属していれば，$S$ の $2$ つの弱連結成分を結合する&lt;/li>
+&lt;li>そうでなければ閉路が発生する
+&lt;ul>
+&lt;li>$C$ を $(u, v)$ を含む閉路とする&lt;/li>
+&lt;li>$W$ で $C$ に含まれるすべての強連結成分を $1$ つの超頂点 $r^{\prime}$ に縮約する&lt;/li>
+&lt;li>$C$ に含まれる最小重みの辺の行き先を $m$ とし，$min[r^{\prime}] = m$ とする&lt;/li>
+&lt;li>$r^{\prime}$ に外部から入る辺の重みを更新する&lt;/li>
+&lt;li>$r^{\prime}$ を $roots$ に追加する&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="algorithm-leaf">Algorithm LEAF
+&lt;/h3>&lt;p>Algorithm LEAF は $F$ から最適 branching $B$ を構築します．&lt;br>
+$R = \lbrace min(i) | i \in rset \rbrace$，$N$ を $F$ の根の集合とします．&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>$R$ が空でないなら，$R$ から $v$ を 1 つ取り出す&lt;br>
+$R$ が空の場合は，$N$ から任意の根 $(u,v)$ を選び $B$ に追加し，$v$ を処理対象とする&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$F$ の $v$ に入る辺を表す頂点から根までのパス $P$ を特定する&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$F$ からパス $P$ 上のすべての頂点およびそれらから出る全ての辺を削除する&lt;br>
+この削除操作により，$N$ も更新される&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>この一連の処理を $R$ と $N$ がともに空になるまで繰り返すと，最適 branching $B$ が構築されます．&lt;/p>
+&lt;h2 id="アルゴリズムの実行例">アルゴリズムの実行例
+&lt;/h2>&lt;p>下のグラフの branching を求めます．&lt;br>
+&lt;img src="images/実行例_0.png" width="25%">&lt;/p>
+&lt;hr>
+&lt;h3 id="phase1">phase1
+&lt;/h3>&lt;ul>
+&lt;li>頂点 $0$ に入る重み最大の辺 $(2, 0)$ を選びます．森 $F$ に $2 \rightarrow 0$ を表す頂点を追加します．&lt;/li>
+&lt;li>同様に，頂点 $1$，$2$ に入る重み最大の辺 $(0, 1), (1, 2)$ を $F$に追加します&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．
+閉路 $0 \rightarrow 1 \rightarrow 2 \rightarrow 0$ が見つかったので，これを超頂点 $A$ に縮約します．
+$(3, 1)$ の重みを $4 - 4 + 3 = 3$ に変更します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading">&lt;img src="images/実行例_1.png" width="25%"> &lt;img src="images/実行例_1_f.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase2">phase2
+&lt;/h3>&lt;ul>
+&lt;li>頂点 $A$ に入る重み最大の辺 $(3, A)$ を選びます．$F$ に $3 \rightarrow A$ を追加します．&lt;br>
+$(3, A)$ は超頂点 $A$ に入る辺なので，$3 \rightarrow A$ が親となるように $2 \rightarrow 0$，$0 \rightarrow 1$，$1 \rightarrow 2$ に辺をはります．&lt;/li>
+&lt;li>頂点 $3$ に入る重み最大の辺 $(A, 3)$ を選び，$F$ に追加します．&lt;br>
+閉路 $A \rightarrow 3 \rightarrow A$ が見つかったので，これを超頂点 $B$ に縮約します．&lt;br>
+$(4, A)$ の重みを $1 - 3 + 3 = 1$ に変更します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-1">&lt;img src="images/実行例_2.png" width="25%"> &lt;img src="images/実行例_2_f.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase3">phase3
+&lt;/h3>&lt;ul>
+&lt;li>頂点 $B$ に入る重み最大の辺 $(4, B)$ を選びます．$F$ に $4 \rightarrow B$ を追加します．&lt;br>
+$(4, B)$ は超頂点 $B$ に入る辺なので，$4 \rightarrow B$ から $3 \rightarrow A$，$A \rightarrow 3$ に辺をはります．&lt;/li>
+&lt;li>頂点 $4$，$5$ に入る重み最大の辺 $(5, 4)$，$(B, 5)$ を選び，$F$ に追加します．&lt;br>
+閉路 $B \rightarrow 5 \rightarrow 4 \rightarrow B$ が見つかったので，これを超頂点 $C$ に縮約します．&lt;br>
+$(6, 4)$ の重みを $4 - 4 + 1 = 1$ に変更します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-2">&lt;img src="images/実行例_3.png" width="25%"> &lt;img src="images/実行例_3_f.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase4">phase4
+&lt;/h3>&lt;ul>
+&lt;li>頂点 $C$ に入る重み最大の辺 $(6, C)$ を選びます．$F$ に $6 \rightarrow C$ を追加します．&lt;br>
+$(6, C)$ は超頂点 $C$ に入る辺なので，$6 \rightarrow C$ から $4 \rightarrow B$，$5 \rightarrow 4$，$B \rightarrow 5$ に辺をはります．&lt;/li>
+&lt;li>頂点 $6$ に入る重み最大の辺 $(C, 6)$ を選び，$F$ に追加します．&lt;br>
+閉路 $C \rightarrow 6 \rightarrow C$ が見つかったので，これを超頂点 $D$ に縮約します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-3">&lt;img src="images/実行例_4.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase5">phase5
+&lt;/h3>&lt;ul>
+&lt;li>頂点 $D$ に入る辺はないので，Algorithm BRANCH は終了します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-4">&lt;img src="images/実行例_5.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase6">phase6
+&lt;/h3>&lt;ul>
+&lt;li>森 $F$ が求められたので，最適 branching $B$ を構築していきます．&lt;/li>
+&lt;li>$R = \lbrace 5 \rbrace$ から $5$ を取り出します．&lt;/li>
+&lt;li>$5$ に入る辺である $B \rightarrow 5$ から根までのパス $P$ を求め，これを削除します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="">&lt;img src="images/実行例_6.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase7">phase7
+&lt;/h3>&lt;ul>
+&lt;li>森の根である $C \rightarrow 6$ を取り出し，$B$ の辺として採用します．$C \rightarrow 6$ は実際には，$5 \rightarrow 6$ なので，$B$ では $(5, 6)$ を採用しています．&lt;br>
+$6$ に入る辺は森にないので，パス $P$ の削除は行われません．&lt;/li>
+&lt;li>森の根である $5 \rightarrow 4$ も同様に処理をします．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-5">&lt;img src="images/実行例_7.png" width="25%"> &lt;img src="images/実行例_7_g.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase8">phase8
+&lt;/h3>&lt;ul>
+&lt;li>森の根である $4 \rightarrow B$ を取り出し，$B$ の辺として採用します．$4 \rightarrow B$ は実際には，$4 \rightarrow 2$ なので，$B$ では $4 \rightarrow 2$ を採用しています．&lt;br>
+根から $2$ に入る辺である $1 \rightarrow 2$ までのパスを求め削除します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-6">&lt;img src="images/実行例_8.png" width="25%"> &lt;img src="images/実行例_8_g.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h3 id="phase9">phase9
+&lt;/h3>&lt;ul>
+&lt;li>森の根である $A \rightarrow 3$，$2 \rightarrow 0$，$0 \rightarrow 1$ を処理します．&lt;/li>
+&lt;li>森のすべての要素を処理したのでアルゴリズムを終了します．&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-7">&lt;img src="images/実行例_9.png" width="25%"> &lt;img src="images/実行例_9_g.png" width="25%">
+&lt;/h2>&lt;hr>
+&lt;h2 id="問題">問題
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/problem/directedmst" target="_blank" rel="noopener"
+>Directed MST&lt;/a>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/submission/296045" target="_blank" rel="noopener"
+>提出コード&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230070103" target="_blank" rel="noopener"
+>Finding optimum branchings&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230090403" target="_blank" rel="noopener"
+>A note on finding optimum branchings&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://cw.fel.cvut.cz/old/_media/courses/a4m33pal/cviceni/algorithm-description.pdf" target="_blank" rel="noopener"
+>Optimum Branchings and Spanning Aborescences&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://arxiv.org/abs/2208.02590" target="_blank" rel="noopener"
+>Efficiently Computing Directed Minimum Spanning Trees&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>$(3, 1)$ も $1$ に入る重み最大の辺ですが，ここでは $(0, 1)$ を選んだとします．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" />&lt;h2 id="optimum-branchings">Optimum Branchings
 &lt;/h2>&lt;p>有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br>
 $G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p>
 &lt;ul>
