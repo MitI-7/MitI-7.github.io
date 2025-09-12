@@ -1,11 +1,234 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Primal Dual on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/primal-dual/</link><description>Recent content in Primal Dual on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/primal-dual/index.xml" rel="self" type="application/rss+xml"/><item><title>Primal Dual Algorithm(厳密解)</title><link>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</link><pubDate>Fri, 14 Mar 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</guid><description>&lt;h2 id="はじめに">はじめに
-&lt;/h2>&lt;p>厳密解を求める primal dual algorithm の話です．&lt;br>
-primal dual algorithm の一般的な説明をしたあと，具体例としてハンガリアン法を導出します．&lt;/p>
-&lt;h2 id="準備">準備
-&lt;/h2>&lt;p>以下の等式標準形の線形計画問題を考えます．簡単のため $\bold b \ge 0$ を仮定します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>主問題&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Primal Dual on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/primal-dual/</link><description>Recent content in Primal Dual on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 12 Sep 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/primal-dual/index.xml" rel="self" type="application/rss+xml"/><item><title>Adwords に対する Primal-Dual の競合比解析</title><link>https://miti-7.github.io/post/adwords-primal-dual/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/adwords-primal-dual/</guid><description>&lt;h2 id="adwords"&gt;Adwords
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/adwords-greedy-primal-dual/" target="_blank" rel="noopener"
+&gt;Adwords に対する Primal-Dual を使った貪欲法の競合比解析&lt;/a&gt; の続きです．&lt;br&gt;
+以下では，adwords に対する primal dual algorithm が $1 - \frac{1}{e}$-competitive となることを示します．&lt;/p&gt;
+&lt;h2 id="small-bids-assumption"&gt;Small Bids Assumption
+&lt;/h2&gt;&lt;p&gt;予算に対する入札額の比率のうち最大を $R_{\mathrm{max}}$ とし，$R_{\mathrm{max}}$ は十分小さいと仮定します．&lt;br&gt;
+$R_{\mathrm{max}} \coloneqq \max_{u, v} \frac{\mathrm{bid}_{uv}}{B_u}$&lt;/p&gt;
+&lt;h2 id="adwords-の定式化"&gt;Adwords の定式化
+&lt;/h2&gt;&lt;p&gt;Adwords の主問題と双対問題は以下のようになります．ここでは adwords を双対問題とします．&lt;br&gt;
+$x_{uv}$ は $v$ が $u$ に割り当てられたときに $1$ になる決定変数です．実際には広告リクエストは分割できないので $x_{uv} \in \lbrace 0, 1 \rbrace$ ですが線形緩和しています．&lt;/p&gt;
+&lt;p&gt;主問題(Primal Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{u} B_u \alpha_{u} + \sum_{v} \beta_v \\
+&amp;\text{subject to}
+&amp;&amp; \mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v &amp;&amp; \forall u, v \\
+&amp; &amp;&amp; \alpha_u \geq 0 \\
+&amp; &amp;&amp; \beta_{v} \geq 0
+\end{aligned}
+$$&lt;p&gt;双対問題(Dual Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{maximize} &amp;&amp; \sum_{u, v} \mathrm{bid}_{uv} x_{uv} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u &amp;&amp; \forall u \\
+&amp; &amp;&amp; \sum_u x_{uv} \leq 1 &amp;&amp; \forall v \\
+&amp; &amp;&amp; x_{uv} \geq 0
+\end{aligned}
+$$&lt;h2 id="アルゴリズム"&gt;アルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;初期化
+&lt;ul&gt;
+&lt;li&gt;各 $u$ について，$\alpha_u \leftarrow 0$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v$ が到着したとき，$\alpha_u \lt 1$ の中で $\mathrm{bid}_{uv}(1 - \alpha_u)$ を最大化する $u$ に $v$ を割り当てる&lt;/li&gt;
+&lt;li&gt;$\alpha_u \ge 1$ ならなにもしない．そうでなければ
+&lt;ul&gt;
+&lt;li&gt;$u$ の残り予算から $\min(\mathrm{bid}_{uv}, 残り予算)$ 減算し，$x_{uv} \leftarrow 1$ とする&lt;/li&gt;
+&lt;li&gt;$\beta_v \leftarrow \mathrm{bid}_{uv}(1 - \alpha_u)$&lt;/li&gt;
+&lt;li&gt;$\alpha_u \leftarrow \alpha_u (1 + \frac{\mathrm{bid}_{uv}}{B_u}) + \frac{\mathrm{bid}_{uv}}{(c - 1) \cdot B_u}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="競合比解析"&gt;競合比解析
+&lt;/h2&gt;&lt;p&gt;以下の 3 つを示します．
+主問題の目的関数値と双対問題の目的関数値を $P$ と $D$ とし，$1$ イテレーションでの変化量をそれぞれ $\Delta P$ と $\Delta D$ で表します．&lt;br&gt;
+また，$R_{\mathrm{max}} = \max_{u, v}{\frac{\mathrm{bid}_{uv}}{B_u}}$，$c = (1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}$ とします．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;主問題の実行可能解を生成する&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双対問題の（ほぼ）実行可能解を生成する&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;双対問題の予算制約を破ることがあるが，各 $u$ の超過は高々 $\max_{v} \mathrm{bid}_{uv}$&lt;/li&gt;
+&lt;li&gt;得られる利益は $(1 - R_{\mathrm{max}})\sum_{uv} \mathrm{bid}_{uv} x_{uv}$ 以上となる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各イテレーションで $\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\frac{\Delta D}{\Delta P} \ge 1 - \frac{1}{c}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;1.，2.，3.と弱双対性により上記のアルゴリズムの競合比は以下のようになります．
+&lt;/p&gt;
+$$(1 - \frac{1}{c})(1 - R_{\mathrm{max}}) = (1 - \frac{1}{(1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}})(1 - R_{\mathrm{max}})$$&lt;p&gt;これは，$R_{\mathrm{max}} \rightarrow 0^+$ のとき $1 - \frac{1}{e}$ に近づきます．&lt;/p&gt;
+&lt;h3 id="1-主問題の実行可能解を生成する"&gt;1. 主問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;主問題の制約条件は $(1)$ $\mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v$，$(2)$ $\alpha_u \geq 0$，$(3)$ $\beta_{v} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たすことを確認します．&lt;/p&gt;
+&lt;p&gt;$v$ が $u$ に割り当てられたときを考えます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$\alpha_u \ge 1$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\mathrm{bid}_{uv} \ge 0$ かつ $\beta_v \ge 0$のため制約 $(1)$ を満たします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\alpha_u \lt 1$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アルゴリズムで $\beta_v = \mathrm{bid}_{uv}(1 - \alpha_u)$となります．&lt;br&gt;
+このとき $u$ として $\mathrm{bid}_{u^{\prime} v}(1 - \alpha_{u^{\prime}})$ を最大化する $u^{\prime}$ を選んでいるため，任意の $u$, $v$ について制約 $(1)$ を満たします．&lt;br&gt;
+また，アルゴリズムでは $\alpha_i$ を単調増加させるため，この操作によって制約が満たされなくなることはありません．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-双対問題のほぼ実行可能解を生成する"&gt;2. 双対問題の(ほぼ)実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;双対問題の制約条件は，$(1)$ $\sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u$，$(2)$ $\sum_u x_{uv} \leq 1$，$(3)$ $x_{uv} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;まず，アルゴリズムは $\alpha \ge 1$ のとき双対変数を更新しないので，$u$ に対する課金額 $\sum_{v} \mathrm{bid}_{uv} x_{uv}$ が予算を超えたら場合 $\alpha_u \ge 1$ となることを示します．&lt;br&gt;
+これは $\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ によって示されます．&lt;/p&gt;
+&lt;p&gt;$\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ を帰納法を使って証明します．&lt;br&gt;
+$\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ を仮定します．はじめこの条件は明らかに満たされています．&lt;br&gt;
+$k$ が $u$ に割り当てられたときの $\alpha_{u}$ の変化量を考えます．&lt;/p&gt;
+$$
+\begin{aligned}
+\alpha_{u_{end}} &amp;= \alpha_{u_{start}}(1 + \frac{\mathrm{bid}_{uk}}{B_u}) + \frac{\mathrm{bid}_{uk}}{(c - 1)B_u} \\
+&amp;\ge \frac{1}{c - 1} [c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1](1 + \frac{\mathrm{bid}_{uk}}{B_u}) + \frac{\mathrm{bid}_{uk}}{(c - 1)B_u} \\
+&amp;= \frac{1}{c - 1}[c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}}(1 + \frac{\mathrm{bid}_{uk}}{B_u}) - 1] \\
+&amp;\ge \frac{1}{c - 1}[c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}} c^{\frac{\mathrm{bid}_{uk}}{B_u}} - 1] \\
+&amp;= \frac{1}{c - 1}[c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1]
+\end{aligned}
+$$&lt;details&gt;&lt;summary&gt;補足&lt;/summary&gt;&lt;div&gt;
+&lt;hr&gt;
+&lt;p&gt;$2$ つめの不等式は帰納法の仮定から導かれます．&lt;br&gt;
+$4$ つめの不等式が成り立つことを示すために，$1 + \frac{\mathrm{bid}_{uk}}{B_u} \ge c^{\frac{\mathrm{bid}_{uk}}{B_u}}$ を示します．&lt;br&gt;
+$0 \le x \le y \le 1$ のとき，$\frac{\ln(1 + x)}{x} \ge \frac{\ln(1 + y)}{y}$ となることを利用します．&lt;br&gt;
+ここで，$x = \frac{\mathrm{bid}(uk)}{B_u} \le R_{\mathrm{max}} = y$ とおくと，
+&lt;/p&gt;
+$$\frac{\ln(1 + x)}{x} \ge \frac{\ln(1 + R_{\mathrm{max}})}{R_{\mathrm{max}}} = \ln((1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}) = \ln c$$&lt;p&gt;
+両辺を $x$ 倍して指数をとると $1 + x \ge c^{x}$ となることから $1 + \frac{\mathrm{bid}_{uk}}{B_u} \ge c^{\frac{\mathrm{bid}_{uk}}{B_u}}$ が示せました．&lt;br&gt;
+また，$\frac{\mathrm{bid}_{uk}}{B_u} = R_{\mathrm{max}}$ のとき，この不等式は等式で成り立ちます．そのため，$c = (1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}$ としているのでした．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/div&gt;&lt;/details&gt;
+&lt;p&gt;次に，予算をどれくらい超えるかを考えます．&lt;br&gt;
+アルゴリズムでは各 $u$ について予算制約を破る回数は高々 $1$ 回です．&lt;br&gt;
+よって $\sum_{v} \mathrm{bid}_{uv} x_{uv} \leq B_{u} + \max_{v} \mathrm{bid}_{uv}$ を満たします．&lt;/p&gt;
+&lt;p&gt;$[\sum \mathrm{bid}_{uv} x_{uv}] \frac{B_u}{B_u + \max \mathrm{bid}_{uv}} \ge [\sum \mathrm{bid}_{uv} x_{uv}] (1 - R_{\mathrm{max}})$&lt;br&gt;
+よって $(1 - R_{\mathrm{max}})$ をかけることにより確保できる利益の下界がわかります．&lt;/p&gt;
+&lt;h3 id="3-各イテレーションで"&gt;3. 各イテレーションで $\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$
+&lt;/h3&gt;&lt;p&gt;$\alpha_u \ge 1$ のときはどちらの目的関数値も変化しないので，$\alpha_u \lt 1$ のときを考えます&lt;/p&gt;
+&lt;p&gt;$\Delta P$&lt;br&gt;
+$\alpha_u \leftarrow \alpha_u (1 + \frac{\mathrm{bid}_{uv}}{B_u}) + \frac{\mathrm{bid}_{uv}}{(c - 1) \cdot B_u}$，$\beta_v \leftarrow \mathrm{bid}_{uv}(1 - \alpha_u)$ とするので&lt;/p&gt;
+$$
+\begin{aligned}
+\Delta P &amp;= B_{u} \Delta \alpha_u + \Delta \beta_v \\
+&amp;= B_u(\frac{\mathrm{bid}_{uv} \alpha_u} {B_u} + \frac{\mathrm{bid}_{uv}}{(c - 1)B_{u}}) + \beta_v \\
+&amp;= \mathrm{bid}_{uv} \alpha_u + \frac{\mathrm{bid}_{uv}}{c - 1} + \mathrm{bid}_{uv}(1 - \alpha_u) \\
+&amp;= \mathrm{bid}_{uv} \alpha_u + \frac{\mathrm{bid}_{uv}}{c - 1} + \mathrm{bid}_{uv} - \mathrm{bid}_{uv} \alpha_u \\
+&amp;= \mathrm{bid}_{uv}(1 + \frac{1}{c - 1})
+\end{aligned}
+$$&lt;p&gt;$\Delta D$&lt;br&gt;
+$x_{uv} \leftarrow 1$ とするので&lt;/p&gt;
+$$
+\begin{aligned}
+\Delta D &amp;= \mathrm{bid}_{uv} \Delta x_{uv} \\
+&amp;= \mathrm{bid}_{uv}
+\end{aligned}
+$$&lt;p&gt;よって，$\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$ が示せました．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://link.springer.com/chapter/10.1007/978-3-540-75520-3_24" target="_blank" rel="noopener"
+&gt;Online Primal-Dual Algorithms for Maximizing Ad-Auctions Revenue&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://ieeexplore.ieee.org/document/8186915" target="_blank" rel="noopener"
+&gt;The Design of Competitive Online Algorithms via a Primal-Dual Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://research.google/pubs/online-matching-and-ad-allocation/" target="_blank" rel="noopener"
+&gt;Online Matching and Ad Allocation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Adwords に対する Primal-Dual を使った貪欲法の競合比解析</title><link>https://miti-7.github.io/post/adwords-greedy-primal-dual/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/adwords-greedy-primal-dual/</guid><description>&lt;h2 id="adwords"&gt;Adwords
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/adwords-greedy/" target="_blank" rel="noopener"
+&gt;Adwords に対する貪欲法の競合比解析&lt;/a&gt; の続きです．&lt;br&gt;
+以下では，adwords に対する貪欲法が $\frac{1}{2}$-competitive となることを primal-dual を使って示します．&lt;/p&gt;
+&lt;h2 id="small-bids-assumption"&gt;Small Bids Assumption
+&lt;/h2&gt;&lt;p&gt;予算に対する入札額の比率のうち最大を $R_{\mathrm{max}}$ とし，$R_{\mathrm{max}}$ は十分小さいと仮定します．&lt;br&gt;
+$R_{\mathrm{max}} \coloneqq \max_{u, v} \frac{\mathrm{bid}_{uv}}{B_u}$&lt;/p&gt;
+&lt;h2 id="adwords-の定式化"&gt;Adwords の定式化
+&lt;/h2&gt;&lt;p&gt;Adwords の主問題と双対問題は以下のようになります．ここでは adwords を双対問題とします．&lt;br&gt;
+$x_{uv}$ は $v$ が $u$ に割り当てられたときに $1$ になる決定変数です．実際には広告リクエストは分割できないので $x_{uv} \in \lbrace 0, 1 \rbrace$ ですが線形緩和しています．&lt;/p&gt;
+&lt;p&gt;主問題(Primal Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{u} B_u \alpha_{u} + \sum_{v} \beta_v \\
+&amp;\text{subject to}
+&amp;&amp; \mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v &amp;&amp; \forall u, v \\
+&amp; &amp;&amp; \alpha_u \geq 0 \\
+&amp; &amp;&amp; \beta_{v} \geq 0
+\end{aligned}
+$$&lt;p&gt;双対問題(Dual Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{maximize} &amp;&amp; \sum_{u, v} \mathrm{bid}_{uv} x_{uv} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u &amp;&amp; \forall u \\
+&amp; &amp;&amp; \sum_u x_{uv} \leq 1 &amp;&amp; \forall v \\
+&amp; &amp;&amp; x_{uv} \geq 0
+\end{aligned}
+$$&lt;h2 id="アルゴリズム"&gt;アルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;初期化
+&lt;ul&gt;
+&lt;li&gt;$x_{uv} \leftarrow 0$，$\alpha_u \leftarrow 0$，$\beta_v \leftarrow 0$ とする&lt;br&gt;
+$\alpha_u$ は $u$ が予算を使い切ったときに $1$ になる変数である．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v$ が到着したとき
+&lt;ul&gt;
+&lt;li&gt;$\alpha_u = 0$ であるような $u$ （つまり予算を使い切っていない $u$）のうち，$\mathrm{bid}_{uv}$ が最も高い $u^{\prime}$ に $v$ を割り当て，$\beta_v = \mathrm{bid}_{u^{\prime}v}$，$x_{u^{\prime}v} = 1$ とする&lt;/li&gt;
+&lt;li&gt;この割り当てで $u^{\prime}$ の予算が $0$ になった場合は，$\alpha_{u^{\prime}} = 1$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="競合比解析"&gt;競合比解析
+&lt;/h2&gt;&lt;p&gt;以下の不等式が成り立つことを示します．&lt;/p&gt;
+$$\mathrm{ALG} = \mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal} \ge \frac{1}{2} \mathrm{Primal}^{\star} \ge \frac{1}{2} \mathrm{OPT}$$&lt;p&gt;ここで，$\mathrm{Primal}$ と $\mathrm{Dual}$ はアルゴリズムで構築される主問題と双対問題の目的関数値，$\mathrm{Primal}^{\star}$ は主問題の最適解の目的関数値，$\mathrm{OPT}$ は整数問題の最適解の目的関数値です．&lt;br&gt;
+以下の 3 つを示します．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主問題の実行可能解を生成する&lt;/li&gt;
+&lt;li&gt;双対問題の実行可能解を生成する&lt;/li&gt;
+&lt;li&gt;$\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="1-主問題の実行可能解を生成する"&gt;1. 主問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;主問題の制約条件は $(1)$ $\mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v$，$(2)$ $\alpha_u \geq 0$，$(3)$ $\beta_{v} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;$\alpha_u = 1$ のとき，$\mathrm{bid}_{uv} (1 - \alpha_u) \le \beta_v$ を満たします．&lt;br&gt;
+$\alpha_u = 0$ のとき，$\beta_{v} \ge \mathrm{bid}_{uv}$ となることを確認します．&lt;br&gt;
+アルゴリズムは $v$ を $\mathrm{bid}_{uv}$ が最も高くなるような $u^{\prime}$ に割り当て，$\beta_v = \mathrm{bid}_{u^{\prime}v}$ とするので，$\beta_{v} \ge \mathrm{bid}_{uv}$ を満たします．&lt;/p&gt;
+&lt;h3 id="2-双対問題の実行可能解を生成する"&gt;2. 双対問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;双対問題の制約条件は，$(1)$ $\sum_{v} bid_{uv} x_{uv} \le B_u$，$(2)$ $\sum_u x_{uv} \leq 1$，$(3)$ $x_{uv} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;アルゴリズムでは，予算の残っている $u$ にのみ $v$ を割り当てているので，基本的には制約条件を満たします．&lt;br&gt;
+厳密には，$v$ を $u$ に割り当てるとき，$u$ の残り予算が $\mathrm{bid}_{uv}$ に満たない場合でも割り当てることができ予算制約を破る可能性がありますが，small-bids assumption によって競合比には影響しません．&lt;/p&gt;
+&lt;h3 id="3"&gt;3. $\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$
+&lt;/h3&gt;&lt;p&gt;$v$ を $u$ に割り当てるたび，$\mathrm{Primal}$ も $\mathrm{Dual}$ も $\mathrm{bid}_{uv}(=\beta_v)$ だけ目的関数値が増加します．&lt;br&gt;
+また，$\mathrm{Primal}$ は予算を使い切ったとき $\alpha_u = 1$ となり $B_u$ 増加します．この $B_u$ は $u$ に割り当てられた $bid_{uv}$ の合計なので，$\alpha_u = 1$となるような $B_u$ の合計は高々 $\mathrm{Dual}$ となります．&lt;br&gt;
+よって，全体として $\mathrm{Primal} \le \mathrm{Dual} + \mathrm{Dual} = 2 \mathrm{Dual}$ なので，$\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$ となります．&lt;/p&gt;
+&lt;p&gt;今回の解析では $v$ を $u$ に割り当てるとき，$u$ の残り予算が $\mathrm{bid}_{uv}$ に満たない場合でも $\mathrm{bid}_{uv}$ を計上しています．&lt;br&gt;
+よって厳密には高々 $\sum_{u} \max_{v} \mathrm{bid}_{uv}$ を過大に計上していますが，small bids assumption によって，競合比には影響しません．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://research.google/pubs/online-matching-and-ad-allocation/" target="_blank" rel="noopener"
+&gt;Online Matching and Ad Allocation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Primal Dual Algorithm(厳密解)</title><link>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</link><pubDate>Fri, 14 Mar 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/primal-dual-algorithm%E5%8E%B3%E5%AF%86%E8%A7%A3/</guid><description>&lt;h2 id="はじめに"&gt;はじめに
+&lt;/h2&gt;&lt;p&gt;厳密解を求める primal dual algorithm の話です．&lt;br&gt;
+primal dual algorithm の一般的な説明をしたあと，具体例としてハンガリアン法を導出します．&lt;/p&gt;
+&lt;h2 id="準備"&gt;準備
+&lt;/h2&gt;&lt;p&gt;以下の等式標準形の線形計画問題を考えます．簡単のため $\bold b \ge 0$ を仮定します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;主問題&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \bold c^{T} \bold x \\
@@ -13,62 +236,62 @@ $$
 &amp;&amp; \bold A \bold x = \bold b \\
 &amp; &amp;&amp; \bold x \geq 0
 \end{aligned}
-$$&lt;/li>
-&lt;li>
-&lt;p>双対問題
-&lt;/p>
+$$&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双対問題
+&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;\text{maxiimize} &amp;&amp; \bold b^{T} \bold y \\
 &amp;\text{subject to}
 &amp;&amp; \bold A^{T} \bold y \leq \bold c
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;p>$\bold x$ と $\bold y$ が主問題と双対問題の最適解であるための必要十分条件は，以下の 2 つの条件をともに満たすことです．&lt;br>
-$A_i$ は行列 $\bold A$ の $i$行目を，$A^{j}$ は行列 $\bold A$ の $j$ 列目の転置をとったものを表します．今回は主問題の制約条件に $\bold A \bold x = \bold b$ があるため，双対相補性条件を常に満たします．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>主相補性条件&lt;/p>
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$\bold x$ と $\bold y$ が主問題と双対問題の最適解であるための必要十分条件は，以下の 2 つの条件をともに満たすことです．&lt;br&gt;
+$A_i$ は行列 $\bold A$ の $i$行目を，$A^{j}$ は行列 $\bold A$ の $j$ 列目の転置をとったものを表します．今回は主問題の制約条件に $\bold A \bold x = \bold b$ があるため，双対相補性条件を常に満たします．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;主相補性条件&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;&amp; x_{j} \gt 0 \Rightarrow \bold A^{j} \bold y = c_{j} &amp;&amp;&amp; \forall j \\
 \end{aligned}
-$$&lt;/li>
-&lt;li>
-&lt;p>双対相補性条件
-&lt;/p>
+$$&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双対相補性条件
+&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;&amp; y_{i} \gt 0 \Rightarrow \bold A_{i} \bold x = b_{i} &amp;&amp;&amp; \forall i \\
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;p>${\bold x}^{\star}$ と ${\bold y}^{\star}$ が主問題と双対問題の最適解であるとき以下が成立します．&lt;/p>
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;${\bold x}^{\star}$ と ${\bold y}^{\star}$ が主問題と双対問題の最適解であるとき以下が成立します．&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;&amp; \bold c^{T} \bold x^{\star} = \bold b^{T} \bold y^{\star} \\
 \end{aligned}
-$$&lt;h2 id="primal-dual-algorithm">Primal Dual Algorithm
-&lt;/h2>&lt;p>primal dual algorithm は線形計画問題を解くための一般的なアルゴリズムです．&lt;br>
-primal dual algorithm を用いて主問題の最適解 ${\bold x}^{\star}$ を求めます．簡単のため，主問題には実行可能解があると仮定します．primal dual algorithm は以下のように実行されます．双対問題の実行可能性が常に維持されていることに注意してください．&lt;/p>
-&lt;ol>
-&lt;li>双対問題の実行可能解 $\bold y$ を求める&lt;/li>
-&lt;li>$\bold y$ をもとに構築した restricted primal problem を解く&lt;/li>
-&lt;li>restricted primal problem の最適解の値が $0$ ならば，最適解 $\bold {x}^{\star}$ が判明したということなのでアルゴリズムを終了する&lt;/li>
-&lt;li>restricted primal problem の最適解の値が $0$ でないならば，restricted primal problem の双対問題である dual restricted primal の最適解を求める．この解を $\bold z$ とする&lt;/li>
-&lt;li>ある $\epsilon$ を求め，${\bold y}^{\prime} = {\bold y} + \epsilon {\bold z}$ を新たな双対問題の実行可能解として採用し，2 に戻る&lt;/li>
-&lt;/ol>
-&lt;p>順に詳しくみていきます．&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>双対問題の実行可能解 $\bold y$ を適当に求めます．$\bold c \ge 0$ を仮定しているため $\bold y = \bold 0$ とおくことができます．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>ある双対問題の解 $\bold y$ が与えられたときに，「主問題の制約の違反」と「相補性条件の違反」を最小にするような主問題の解 $\bold x$ を見 つける問題を考えます．もしこれらの違反量が 0 の $\bold x$ を見つけることができたら，相補性条件よりこの $\bold x$ と $\bold y$ は最適解だということになります．&lt;br>
-$J = \lbrace j \mid \bold A^{j} \bold y = c_{j} \rbrace$ とします．これは正になることのできる主問題の変数の index の集合です．すると，この問題は以下のような線形計画問題となります．これを restricted primal(以下 RP)とよびます．&lt;/p>
-&lt;ul>
-&lt;li>Restricted Primal
+$$&lt;h2 id="primal-dual-algorithm"&gt;Primal Dual Algorithm
+&lt;/h2&gt;&lt;p&gt;primal dual algorithm は線形計画問題を解くための一般的なアルゴリズムです．&lt;br&gt;
+primal dual algorithm を用いて主問題の最適解 ${\bold x}^{\star}$ を求めます．簡単のため，主問題には実行可能解があると仮定します．primal dual algorithm は以下のように実行されます．双対問題の実行可能性が常に維持されていることに注意してください．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;双対問題の実行可能解 $\bold y$ を求める&lt;/li&gt;
+&lt;li&gt;$\bold y$ をもとに構築した restricted primal problem を解く&lt;/li&gt;
+&lt;li&gt;restricted primal problem の最適解の値が $0$ ならば，最適解 $\bold {x}^{\star}$ が判明したということなのでアルゴリズムを終了する&lt;/li&gt;
+&lt;li&gt;restricted primal problem の最適解の値が $0$ でないならば，restricted primal problem の双対問題である dual restricted primal の最適解を求める．この解を $\bold z$ とする&lt;/li&gt;
+&lt;li&gt;ある $\epsilon$ を求め，${\bold y}^{\prime} = {\bold y} + \epsilon {\bold z}$ を新たな双対問題の実行可能解として採用し，2 に戻る&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;順に詳しくみていきます．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;双対問題の実行可能解 $\bold y$ を適当に求めます．$\bold c \ge 0$ を仮定しているため $\bold y = \bold 0$ とおくことができます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ある双対問題の解 $\bold y$ が与えられたときに，「主問題の制約の違反」と「相補性条件の違反」を最小にするような主問題の解 $\bold x$ を見 つける問題を考えます．もしこれらの違反量が 0 の $\bold x$ を見つけることができたら，相補性条件よりこの $\bold x$ と $\bold y$ は最適解だということになります．&lt;br&gt;
+$J = \lbrace j \mid \bold A^{j} \bold y = c_{j} \rbrace$ とします．これは正になることのできる主問題の変数の index の集合です．すると，この問題は以下のような線形計画問題となります．これを restricted primal(以下 RP)とよびます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Restricted Primal
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \sum_i s_i \\\
@@ -78,18 +301,18 @@ $$
 &amp; &amp;&amp; \bold x = \bold 0 &amp;&amp;&amp; j \notin J\\\
 &amp; &amp;&amp; \bold s \geq \bold 0
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>もし RP の最適解の値が $0$ なら，この $(\bold x, \bold y)$ が主問題と双対問題の最適解ということになりアルゴリズムは終了します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>そうでない場合は相補性条件を満たすような実行可能解 $\bold x$ が見つからなかったということなので，$\bold y$ は双対問題の最適解ではなかったということがわかります．&lt;br>
-そこで，$\bold y$ よりも良い双対問題の解を探すことにします．&lt;br>
-そのために RP の双対問題である Dual Restricted Primal(以下 DRP)を考えます．これは以下のようになります．&lt;/p>
-&lt;ul>
-&lt;li>Dual Restricted Primal
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;もし RP の最適解の値が $0$ なら，この $(\bold x, \bold y)$ が主問題と双対問題の最適解ということになりアルゴリズムは終了します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;そうでない場合は相補性条件を満たすような実行可能解 $\bold x$ が見つからなかったということなので，$\bold y$ は双対問題の最適解ではなかったということがわかります．&lt;br&gt;
+そこで，$\bold y$ よりも良い双対問題の解を探すことにします．&lt;br&gt;
+そのために RP の双対問題である Dual Restricted Primal(以下 DRP)を考えます．これは以下のようになります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dual Restricted Primal
 $$
 \begin{aligned}
 &amp;\text{maxmize} &amp;&amp; \bold b^{T} \bold z \\\
@@ -97,44 +320,44 @@ $$
 &amp;&amp; \bold A^{j} \bold z \leq 0 &amp;&amp;&amp; j \in J \\\
 &amp; &amp;&amp; z_{i} \leq 1 &amp;&amp;&amp; \forall i \\\
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>DRP の最適解を $\bold z^{\star}$ とします．
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DRP の最適解を $\bold z^{\star}$ とします．
 双対問題の実行可能解 $\bold y$ に $\bold z^{\star}$ を $\epsilon(\epsilon \gt 0)$ 倍して足し合わせた解 ${\bold y}^{\prime} = \bold y + \epsilon \bold z^{\star}$ を考えます．
-実はうまく $\epsilon$ を選ぶことで $\bold y^{\prime}$ は元の解 $\bold y$ よりも良い目的関数値をとり，さらに実行可能解となっています．&lt;br>
-$\bold y$ よりも良い解 $\bold y^{\prime}$ が手に入れば，これを新たな双対問題の解として採用し，また 2 に戻り RP を考え&amp;hellip;と手順を繰り返していくことで，やがて最適解を得ることができます．&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;p>最後に，$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良い解となることと $\bold y^{\prime}$ が実行可能解となるような $\epsilon$ の選び方を示します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良くなることを示します．&lt;br>
-$\bold y^{\prime} = \bold y + \epsilon \bold z$ を双対問題の目的関数に当てはめると $\bold b^{T} \bold y^{\prime} = \bold b^{T} \bold y + \epsilon \bold b^{T} \bold z^{\star}$ となります．&lt;br>
-$\epsilon \bold b^{T} \bold z^{\star} \gt 0$ となることを確認します．&lt;br>
-$\epsilon$ は $0$ より大きい値をとるため，$\epsilon \gt 0$ となります．&lt;br>
-RP の最適解の値は 0 より大きかったため，その双対問題である DRP の最適解の値も 0 より大きいことになります．よって，$\bold b^{T} \bold z^{\star} \gt 0$ といえます．&lt;br>
-以上のことから，$\bold y^{\prime}$ が $\bold y$ より良い目的関数値をとることがわかりました．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が双対問題の実行可能解となるような $\epsilon$ の選び方を示します．&lt;br>
-双対問題の実行可能解になるように制約条件 $\bold A^{T} \bold y^{\prime} \leq \bold c$ を満たすような $\epsilon$ を求めます．&lt;br>
-まず，双対問題の制約条件より $\bold A^{T} \bold y \le \bold c$ です．&lt;br>
+実はうまく $\epsilon$ を選ぶことで $\bold y^{\prime}$ は元の解 $\bold y$ よりも良い目的関数値をとり，さらに実行可能解となっています．&lt;br&gt;
+$\bold y$ よりも良い解 $\bold y^{\prime}$ が手に入れば，これを新たな双対問題の解として採用し，また 2 に戻り RP を考え&amp;hellip;と手順を繰り返していくことで，やがて最適解を得ることができます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最後に，$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良い解となることと $\bold y^{\prime}$ が実行可能解となるような $\epsilon$ の選び方を示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が解 $\bold y$ よりも良くなることを示します．&lt;br&gt;
+$\bold y^{\prime} = \bold y + \epsilon \bold z$ を双対問題の目的関数に当てはめると $\bold b^{T} \bold y^{\prime} = \bold b^{T} \bold y + \epsilon \bold b^{T} \bold z^{\star}$ となります．&lt;br&gt;
+$\epsilon \bold b^{T} \bold z^{\star} \gt 0$ となることを確認します．&lt;br&gt;
+$\epsilon$ は $0$ より大きい値をとるため，$\epsilon \gt 0$ となります．&lt;br&gt;
+RP の最適解の値は 0 より大きかったため，その双対問題である DRP の最適解の値も 0 より大きいことになります．よって，$\bold b^{T} \bold z^{\star} \gt 0$ といえます．&lt;br&gt;
+以上のことから，$\bold y^{\prime}$ が $\bold y$ より良い目的関数値をとることがわかりました．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\bold y^{\prime} = \bold y + \epsilon \bold z^{\star}$ が双対問題の実行可能解となるような $\epsilon$ の選び方を示します．&lt;br&gt;
+双対問題の実行可能解になるように制約条件 $\bold A^{T} \bold y^{\prime} \leq \bold c$ を満たすような $\epsilon$ を求めます．&lt;br&gt;
+まず，双対問題の制約条件より $\bold A^{T} \bold y \le \bold c$ です．&lt;br&gt;
 次に，DRP の制約条件より $j \in J$ については $\bold A^{j} \bold z^{\star} \le 0$ となります．
-よって，$j \in J$ であるような $j$ については制約条件を満たすため，$j \notin J$ のうち $\bold A^{j} \bold z^{\star} \gt 0$ である $j$ についてのみ考えます．&lt;br>
-このような $j$ は $\epsilon \le \min_{j \notin J: A^{j} \bold z^{\star} \gt 0} \frac{c_j - \bold A^{j} \bold y}{\bold A^{j} \bold z^{\star}}$ を満たす必要があります．&lt;br>
-$\epsilon$ は大きい方がいいので，この条件を満たす最大の値を $\epsilon$ として選びます．&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="ハンガリアン法">ハンガリアン法
-&lt;/h2>&lt;p>Primal Dual Algorighm を使ってハンガリアン法を導出します．
-頂点 $a$ と頂点 $b$ を結ぶ辺を $(a, b) \in E$ とし，その容量を $c_{ab}$ とします．簡単のため $\bold c \ge \bold 0$ とし完全マッチングが存在するものとします．&lt;/p>
-&lt;p>以下では，有向グラフを接続行列 $\bold A$ で表します．また，ノードの数を $n$，辺の数を $m$ とします．
-二部グラフの最小重み完全マッチングを線形緩和した主問題と双対問題を定義します．&lt;/p>
-&lt;ul>
-&lt;li>主問題&lt;/li>
-&lt;/ul>
+よって，$j \in J$ であるような $j$ については制約条件を満たすため，$j \notin J$ のうち $\bold A^{j} \bold z^{\star} \gt 0$ である $j$ についてのみ考えます．&lt;br&gt;
+このような $j$ は $\epsilon \le \min_{j \notin J: A^{j} \bold z^{\star} \gt 0} \frac{c_j - \bold A^{j} \bold y}{\bold A^{j} \bold z^{\star}}$ を満たす必要があります．&lt;br&gt;
+$\epsilon$ は大きい方がいいので，この条件を満たす最大の値を $\epsilon$ として選びます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="ハンガリアン法"&gt;ハンガリアン法
+&lt;/h2&gt;&lt;p&gt;Primal Dual Algorighm を使ってハンガリアン法を導出します．
+頂点 $a$ と頂点 $b$ を結ぶ辺を $(a, b) \in E$ とし，その容量を $c_{ab}$ とします．簡単のため $\bold c \ge \bold 0$ とし完全マッチングが存在するものとします．&lt;/p&gt;
+&lt;p&gt;以下では，有向グラフを接続行列 $\bold A$ で表します．また，ノードの数を $n$，辺の数を $m$ とします．
+二部グラフの最小重み完全マッチングを線形緩和した主問題と双対問題を定義します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主問題&lt;/li&gt;
+&lt;/ul&gt;
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \sum_{(a, b) \in E} c_{ab} x_{ab} \\
@@ -143,46 +366,46 @@ $$
 &amp; &amp;&amp; \sum_{a:(a, b) \in E} x_{ab} = 1 &amp;&amp;&amp; b \in B \\
 &amp; &amp;&amp; x_{ab} \ge 0 &amp;&amp;&amp; (a, b) \in E\\
 \end{aligned}
-$$&lt;ul>
-&lt;li>双対問題&lt;/li>
-&lt;/ul>
+$$&lt;ul&gt;
+&lt;li&gt;双対問題&lt;/li&gt;
+&lt;/ul&gt;
 $$
 \begin{aligned}
 &amp;\text{maxiimize} &amp;&amp; \sum_{a \in A} u_{a} + \sum_{b \in B} v_{b} \\
 &amp;\text{subject to}
 &amp;&amp; u_{a} + v_{b} \le c_{ab} &amp;&amp;&amp; (a, b) in E\\
 \end{aligned}
-$$&lt;h3 id="ハンガリアン法の導出">ハンガリアン法の導出
-&lt;/h3>&lt;ol>
-&lt;li>
-&lt;p>双対問題の適当な実行可能解を求めます．$C \ge 0$ を仮定しているため，$\bold u = \bold v = \bold 0$ とすることができます．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>restricted primal を考えます．$J = \lbrace(a, b) \in E : u_{a} + v_{b} = c_{ab} \rbrace$ とすると以下のようになります．これは $J$ の辺のみを使って完全マッチングを求める問題です．&lt;/p>
-&lt;ul>
-&lt;li>Restricted Primal
+$$&lt;h3 id="ハンガリアン法の導出"&gt;ハンガリアン法の導出
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;双対問題の適当な実行可能解を求めます．$C \ge 0$ を仮定しているため，$\bold u = \bold v = \bold 0$ とすることができます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;restricted primal を考えます．$J = \lbrace(a, b) \in E : u_{a} + v_{b} = c_{ab} \rbrace$ とすると以下のようになります．これは $J$ の辺のみを使って完全マッチングを求める問題です．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Restricted Primal
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \sum_{a \in A} s_{a} + \sum_{b \in B} s_{b} \\\
 &amp;\text{subject to}
 &amp;&amp; \sum_{b:(a, b) \in E} x_{ab} + s_{a} = 1 &amp;&amp;&amp; a \in A\\\
 &amp; &amp;&amp; \sum_{a:(a, b) \in E} x_{ab} + s_{b} = 1 &amp;&amp;&amp; b \in B\\\
-&amp; &amp;&amp; x_{ab} >= 0 &amp;&amp;&amp; (a, b) \in J \\\
+&amp; &amp;&amp; x_{ab} &gt;= 0 &amp;&amp;&amp; (a, b) \in J \\\
 &amp; &amp;&amp; x_{ab} = 0　&amp;&amp;&amp; (a, b) \in (E - J) \\\
 &amp; &amp;&amp; s \ge 0
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$J$ の辺のみをつかって完全マッチングを作ることができれば，RP の目的関数値を 0 にすることができます．
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$J$ の辺のみをつかって完全マッチングを作ることができれば，RP の目的関数値を 0 にすることができます．
 辺の重みを考えなくてよくなったため，2 部グラフの最大マッチングを求めるアルゴリズムを使うことができます．
-もし完全マッチングがみつかればアルゴリズムは終了します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>見つからない場合は dual restricted primal を考えます．DRP は $J$ の辺のみを使ったグラフ上で最小点被覆を求める問題です．これは RP で求めた最大マッチングの解を使って求めることができます ．&lt;/p>
-&lt;ul>
-&lt;li>Dual Restricted Primal
+もし完全マッチングがみつかればアルゴリズムは終了します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;見つからない場合は dual restricted primal を考えます．DRP は $J$ の辺のみを使ったグラフ上で最小点被覆を求める問題です．これは RP で求めた最大マッチングの解を使って求めることができます ．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dual Restricted Primal
 $$
 \begin{aligned}
 &amp;\text{maximize} &amp;&amp; \sum_{a \in A} u^{\prime}_{a} + \sum_{b \in B} v^{\prime}_{b} \\\
@@ -191,19 +414,19 @@ $$
 &amp; &amp;&amp; u^{\prime}_{a} \le 1 &amp;&amp;&amp; a \in A\\\
 &amp; &amp;&amp; v^{\prime}_{b} \le 1 &amp;&amp;&amp; b \in B
 \end{aligned}
-$$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>DRP の解を求め，$u^{\prime \prime} = u + \epsilon u^{\prime}$，$v^{\prime \prime} = v + \epsilon v^{\prime}$とします．ここで $\epsilon = \min_{(a, b) \in (E - J)}(c_{ab} - u_{a} - v_{b})$ とすることができます．あとは，$u^{\prime}$ と $v^{\prime}$ を新しい双対問題の解として採用し，2 に戻ります．&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;h2 id="参考文系">参考文系
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/B00C8UQZAO/" target="_blank" rel="noopener"
->Combinatorial Optimization: Algorithms and Complexity&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://ocw.mit.edu/courses/18-433-combinatorial-optimization-fall-2003/92c255b407a6ad7d75c9ea55de2fdf33_l15.pdf" target="_blank" rel="noopener"
->18.433 Combinatorial Optimization The Primal-dual Algorithm&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://math.mit.edu/~goemans/PAPERS/book-ch4.pdf" target="_blank" rel="noopener"
->CHAPTER 4 THE PRIMAL-DUAL METHOD FOR APPROXIMATION ALGORITHMS AND ITS APPLICATION TO NETWORK DESIGN PROBLEMS&lt;/a>&lt;/li>
-&lt;/ul></description></item></channel></rss>
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DRP の解を求め，$u^{\prime \prime} = u + \epsilon u^{\prime}$，$v^{\prime \prime} = v + \epsilon v^{\prime}$とします．ここで $\epsilon = \min_{(a, b) \in (E - J)}(c_{ab} - u_{a} - v_{b})$ とすることができます．あとは，$u^{\prime}$ と $v^{\prime}$ を新しい双対問題の解として採用し，2 に戻ります．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="参考文系"&gt;参考文系
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.amazon.co.jp/dp/B00C8UQZAO/" target="_blank" rel="noopener"
+&gt;Combinatorial Optimization: Algorithms and Complexity&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://ocw.mit.edu/courses/18-433-combinatorial-optimization-fall-2003/92c255b407a6ad7d75c9ea55de2fdf33_l15.pdf" target="_blank" rel="noopener"
+&gt;18.433 Combinatorial Optimization The Primal-dual Algorithm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://math.mit.edu/~goemans/PAPERS/book-ch4.pdf" target="_blank" rel="noopener"
+&gt;CHAPTER 4 THE PRIMAL-DUAL METHOD FOR APPROXIMATION ALGORITHMS AND ITS APPLICATION TO NETWORK DESIGN PROBLEMS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

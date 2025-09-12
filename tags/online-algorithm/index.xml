@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Online Algorithm on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/online-algorithm/</link><description>Recent content in Online Algorithm on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 12 Sep 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/online-algorithm/index.xml" rel="self" type="application/rss+xml"/><item><title>Adwords に対する Primal-Dual の競合比解析</title><link>https://miti-7.github.io/post/adwords-primal-dual/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/adwords-primal-dual/</guid><description>&lt;h2 id="adwords"&gt;Adwords
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/adwords-greedy-primal-dual/" target="_blank" rel="noopener"
+&gt;Adwords に対する Primal-Dual を使った貪欲法の競合比解析&lt;/a&gt; の続きです．&lt;br&gt;
+以下では，adwords に対する primal dual algorithm が $1 - \frac{1}{e}$-competitive となることを示します．&lt;/p&gt;
+&lt;h2 id="small-bids-assumption"&gt;Small Bids Assumption
+&lt;/h2&gt;&lt;p&gt;予算に対する入札額の比率のうち最大を $R_{\mathrm{max}}$ とし，$R_{\mathrm{max}}$ は十分小さいと仮定します．&lt;br&gt;
+$R_{\mathrm{max}} \coloneqq \max_{u, v} \frac{\mathrm{bid}_{uv}}{B_u}$&lt;/p&gt;
+&lt;h2 id="adwords-の定式化"&gt;Adwords の定式化
+&lt;/h2&gt;&lt;p&gt;Adwords の主問題と双対問題は以下のようになります．ここでは adwords を双対問題とします．&lt;br&gt;
+$x_{uv}$ は $v$ が $u$ に割り当てられたときに $1$ になる決定変数です．実際には広告リクエストは分割できないので $x_{uv} \in \lbrace 0, 1 \rbrace$ ですが線形緩和しています．&lt;/p&gt;
+&lt;p&gt;主問題(Primal Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{u} B_u \alpha_{u} + \sum_{v} \beta_v \\
+&amp;\text{subject to}
+&amp;&amp; \mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v &amp;&amp; \forall u, v \\
+&amp; &amp;&amp; \alpha_u \geq 0 \\
+&amp; &amp;&amp; \beta_{v} \geq 0
+\end{aligned}
+$$&lt;p&gt;双対問題(Dual Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{maximize} &amp;&amp; \sum_{u, v} \mathrm{bid}_{uv} x_{uv} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u &amp;&amp; \forall u \\
+&amp; &amp;&amp; \sum_u x_{uv} \leq 1 &amp;&amp; \forall v \\
+&amp; &amp;&amp; x_{uv} \geq 0
+\end{aligned}
+$$&lt;h2 id="アルゴリズム"&gt;アルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;初期化
+&lt;ul&gt;
+&lt;li&gt;各 $u$ について，$\alpha_u \leftarrow 0$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v$ が到着したとき，$\alpha_u \lt 1$ の中で $\mathrm{bid}_{uv}(1 - \alpha_u)$ を最大化する $u$ に $v$ を割り当てる&lt;/li&gt;
+&lt;li&gt;$\alpha_u \ge 1$ ならなにもしない．そうでなければ
+&lt;ul&gt;
+&lt;li&gt;$u$ の残り予算から $\min(\mathrm{bid}_{uv}, 残り予算)$ 減算し，$x_{uv} \leftarrow 1$ とする&lt;/li&gt;
+&lt;li&gt;$\beta_v \leftarrow \mathrm{bid}_{uv}(1 - \alpha_u)$&lt;/li&gt;
+&lt;li&gt;$\alpha_u \leftarrow \alpha_u (1 + \frac{\mathrm{bid}_{uv}}{B_u}) + \frac{\mathrm{bid}_{uv}}{(c - 1) \cdot B_u}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="競合比解析"&gt;競合比解析
+&lt;/h2&gt;&lt;p&gt;以下の 3 つを示します．
+主問題の目的関数値と双対問題の目的関数値を $P$ と $D$ とし，$1$ イテレーションでの変化量をそれぞれ $\Delta P$ と $\Delta D$ で表します．&lt;br&gt;
+また，$R_{\mathrm{max}} = \max_{u, v}{\frac{\mathrm{bid}_{uv}}{B_u}}$，$c = (1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}$ とします．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;主問題の実行可能解を生成する&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双対問題の（ほぼ）実行可能解を生成する&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;双対問題の予算制約を破ることがあるが，各 $u$ の超過は高々 $\max_{v} \mathrm{bid}_{uv}$&lt;/li&gt;
+&lt;li&gt;得られる利益は $(1 - R_{\mathrm{max}})\sum_{uv} \mathrm{bid}_{uv} x_{uv}$ 以上となる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各イテレーションで $\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\frac{\Delta D}{\Delta P} \ge 1 - \frac{1}{c}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;1.，2.，3.と弱双対性により上記のアルゴリズムの競合比は以下のようになります．
+&lt;/p&gt;
+$$(1 - \frac{1}{c})(1 - R_{\mathrm{max}}) = (1 - \frac{1}{(1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}})(1 - R_{\mathrm{max}})$$&lt;p&gt;これは，$R_{\mathrm{max}} \rightarrow 0^+$ のとき $1 - \frac{1}{e}$ に近づきます．&lt;/p&gt;
+&lt;h3 id="1-主問題の実行可能解を生成する"&gt;1. 主問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;主問題の制約条件は $(1)$ $\mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v$，$(2)$ $\alpha_u \geq 0$，$(3)$ $\beta_{v} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たすことを確認します．&lt;/p&gt;
+&lt;p&gt;$v$ が $u$ に割り当てられたときを考えます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$\alpha_u \ge 1$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\mathrm{bid}_{uv} \ge 0$ かつ $\beta_v \ge 0$のため制約 $(1)$ を満たします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\alpha_u \lt 1$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アルゴリズムで $\beta_v = \mathrm{bid}_{uv}(1 - \alpha_u)$となります．&lt;br&gt;
+このとき $u$ として $\mathrm{bid}_{u^{\prime} v}(1 - \alpha_{u^{\prime}})$ を最大化する $u^{\prime}$ を選んでいるため，任意の $u$, $v$ について制約 $(1)$ を満たします．&lt;br&gt;
+また，アルゴリズムでは $\alpha_i$ を単調増加させるため，この操作によって制約が満たされなくなることはありません．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-双対問題のほぼ実行可能解を生成する"&gt;2. 双対問題の(ほぼ)実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;双対問題の制約条件は，$(1)$ $\sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u$，$(2)$ $\sum_u x_{uv} \leq 1$，$(3)$ $x_{uv} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;まず，アルゴリズムは $\alpha \ge 1$ のとき双対変数を更新しないので，$u$ に対する課金額 $\sum_{v} \mathrm{bid}_{uv} x_{uv}$ が予算を超えたら場合 $\alpha_u \ge 1$ となることを示します．&lt;br&gt;
+これは $\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ によって示されます．&lt;/p&gt;
+&lt;p&gt;$\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ を帰納法を使って証明します．&lt;br&gt;
+$\alpha_u \ge \frac{1}{c - 1}(c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1)$ を仮定します．はじめこの条件は明らかに満たされています．&lt;br&gt;
+$k$ が $u$ に割り当てられたときの $\alpha_{u}$ の変化量を考えます．&lt;/p&gt;
+$$
+\begin{aligned}
+\alpha_{u_{end}} &amp;= \alpha_{u_{start}}(1 + \frac{\mathrm{bid}_{uk}}{B_u}) + \frac{\mathrm{bid}_{uk}}{(c - 1)B_u} \\
+&amp;\ge \frac{1}{c - 1} [c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1](1 + \frac{\mathrm{bid}_{uk}}{B_u}) + \frac{\mathrm{bid}_{uk}}{(c - 1)B_u} \\
+&amp;= \frac{1}{c - 1}[c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}}(1 + \frac{\mathrm{bid}_{uk}}{B_u}) - 1] \\
+&amp;\ge \frac{1}{c - 1}[c^{\frac{\sum_{v \in V \backslash \{k\}} \mathrm{bid}_{uv} x_{uv}}{B_u}} c^{\frac{\mathrm{bid}_{uk}}{B_u}} - 1] \\
+&amp;= \frac{1}{c - 1}[c^{\frac{\sum_{v} \mathrm{bid}_{uv} x_{uv}}{B_u}} - 1]
+\end{aligned}
+$$&lt;details&gt;&lt;summary&gt;補足&lt;/summary&gt;&lt;div&gt;
+&lt;hr&gt;
+&lt;p&gt;$2$ つめの不等式は帰納法の仮定から導かれます．&lt;br&gt;
+$4$ つめの不等式が成り立つことを示すために，$1 + \frac{\mathrm{bid}_{uk}}{B_u} \ge c^{\frac{\mathrm{bid}_{uk}}{B_u}}$ を示します．&lt;br&gt;
+$0 \le x \le y \le 1$ のとき，$\frac{\ln(1 + x)}{x} \ge \frac{\ln(1 + y)}{y}$ となることを利用します．&lt;br&gt;
+ここで，$x = \frac{\mathrm{bid}(uk)}{B_u} \le R_{\mathrm{max}} = y$ とおくと，
+&lt;/p&gt;
+$$\frac{\ln(1 + x)}{x} \ge \frac{\ln(1 + R_{\mathrm{max}})}{R_{\mathrm{max}}} = \ln((1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}) = \ln c$$&lt;p&gt;
+両辺を $x$ 倍して指数をとると $1 + x \ge c^{x}$ となることから $1 + \frac{\mathrm{bid}_{uk}}{B_u} \ge c^{\frac{\mathrm{bid}_{uk}}{B_u}}$ が示せました．&lt;br&gt;
+また，$\frac{\mathrm{bid}_{uk}}{B_u} = R_{\mathrm{max}}$ のとき，この不等式は等式で成り立ちます．そのため，$c = (1 + R_{\mathrm{max}})^{\frac{1}{R_{\mathrm{max}}}}$ としているのでした．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/div&gt;&lt;/details&gt;
+&lt;p&gt;次に，予算をどれくらい超えるかを考えます．&lt;br&gt;
+アルゴリズムでは各 $u$ について予算制約を破る回数は高々 $1$ 回です．&lt;br&gt;
+よって $\sum_{v} \mathrm{bid}_{uv} x_{uv} \leq B_{u} + \max_{v} \mathrm{bid}_{uv}$ を満たします．&lt;/p&gt;
+&lt;p&gt;$[\sum \mathrm{bid}_{uv} x_{uv}] \frac{B_u}{B_u + \max \mathrm{bid}_{uv}} \ge [\sum \mathrm{bid}_{uv} x_{uv}] (1 - R_{\mathrm{max}})$&lt;br&gt;
+よって $(1 - R_{\mathrm{max}})$ をかけることにより確保できる利益の下界がわかります．&lt;/p&gt;
+&lt;h3 id="3-各イテレーションで"&gt;3. 各イテレーションで $\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$
+&lt;/h3&gt;&lt;p&gt;$\alpha_u \ge 1$ のときはどちらの目的関数値も変化しないので，$\alpha_u \lt 1$ のときを考えます&lt;/p&gt;
+&lt;p&gt;$\Delta P$&lt;br&gt;
+$\alpha_u \leftarrow \alpha_u (1 + \frac{\mathrm{bid}_{uv}}{B_u}) + \frac{\mathrm{bid}_{uv}}{(c - 1) \cdot B_u}$，$\beta_v \leftarrow \mathrm{bid}_{uv}(1 - \alpha_u)$ とするので&lt;/p&gt;
+$$
+\begin{aligned}
+\Delta P &amp;= B_{u} \Delta \alpha_u + \Delta \beta_v \\
+&amp;= B_u(\frac{\mathrm{bid}_{uv} \alpha_u} {B_u} + \frac{\mathrm{bid}_{uv}}{(c - 1)B_{u}}) + \beta_v \\
+&amp;= \mathrm{bid}_{uv} \alpha_u + \frac{\mathrm{bid}_{uv}}{c - 1} + \mathrm{bid}_{uv}(1 - \alpha_u) \\
+&amp;= \mathrm{bid}_{uv} \alpha_u + \frac{\mathrm{bid}_{uv}}{c - 1} + \mathrm{bid}_{uv} - \mathrm{bid}_{uv} \alpha_u \\
+&amp;= \mathrm{bid}_{uv}(1 + \frac{1}{c - 1})
+\end{aligned}
+$$&lt;p&gt;$\Delta D$&lt;br&gt;
+$x_{uv} \leftarrow 1$ とするので&lt;/p&gt;
+$$
+\begin{aligned}
+\Delta D &amp;= \mathrm{bid}_{uv} \Delta x_{uv} \\
+&amp;= \mathrm{bid}_{uv}
+\end{aligned}
+$$&lt;p&gt;よって，$\Delta P \le (1 + \frac{1}{c - 1}) \Delta D$ が示せました．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://link.springer.com/chapter/10.1007/978-3-540-75520-3_24" target="_blank" rel="noopener"
+&gt;Online Primal-Dual Algorithms for Maximizing Ad-Auctions Revenue&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://ieeexplore.ieee.org/document/8186915" target="_blank" rel="noopener"
+&gt;The Design of Competitive Online Algorithms via a Primal-Dual Approach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://research.google/pubs/online-matching-and-ad-allocation/" target="_blank" rel="noopener"
+&gt;Online Matching and Ad Allocation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Adwords に対する Primal-Dual を使った貪欲法の競合比解析</title><link>https://miti-7.github.io/post/adwords-greedy-primal-dual/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/adwords-greedy-primal-dual/</guid><description>&lt;h2 id="adwords"&gt;Adwords
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/adwords-greedy/" target="_blank" rel="noopener"
+&gt;Adwords に対する貪欲法の競合比解析&lt;/a&gt; の続きです．&lt;br&gt;
+以下では，adwords に対する貪欲法が $\frac{1}{2}$-competitive となることを primal-dual を使って示します．&lt;/p&gt;
+&lt;h2 id="small-bids-assumption"&gt;Small Bids Assumption
+&lt;/h2&gt;&lt;p&gt;予算に対する入札額の比率のうち最大を $R_{\mathrm{max}}$ とし，$R_{\mathrm{max}}$ は十分小さいと仮定します．&lt;br&gt;
+$R_{\mathrm{max}} \coloneqq \max_{u, v} \frac{\mathrm{bid}_{uv}}{B_u}$&lt;/p&gt;
+&lt;h2 id="adwords-の定式化"&gt;Adwords の定式化
+&lt;/h2&gt;&lt;p&gt;Adwords の主問題と双対問題は以下のようになります．ここでは adwords を双対問題とします．&lt;br&gt;
+$x_{uv}$ は $v$ が $u$ に割り当てられたときに $1$ になる決定変数です．実際には広告リクエストは分割できないので $x_{uv} \in \lbrace 0, 1 \rbrace$ ですが線形緩和しています．&lt;/p&gt;
+&lt;p&gt;主問題(Primal Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{minimize} &amp;&amp; \sum_{u} B_u \alpha_{u} + \sum_{v} \beta_v \\
+&amp;\text{subject to}
+&amp;&amp; \mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v &amp;&amp; \forall u, v \\
+&amp; &amp;&amp; \alpha_u \geq 0 \\
+&amp; &amp;&amp; \beta_{v} \geq 0
+\end{aligned}
+$$&lt;p&gt;双対問題(Dual Problem)&lt;/p&gt;
+$$
+\begin{aligned}
+&amp;\text{maximize} &amp;&amp; \sum_{u, v} \mathrm{bid}_{uv} x_{uv} \\
+&amp;\text{subject to}
+&amp;&amp; \sum_{v} \mathrm{bid}_{uv} x_{uv} \le B_u &amp;&amp; \forall u \\
+&amp; &amp;&amp; \sum_u x_{uv} \leq 1 &amp;&amp; \forall v \\
+&amp; &amp;&amp; x_{uv} \geq 0
+\end{aligned}
+$$&lt;h2 id="アルゴリズム"&gt;アルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;初期化
+&lt;ul&gt;
+&lt;li&gt;$x_{uv} \leftarrow 0$，$\alpha_u \leftarrow 0$，$\beta_v \leftarrow 0$ とする&lt;br&gt;
+$\alpha_u$ は $u$ が予算を使い切ったときに $1$ になる変数である．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v$ が到着したとき
+&lt;ul&gt;
+&lt;li&gt;$\alpha_u = 0$ であるような $u$ （つまり予算を使い切っていない $u$）のうち，$\mathrm{bid}_{uv}$ が最も高い $u^{\prime}$ に $v$ を割り当て，$\beta_v = \mathrm{bid}_{u^{\prime}v}$，$x_{u^{\prime}v} = 1$ とする&lt;/li&gt;
+&lt;li&gt;この割り当てで $u^{\prime}$ の予算が $0$ になった場合は，$\alpha_{u^{\prime}} = 1$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="競合比解析"&gt;競合比解析
+&lt;/h2&gt;&lt;p&gt;以下の不等式が成り立つことを示します．&lt;/p&gt;
+$$\mathrm{ALG} = \mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal} \ge \frac{1}{2} \mathrm{Primal}^{\star} \ge \frac{1}{2} \mathrm{OPT}$$&lt;p&gt;ここで，$\mathrm{Primal}$ と $\mathrm{Dual}$ はアルゴリズムで構築される主問題と双対問題の目的関数値，$\mathrm{Primal}^{\star}$ は主問題の最適解の目的関数値，$\mathrm{OPT}$ は整数問題の最適解の目的関数値です．&lt;br&gt;
+以下の 3 つを示します．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主問題の実行可能解を生成する&lt;/li&gt;
+&lt;li&gt;双対問題の実行可能解を生成する&lt;/li&gt;
+&lt;li&gt;$\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="1-主問題の実行可能解を生成する"&gt;1. 主問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;主問題の制約条件は $(1)$ $\mathrm{bid}_{uv}(1 - \alpha_u) \leq \beta_v$，$(2)$ $\alpha_u \geq 0$，$(3)$ $\beta_{v} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;$\alpha_u = 1$ のとき，$\mathrm{bid}_{uv} (1 - \alpha_u) \le \beta_v$ を満たします．&lt;br&gt;
+$\alpha_u = 0$ のとき，$\beta_{v} \ge \mathrm{bid}_{uv}$ となることを確認します．&lt;br&gt;
+アルゴリズムは $v$ を $\mathrm{bid}_{uv}$ が最も高くなるような $u^{\prime}$ に割り当て，$\beta_v = \mathrm{bid}_{u^{\prime}v}$ とするので，$\beta_{v} \ge \mathrm{bid}_{uv}$ を満たします．&lt;/p&gt;
+&lt;h3 id="2-双対問題の実行可能解を生成する"&gt;2. 双対問題の実行可能解を生成する
+&lt;/h3&gt;&lt;p&gt;双対問題の制約条件は，$(1)$ $\sum_{v} bid_{uv} x_{uv} \le B_u$，$(2)$ $\sum_u x_{uv} \leq 1$，$(3)$ $x_{uv} \geq 0$ の 3 つです．&lt;br&gt;
+$(2)$ と $(3)$ は明らかに満たしているので，$(1)$ を満たしていることを確認します．&lt;/p&gt;
+&lt;p&gt;アルゴリズムでは，予算の残っている $u$ にのみ $v$ を割り当てているので，基本的には制約条件を満たします．&lt;br&gt;
+厳密には，$v$ を $u$ に割り当てるとき，$u$ の残り予算が $\mathrm{bid}_{uv}$ に満たない場合でも割り当てることができ予算制約を破る可能性がありますが，small-bids assumption によって競合比には影響しません．&lt;/p&gt;
+&lt;h3 id="3"&gt;3. $\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$
+&lt;/h3&gt;&lt;p&gt;$v$ を $u$ に割り当てるたび，$\mathrm{Primal}$ も $\mathrm{Dual}$ も $\mathrm{bid}_{uv}(=\beta_v)$ だけ目的関数値が増加します．&lt;br&gt;
+また，$\mathrm{Primal}$ は予算を使い切ったとき $\alpha_u = 1$ となり $B_u$ 増加します．この $B_u$ は $u$ に割り当てられた $bid_{uv}$ の合計なので，$\alpha_u = 1$となるような $B_u$ の合計は高々 $\mathrm{Dual}$ となります．&lt;br&gt;
+よって，全体として $\mathrm{Primal} \le \mathrm{Dual} + \mathrm{Dual} = 2 \mathrm{Dual}$ なので，$\mathrm{Dual} \ge \frac{1}{2} \mathrm{Primal}$ となります．&lt;/p&gt;
+&lt;p&gt;今回の解析では $v$ を $u$ に割り当てるとき，$u$ の残り予算が $\mathrm{bid}_{uv}$ に満たない場合でも $\mathrm{bid}_{uv}$ を計上しています．&lt;br&gt;
+よって厳密には高々 $\sum_{u} \max_{v} \mathrm{bid}_{uv}$ を過大に計上していますが，small bids assumption によって，競合比には影響しません．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://research.google/pubs/online-matching-and-ad-allocation/" target="_blank" rel="noopener"
+&gt;Online Matching and Ad Allocation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Adwords に対する貪欲法の競合比解析</title><link>https://miti-7.github.io/post/adwords-greedy/</link><pubDate>Fri, 12 Sep 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/adwords-greedy/</guid><description>&lt;h2 id="adwords"&gt;Adwords
+&lt;/h2&gt;&lt;p&gt;広告主の集合 $U$ と広告リクエストの集合 $V$ があります．
+各広告主 $u$ は予算 $B_{u}$ を持ちます．広告リクエストは逐次到着し，各広告主は各広告リクエストに対して入札額 $\mathrm{bid}_{uv}$ を設定します．&lt;br&gt;
+各広告リクエストが到着するたびに，そのリクエストを一人の広告主に割り当てるか，誰にも割り当てないかを即時に決定します．&lt;br&gt;
+割り当てが行われた場合，その広告主の残り予算は $\min(\mathrm{bid}_{uv}, B_{u} - S_{u})$ 減少します．ここで $S_{u}$ は広告主 $u$ の予算消化額です．&lt;br&gt;
+全てのリクエストに対して割り当てを決定し，広告主の予算制約を超えない範囲で割り当てられた広告リクエストの入札額の合計を最大化することが目的です．&lt;/p&gt;
+&lt;p&gt;以下では，adwords に対する貪欲法が $\frac{1}{2}$-competitive となることを示します．&lt;/p&gt;
+&lt;h2 id="アルゴリズム"&gt;アルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;$v$ が到着したとき
+&lt;ul&gt;
+&lt;li&gt;予算が残っている $u$ がない場合は，どの $u$ にも割り当てない．&lt;/li&gt;
+&lt;li&gt;予算が残っている $u$ について，$\widehat{\mathrm{bid}_{uv}} = \min\{\mathrm{bid}_{uv}, B_u - S_u\}$ とし，もっとも $\widehat{\mathrm{bid}_{uv}}$ が高い $u$ に $v$ を割り当てる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="証明"&gt;証明
+&lt;/h2&gt;&lt;p&gt;以下のように定義します.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\mathrm{OPT}$: 最適解の目的関数値&lt;/li&gt;
+&lt;li&gt;$\mathrm{ALG}$: Greedy の目的関数値&lt;/li&gt;
+&lt;li&gt;$\mathrm{opt}_v$: 最適解において，$v$ によって得られる収益&lt;/li&gt;
+&lt;li&gt;$\mathrm{alg}_v$: Greedy において，$v$ によって得られる収益&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$\mathrm{OPT} - \mathrm{ALG} \le \mathrm{ALG}$ を示します．&lt;br&gt;
+この式が成り立つと，$\mathrm{OPT} \le 2\mathrm{ALG}$ となり，$\frac{1}{2} \mathrm{OPT} \le \mathrm{ALG}$ を示すことができます．&lt;/p&gt;
+&lt;p&gt;まず，$\mathrm{OPT} - \mathrm{ALG}$ の上界を求めます．&lt;br&gt;
+Greedy が最適解に比べて低い金額で採用してしまった $v$ の集合を $V^{\prime} = \lbrace v : \mathrm{alg}_v \lt \mathrm{opt}_v \rbrace$ と定義し，
+$\mathrm{Loss} = \sum_{v \in V^{\prime}} (\mathrm{opt}_v - \mathrm{alg}_v)$ とします．&lt;br&gt;
+$\mathrm{alg}_v \ge \mathrm{opt}_v$ であるような $v$ を無視しているので，$\mathrm{Loss}$ は $\mathrm{OPT} - \mathrm{ALG}$ の上界です．&lt;br&gt;
+よって，以下のようになります．&lt;/p&gt;
+$$
+\begin{equation}
+\mathrm{OPT} - \mathrm{ALG} = \sum_{v \in V} (\mathrm{opt}_v - \mathrm{alg}_v) \le \sum_{v \in V^{\prime}} (\mathrm{opt}_v - \mathrm{alg}_v) = \mathrm{Loss}
+\end{equation}
+$$&lt;p&gt;次に，$\mathrm{Loss} \le \mathrm{ALG}$ を示します．$\mathrm{ALG} = \sum_u S_u$ を利用します．&lt;br&gt;
+証明しやすいように，$\mathrm{Loss}$ を広告主で分割します．&lt;br&gt;
+$V^{\prime}$ のうち最適解で $u$ に割り当てられた広告リクエストの集合を $V^{\prime}_u$ とすると，$\mathrm{Loss}_u = \sum_{v \in V^{\prime}_u} (\mathrm{opt}_v - \mathrm{alg}_v)$ となります．&lt;/p&gt;
+&lt;p&gt;$v \in V^{\prime}_u$ が到着したときを考えます．$v$ は最適解では $u$ に，Greedy では $u^{\prime}$ に割り当てられたとします．&lt;br&gt;
+$v$ が到着した時点で，Greedy が $u$ ではなく $u^{\prime}$ を選んだということは，その時点での $u$ の修正済み入札額 が $u^{\prime}$ の修正済み入札額以下だったということです．つまり，$u$ の残り予算は高々 $alg_v$ だったということになります．&lt;br&gt;
+よって，任意の $v \in V^{\prime}_u$ について $S_u \ge B_u - alg_v$ となります．$B_u$ について整理すると, $B_u \le S_u + \mathrm{alg}_v$ です．&lt;/p&gt;
+&lt;p&gt;これまでの議論によって以下が示せます．&lt;/p&gt;
+$$
+\begin{aligned}
+\mathrm{Loss}_u &amp;= \sum_{v \in V^{\prime}_u} (\mathrm{opt}_v - \mathrm{alg}_v) \\
+\mathrm{Loss}_u &amp;= \sum_{v \in V^{\prime}_u} \mathrm{opt}_v - \sum_{v \in V^{\prime}_u} \mathrm{alg}_v \\
+\mathrm{Loss}_u &amp;\le B_u - \sum_{v \in V^{\prime}_u} \mathrm{alg}_v \\
+\mathrm{Loss}_u &amp;\le S_u + \mathrm{alg}_{v} - \sum_{v \in V^{\prime}_u} \mathrm{alg}_v \\
+\mathrm{Loss}_u &amp;\le S_u
+\end{aligned}
+$$&lt;p&gt;3 つ目の式への変形は，$\sum_{v \in V^{\prime}_u} \mathrm{opt}_v \le B_u$ を利用しています．&lt;br&gt;
+5 つ目の式への変形は，$V^{\prime}_u = \emptyset$ の場合は $\mathrm{Loss}_u = 0$ が，$V^{\prime}_u \ne \emptyset$ の場合は任意の $v^{\star} \in V^{\prime}_u$ について $\mathrm{alg}_{v^{\star}} \le \sum_{v \in V^{\prime}_u} \mathrm{alg}_v$ が成り立つことを利用しています．
+最後の式を $U$ について合計すると，以下の式が成り立ちます．&lt;/p&gt;
+$$
+\begin{equation}
+\mathrm{Loss} = \sum_u \mathrm{Loss}_u \le \sum_u S_u = \mathrm{ALG}
+\end{equation}
+$$&lt;p&gt;式 (1) と式 (2) から，$\mathrm{OPT} - \mathrm{ALG} \le \mathrm{Loss} = \mathrm{ALG}$ となり，$OPT - ALG \le ALG$ が示せました．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://research.google/pubs/online-matching-and-ad-allocation/" target="_blank" rel="noopener"
+&gt;Online Matching and Ad Allocation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

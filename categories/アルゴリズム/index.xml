@@ -1,578 +1,578 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>アルゴリズム on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/</link><description>Recent content in アルゴリズム on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" />&lt;h2 id="optimum-branchings-の-tarjan-の実装">Optimum Branchings の Tarjan の実装
-&lt;/h2>&lt;p>&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
->Optimum Branchings と Edmonds のアルゴリズム&lt;/a>の続きです．&lt;br>
-Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p>
-&lt;p>Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．&lt;/p>
-&lt;p>これに対し，Tarjan の実装はおおむね以下のような流れになります．&lt;br>
-まだ処理されていない頂点について，その頂点に入る最大の重みを持つ辺を採用します．この辺は最適 branching の構築に必要な構造（森）に記録していきます．もし採用した辺によって閉路が形成された場合，閉路を $1$ つの超頂点に縮約します．その際，閉路の外から閉路に入る辺の重みを修正します．最終的な最適 branching は森から $O(|V|)$ で構築することができます．&lt;br>
-Tarjan の実装は，縮約のたびにグラフを再構築することを避け，閉路の展開処理を主アルゴリズムから切り離したことで，計算量を改善しているといえます．&lt;/p>
-&lt;p>Tarjan の実装では，「閉路の検出」，「超頂点の管理」，「各頂点に入る辺の管理」が必要です．
-これらを効率的に行うために，Union Find と 遅延伝播マージ可能ヒープを使います．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>閉路の検出&lt;/p>
-&lt;ul>
-&lt;li>アルゴリズムでは各頂点についてその頂点に入る重み最大の辺を採用していきます．頂点を Union Find で管理し，辺が採用されるたびにその端点をマージしていきます．各頂点は最大でも 1 本の入力辺しかもたないため，採用された辺 $(u, v)$ の $u$ と $v$ が同じ集合なら閉路が形成されたことになります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>超頂点の管理&lt;/p>
-&lt;ul>
-&lt;li>閉路が超頂点に縮約されたとき，各頂点がどの超頂点に所属しているかを管理する必要があります．これは，Union Find で管理することができます．ただし，この Union Find は閉路の検出用の Union Find とは別でもつ必要があります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>各頂点に入る辺の管理&lt;/p>
-&lt;ul>
-&lt;li>各頂点に入る辺を管理するデータ構造には，以下の $4$ つの操作が必要です．
-&lt;ol>
-&lt;li>要素の追加&lt;/li>
-&lt;li>最大要素の抽出&lt;/li>
-&lt;li>$2$ つの集合のマージ&lt;/li>
-&lt;li>集合内の全要素の重みの定数変更&lt;/li>
-&lt;/ol>
-&lt;/li>
-&lt;li>これらの操作がすべて対数時間で実行できる場合，Tarjan の実装は $O(|E| \log |V|)$ で動作します．&lt;br>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>アルゴリズム on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/</link><description>Recent content in アルゴリズム on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" /&gt;&lt;h2 id="optimum-branchings-の-tarjan-の実装"&gt;Optimum Branchings の Tarjan の実装
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
+&gt;Optimum Branchings と Edmonds のアルゴリズム&lt;/a&gt;の続きです．&lt;br&gt;
+Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p&gt;
+&lt;p&gt;Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．&lt;/p&gt;
+&lt;p&gt;これに対し，Tarjan の実装はおおむね以下のような流れになります．&lt;br&gt;
+まだ処理されていない頂点について，その頂点に入る最大の重みを持つ辺を採用します．この辺は最適 branching の構築に必要な構造（森）に記録していきます．もし採用した辺によって閉路が形成された場合，閉路を $1$ つの超頂点に縮約します．その際，閉路の外から閉路に入る辺の重みを修正します．最終的な最適 branching は森から $O(|V|)$ で構築することができます．&lt;br&gt;
+Tarjan の実装は，縮約のたびにグラフを再構築することを避け，閉路の展開処理を主アルゴリズムから切り離したことで，計算量を改善しているといえます．&lt;/p&gt;
+&lt;p&gt;Tarjan の実装では，「閉路の検出」，「超頂点の管理」，「各頂点に入る辺の管理」が必要です．
+これらを効率的に行うために，Union Find と 遅延伝播マージ可能ヒープを使います．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;閉路の検出&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アルゴリズムでは各頂点についてその頂点に入る重み最大の辺を採用していきます．頂点を Union Find で管理し，辺が採用されるたびにその端点をマージしていきます．各頂点は最大でも 1 本の入力辺しかもたないため，採用された辺 $(u, v)$ の $u$ と $v$ が同じ集合なら閉路が形成されたことになります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点の管理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;閉路が超頂点に縮約されたとき，各頂点がどの超頂点に所属しているかを管理する必要があります．これは，Union Find で管理することができます．ただし，この Union Find は閉路の検出用の Union Find とは別でもつ必要があります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各頂点に入る辺の管理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;各頂点に入る辺を管理するデータ構造には，以下の $4$ つの操作が必要です．
+&lt;ol&gt;
+&lt;li&gt;要素の追加&lt;/li&gt;
+&lt;li&gt;最大要素の抽出&lt;/li&gt;
+&lt;li&gt;$2$ つの集合のマージ&lt;/li&gt;
+&lt;li&gt;集合内の全要素の重みの定数変更&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;これらの操作がすべて対数時間で実行できる場合，Tarjan の実装は $O(|E| \log |V|)$ で動作します．&lt;br&gt;
 &lt;a class="link" href="https://en.wikipedia.org/wiki/Skew_heap" target="_blank" rel="noopener"
->Skew Heap&lt;/a> は操作 1, 2, 3 を償却 $O(\log |N|)$ で実行できます．これに遅延伝播機能をつけることで操作 4 を定数時間で実行できます．&lt;/li>
-&lt;li>密グラフの場合は，隣接行列を使うことで操作 2, 3, 4 を $O(|V|)$ で実行できます．この場合 Tarjan の実装は $O(|V|^2)$ で動作します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="tarjan-の実装">Tarjan の実装
-&lt;/h2>&lt;p>アルゴリズムは，森 $F$ を構築する Algorithm BRANCH と，森 $F$ から branching を構築する Algorithm LEAF の $2$ つからなります．&lt;br>
-森 $F$ は採用された $G$ の辺を頂点とし，縮約過程を親子関係として記録するデータ構造です．&lt;/p>
-&lt;h3 id="algorithm-branch">Algorithm BRANCH
-&lt;/h3>&lt;p>このアルゴリズムは，森 $F$ を構築します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>変数&lt;/p>
-&lt;ul>
-&lt;li>S: 強連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ強連結成分となる．&lt;/li>
-&lt;li>W: 弱連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ弱連結成分となる．&lt;/li>
-&lt;li>$min[v]$: 超頂点 $v$ 内で最終的に根に選ばれる頂点&lt;/li>
-&lt;li>$roots$: 入辺のない強連結成分の集合&lt;/li>
-&lt;li>$rset$: 正の重みを持つ入辺がない（超）頂点の集合&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$roots$ に要素がある間，以下の処理を繰り返す&lt;/p>
-&lt;ul>
-&lt;li>$roots$ から任意の（超）頂点 $r$ を取り出す&lt;/li>
-&lt;li>$r$ に入る重みが $0$ より大きい辺がなければ，$r$ を $rset$ に格納する&lt;/li>
-&lt;li>そうでなければ，$r$ に入る重み最大の辺 $(u, v)$ を選ぶ&lt;/li>
-&lt;li>$(u, v)$ を表す頂点を $F$ に追加する
-&lt;ul>
-&lt;li>$r$ が超頂点なら，$F$ の $r$ が属する閉路の各頂点を $(u, v)$ の子とする&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$u$ と $v$ が異なる弱連結成分に属していれば，$S$ の $2$ つの弱連結成分を結合する&lt;/li>
-&lt;li>そうでなければ閉路が発生する
-&lt;ul>
-&lt;li>$C$ を $(u, v)$ を含む閉路とする&lt;/li>
-&lt;li>$W$ で $C$ に含まれるすべての強連結成分を $1$ つの超頂点 $r^{\prime}$ に縮約する&lt;/li>
-&lt;li>$C$ に含まれる最小重みの辺の行き先を $m$ とし，$min[r^{\prime}] = m$ とする&lt;/li>
-&lt;li>$r^{\prime}$ に外部から入る辺の重みを更新する&lt;/li>
-&lt;li>$r^{\prime}$ を $roots$ に追加する&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="algorithm-leaf">Algorithm LEAF
-&lt;/h3>&lt;p>Algorithm LEAF は $F$ から最適 branching $B$ を構築します．&lt;br>
-$R = \lbrace min(i) | i \in rset \rbrace$，$N$ を $F$ の根の集合とします．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$R$ が空でないなら，$R$ から $v$ を 1 つ取り出す&lt;br>
-$R$ が空の場合は，$N$ から任意の根 $(u,v)$ を選び $B$ に追加し，$v$ を処理対象とする&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$F$ の $v$ に入る辺を表す頂点から根までのパス $P$ を特定する&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$F$ からパス $P$ 上のすべての頂点およびそれらから出る全ての辺を削除する&lt;br>
-この削除操作により，$N$ も更新される&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>この一連の処理を $R$ と $N$ がともに空になるまで繰り返すと，最適 branching $B$ が構築されます．&lt;/p>
-&lt;h2 id="アルゴリズムの実行例">アルゴリズムの実行例
-&lt;/h2>&lt;p>下のグラフの branching を求めます．&lt;br>
-&lt;img src="images/実行例_0.png" width="25%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase1">phase1
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $0$ に入る重み最大の辺 $(2, 0)$ を選びます．森 $F$ に $2 \rightarrow 0$ を表す頂点を追加します．&lt;/li>
-&lt;li>同様に，頂点 $1$，$2$ に入る重み最大の辺 $(0, 1), (1, 2)$ を $F$に追加します&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．
+&gt;Skew Heap&lt;/a&gt; は操作 1, 2, 3 を償却 $O(\log |N|)$ で実行できます．これに遅延伝播機能をつけることで操作 4 を定数時間で実行できます．&lt;/li&gt;
+&lt;li&gt;密グラフの場合は，隣接行列を使うことで操作 2, 3, 4 を $O(|V|)$ で実行できます．この場合 Tarjan の実装は $O(|V|^2)$ で動作します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="tarjan-の実装"&gt;Tarjan の実装
+&lt;/h2&gt;&lt;p&gt;アルゴリズムは，森 $F$ を構築する Algorithm BRANCH と，森 $F$ から branching を構築する Algorithm LEAF の $2$ つからなります．&lt;br&gt;
+森 $F$ は採用された $G$ の辺を頂点とし，縮約過程を親子関係として記録するデータ構造です．&lt;/p&gt;
+&lt;h3 id="algorithm-branch"&gt;Algorithm BRANCH
+&lt;/h3&gt;&lt;p&gt;このアルゴリズムは，森 $F$ を構築します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;変数&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;S: 強連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ強連結成分となる．&lt;/li&gt;
+&lt;li&gt;W: 弱連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ弱連結成分となる．&lt;/li&gt;
+&lt;li&gt;$min[v]$: 超頂点 $v$ 内で最終的に根に選ばれる頂点&lt;/li&gt;
+&lt;li&gt;$roots$: 入辺のない強連結成分の集合&lt;/li&gt;
+&lt;li&gt;$rset$: 正の重みを持つ入辺がない（超）頂点の集合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$roots$ に要素がある間，以下の処理を繰り返す&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$roots$ から任意の（超）頂点 $r$ を取り出す&lt;/li&gt;
+&lt;li&gt;$r$ に入る重みが $0$ より大きい辺がなければ，$r$ を $rset$ に格納する&lt;/li&gt;
+&lt;li&gt;そうでなければ，$r$ に入る重み最大の辺 $(u, v)$ を選ぶ&lt;/li&gt;
+&lt;li&gt;$(u, v)$ を表す頂点を $F$ に追加する
+&lt;ul&gt;
+&lt;li&gt;$r$ が超頂点なら，$F$ の $r$ が属する閉路の各頂点を $(u, v)$ の子とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$u$ と $v$ が異なる弱連結成分に属していれば，$S$ の $2$ つの弱連結成分を結合する&lt;/li&gt;
+&lt;li&gt;そうでなければ閉路が発生する
+&lt;ul&gt;
+&lt;li&gt;$C$ を $(u, v)$ を含む閉路とする&lt;/li&gt;
+&lt;li&gt;$W$ で $C$ に含まれるすべての強連結成分を $1$ つの超頂点 $r^{\prime}$ に縮約する&lt;/li&gt;
+&lt;li&gt;$C$ に含まれる最小重みの辺の行き先を $m$ とし，$min[r^{\prime}] = m$ とする&lt;/li&gt;
+&lt;li&gt;$r^{\prime}$ に外部から入る辺の重みを更新する&lt;/li&gt;
+&lt;li&gt;$r^{\prime}$ を $roots$ に追加する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="algorithm-leaf"&gt;Algorithm LEAF
+&lt;/h3&gt;&lt;p&gt;Algorithm LEAF は $F$ から最適 branching $B$ を構築します．&lt;br&gt;
+$R = \lbrace min(i) | i \in rset \rbrace$，$N$ を $F$ の根の集合とします．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$R$ が空でないなら，$R$ から $v$ を 1 つ取り出す&lt;br&gt;
+$R$ が空の場合は，$N$ から任意の根 $(u,v)$ を選び $B$ に追加し，$v$ を処理対象とする&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$F$ の $v$ に入る辺を表す頂点から根までのパス $P$ を特定する&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$F$ からパス $P$ 上のすべての頂点およびそれらから出る全ての辺を削除する&lt;br&gt;
+この削除操作により，$N$ も更新される&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;この一連の処理を $R$ と $N$ がともに空になるまで繰り返すと，最適 branching $B$ が構築されます．&lt;/p&gt;
+&lt;h2 id="アルゴリズムの実行例"&gt;アルゴリズムの実行例
+&lt;/h2&gt;&lt;p&gt;下のグラフの branching を求めます．&lt;br&gt;
+&lt;img src="images/実行例_0.png" width="25%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase1"&gt;phase1
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $0$ に入る重み最大の辺 $(2, 0)$ を選びます．森 $F$ に $2 \rightarrow 0$ を表す頂点を追加します．&lt;/li&gt;
+&lt;li&gt;同様に，頂点 $1$，$2$ に入る重み最大の辺 $(0, 1), (1, 2)$ を $F$に追加します&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．
 閉路 $0 \rightarrow 1 \rightarrow 2 \rightarrow 0$ が見つかったので，これを超頂点 $A$ に縮約します．
-$(3, 1)$ の重みを $4 - 4 + 3 = 3$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading">&lt;img src="images/実行例_1.png" width="25%"> &lt;img src="images/実行例_1_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase2">phase2
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $A$ に入る重み最大の辺 $(3, A)$ を選びます．$F$ に $3 \rightarrow A$ を追加します．&lt;br>
-$(3, A)$ は超頂点 $A$ に入る辺なので，$3 \rightarrow A$ が親となるように $2 \rightarrow 0$，$0 \rightarrow 1$，$1 \rightarrow 2$ に辺をはります．&lt;/li>
-&lt;li>頂点 $3$ に入る重み最大の辺 $(A, 3)$ を選び，$F$ に追加します．&lt;br>
-閉路 $A \rightarrow 3 \rightarrow A$ が見つかったので，これを超頂点 $B$ に縮約します．&lt;br>
-$(4, A)$ の重みを $1 - 3 + 3 = 1$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-1">&lt;img src="images/実行例_2.png" width="25%"> &lt;img src="images/実行例_2_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase3">phase3
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $B$ に入る重み最大の辺 $(4, B)$ を選びます．$F$ に $4 \rightarrow B$ を追加します．&lt;br>
-$(4, B)$ は超頂点 $B$ に入る辺なので，$4 \rightarrow B$ から $3 \rightarrow A$，$A \rightarrow 3$ に辺をはります．&lt;/li>
-&lt;li>頂点 $4$，$5$ に入る重み最大の辺 $(5, 4)$，$(B, 5)$ を選び，$F$ に追加します．&lt;br>
-閉路 $B \rightarrow 5 \rightarrow 4 \rightarrow B$ が見つかったので，これを超頂点 $C$ に縮約します．&lt;br>
-$(6, 4)$ の重みを $4 - 4 + 1 = 1$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-2">&lt;img src="images/実行例_3.png" width="25%"> &lt;img src="images/実行例_3_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase4">phase4
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $C$ に入る重み最大の辺 $(6, C)$ を選びます．$F$ に $6 \rightarrow C$ を追加します．&lt;br>
-$(6, C)$ は超頂点 $C$ に入る辺なので，$6 \rightarrow C$ から $4 \rightarrow B$，$5 \rightarrow 4$，$B \rightarrow 5$ に辺をはります．&lt;/li>
-&lt;li>頂点 $6$ に入る重み最大の辺 $(C, 6)$ を選び，$F$ に追加します．&lt;br>
-閉路 $C \rightarrow 6 \rightarrow C$ が見つかったので，これを超頂点 $D$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-3">&lt;img src="images/実行例_4.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase5">phase5
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $D$ に入る辺はないので，Algorithm BRANCH は終了します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-4">&lt;img src="images/実行例_5.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase6">phase6
-&lt;/h3>&lt;ul>
-&lt;li>森 $F$ が求められたので，最適 branching $B$ を構築していきます．&lt;/li>
-&lt;li>$R = \lbrace 5 \rbrace$ から $5$ を取り出します．&lt;/li>
-&lt;li>$5$ に入る辺である $B \rightarrow 5$ から根までのパス $P$ を求め，これを削除します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="">&lt;img src="images/実行例_6.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase7">phase7
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $C \rightarrow 6$ を取り出し，$B$ の辺として採用します．$C \rightarrow 6$ は実際には，$5 \rightarrow 6$ なので，$B$ では $(5, 6)$ を採用しています．&lt;br>
-$6$ に入る辺は森にないので，パス $P$ の削除は行われません．&lt;/li>
-&lt;li>森の根である $5 \rightarrow 4$ も同様に処理をします．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-5">&lt;img src="images/実行例_7.png" width="25%"> &lt;img src="images/実行例_7_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase8">phase8
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $4 \rightarrow B$ を取り出し，$B$ の辺として採用します．$4 \rightarrow B$ は実際には，$4 \rightarrow 2$ なので，$B$ では $4 \rightarrow 2$ を採用しています．&lt;br>
-根から $2$ に入る辺である $1 \rightarrow 2$ までのパスを求め削除します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-6">&lt;img src="images/実行例_8.png" width="25%"> &lt;img src="images/実行例_8_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase9">phase9
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $A \rightarrow 3$，$2 \rightarrow 0$，$0 \rightarrow 1$ を処理します．&lt;/li>
-&lt;li>森のすべての要素を処理したのでアルゴリズムを終了します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-7">&lt;img src="images/実行例_9.png" width="25%"> &lt;img src="images/実行例_9_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h2 id="問題">問題
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/problem/directedmst" target="_blank" rel="noopener"
->Directed MST&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/submission/296045" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230070103" target="_blank" rel="noopener"
->Finding optimum branchings&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230090403" target="_blank" rel="noopener"
->A note on finding optimum branchings&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://cw.fel.cvut.cz/old/_media/courses/a4m33pal/cviceni/algorithm-description.pdf" target="_blank" rel="noopener"
->Optimum Branchings and Spanning Aborescences&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://arxiv.org/abs/2208.02590" target="_blank" rel="noopener"
->Efficiently Computing Directed Minimum Spanning Trees&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>$(3, 1)$ も $1$ に入る重み最大の辺ですが，ここでは $(0, 1)$ を選んだとします．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" />&lt;h2 id="optimum-branchings">Optimum Branchings
-&lt;/h2>&lt;p>有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br>
-$G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p>
-&lt;ul>
-&lt;li>閉路を含まない&lt;/li>
-&lt;li>同じ頂点に入る辺は高々 $1$ 本&lt;/li>
-&lt;/ul>
-&lt;p>すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>．&lt;br>
-この問題は，最小全域木問題の有向辺バージョンである最小全域有向木問題と等価の問題で，互いに線形時間で変換することができます．&lt;br>
-下の図は有向グラフと対応する 最適 branching の例です．$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;/p>
-&lt;img src="images/branchingの例.png" width="50%">
-&lt;p>以下ではいくつかの定義，補題，定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．&lt;br>
-このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br>
-また，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法と説明します．&lt;br>
+$(3, 1)$ の重みを $4 - 4 + 3 = 3$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading"&gt;&lt;img src="images/実行例_1.png" width="25%"&gt; &lt;img src="images/実行例_1_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase2"&gt;phase2
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $A$ に入る重み最大の辺 $(3, A)$ を選びます．$F$ に $3 \rightarrow A$ を追加します．&lt;br&gt;
+$(3, A)$ は超頂点 $A$ に入る辺なので，$3 \rightarrow A$ が親となるように $2 \rightarrow 0$，$0 \rightarrow 1$，$1 \rightarrow 2$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $3$ に入る重み最大の辺 $(A, 3)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $A \rightarrow 3 \rightarrow A$ が見つかったので，これを超頂点 $B$ に縮約します．&lt;br&gt;
+$(4, A)$ の重みを $1 - 3 + 3 = 1$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-1"&gt;&lt;img src="images/実行例_2.png" width="25%"&gt; &lt;img src="images/実行例_2_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase3"&gt;phase3
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $B$ に入る重み最大の辺 $(4, B)$ を選びます．$F$ に $4 \rightarrow B$ を追加します．&lt;br&gt;
+$(4, B)$ は超頂点 $B$ に入る辺なので，$4 \rightarrow B$ から $3 \rightarrow A$，$A \rightarrow 3$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $4$，$5$ に入る重み最大の辺 $(5, 4)$，$(B, 5)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $B \rightarrow 5 \rightarrow 4 \rightarrow B$ が見つかったので，これを超頂点 $C$ に縮約します．&lt;br&gt;
+$(6, 4)$ の重みを $4 - 4 + 1 = 1$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-2"&gt;&lt;img src="images/実行例_3.png" width="25%"&gt; &lt;img src="images/実行例_3_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase4"&gt;phase4
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $C$ に入る重み最大の辺 $(6, C)$ を選びます．$F$ に $6 \rightarrow C$ を追加します．&lt;br&gt;
+$(6, C)$ は超頂点 $C$ に入る辺なので，$6 \rightarrow C$ から $4 \rightarrow B$，$5 \rightarrow 4$，$B \rightarrow 5$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $6$ に入る重み最大の辺 $(C, 6)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $C \rightarrow 6 \rightarrow C$ が見つかったので，これを超頂点 $D$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-3"&gt;&lt;img src="images/実行例_4.png" width="25%"&gt; &lt;img src="images/実行例_4_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase5"&gt;phase5
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $D$ に入る辺はないので，Algorithm BRANCH は終了します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-4"&gt;&lt;img src="images/実行例_5.png" width="25%"&gt; &lt;img src="images/実行例_4_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase6"&gt;phase6
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森 $F$ が求められたので，最適 branching $B$ を構築していきます．&lt;/li&gt;
+&lt;li&gt;$R = \lbrace 5 \rbrace$ から $5$ を取り出します．&lt;/li&gt;
+&lt;li&gt;$5$ に入る辺である $B \rightarrow 5$ から根までのパス $P$ を求め，これを削除します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=""&gt;&lt;img src="images/実行例_6.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase7"&gt;phase7
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $C \rightarrow 6$ を取り出し，$B$ の辺として採用します．$C \rightarrow 6$ は実際には，$5 \rightarrow 6$ なので，$B$ では $(5, 6)$ を採用しています．&lt;br&gt;
+$6$ に入る辺は森にないので，パス $P$ の削除は行われません．&lt;/li&gt;
+&lt;li&gt;森の根である $5 \rightarrow 4$ も同様に処理をします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-5"&gt;&lt;img src="images/実行例_7.png" width="25%"&gt; &lt;img src="images/実行例_7_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase8"&gt;phase8
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $4 \rightarrow B$ を取り出し，$B$ の辺として採用します．$4 \rightarrow B$ は実際には，$4 \rightarrow 2$ なので，$B$ では $4 \rightarrow 2$ を採用しています．&lt;br&gt;
+根から $2$ に入る辺である $1 \rightarrow 2$ までのパスを求め削除します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-6"&gt;&lt;img src="images/実行例_8.png" width="25%"&gt; &lt;img src="images/実行例_8_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase9"&gt;phase9
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $A \rightarrow 3$，$2 \rightarrow 0$，$0 \rightarrow 1$ を処理します．&lt;/li&gt;
+&lt;li&gt;森のすべての要素を処理したのでアルゴリズムを終了します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-7"&gt;&lt;img src="images/実行例_9.png" width="25%"&gt; &lt;img src="images/実行例_9_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h2 id="問題"&gt;問題
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.yosupo.jp/problem/directedmst" target="_blank" rel="noopener"
+&gt;Directed MST&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.yosupo.jp/submission/296045" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230070103" target="_blank" rel="noopener"
+&gt;Finding optimum branchings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230090403" target="_blank" rel="noopener"
+&gt;A note on finding optimum branchings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://cw.fel.cvut.cz/old/_media/courses/a4m33pal/cviceni/algorithm-description.pdf" target="_blank" rel="noopener"
+&gt;Optimum Branchings and Spanning Aborescences&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://arxiv.org/abs/2208.02590" target="_blank" rel="noopener"
+&gt;Efficiently Computing Directed Minimum Spanning Trees&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;$(3, 1)$ も $1$ に入る重み最大の辺ですが，ここでは $(0, 1)$ を選んだとします．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" /&gt;&lt;h2 id="optimum-branchings"&gt;Optimum Branchings
+&lt;/h2&gt;&lt;p&gt;有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br&gt;
+$G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;閉路を含まない&lt;/li&gt;
+&lt;li&gt;同じ頂点に入る辺は高々 $1$ 本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+この問題は，最小全域木問題の有向辺バージョンである最小全域有向木問題と等価の問題で，互いに線形時間で変換することができます．&lt;br&gt;
+下の図は有向グラフと対応する 最適 branching の例です．$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;/p&gt;
+&lt;img src="images/branchingの例.png" width="50%"&gt;
+&lt;p&gt;以下ではいくつかの定義，補題，定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．&lt;br&gt;
+このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br&gt;
+また，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法と説明します．&lt;br&gt;
 最後に実装例として&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
->AOJ - 最小全域有向木&lt;/a>の提出コードへのリンクをはっておきます．&lt;/p>
-&lt;h2 id="定義">定義
-&lt;/h2>&lt;h3 id="critical">critical
-&lt;/h3>&lt;p>辺 $e = (u, v)$ が以下の 2 条件を満たすとき critical という．&lt;/p>
-&lt;ul>
-&lt;li>$w(e) \gt 0$&lt;/li>
-&lt;li>$v$ に接続するすべての辺 $e^{\prime}$ に対して，$w(e) \ge w(e^{\prime})$&lt;/li>
-&lt;/ul>
-&lt;p>$G$ の全域部分グラフ $H$ が以下の条件を満たすとき critical subgraph という．特にそれ以上辺を追加できない critical subgraph を maximal critical subgraph という．&lt;/p>
-&lt;ul>
-&lt;li>$H$ のすべての辺は critical&lt;/li>
-&lt;li>$H$ の各頂点の入次数は高々 $1$&lt;/li>
-&lt;/ul>
-&lt;p>下の図は maximal critical subgraph の例です．critical な辺を赤線で示しています．&lt;/p>
-&lt;img src="images/maximal_critical_subgraph.png" width="25%">
-&lt;h3 id="eligible">eligible
-&lt;/h3>&lt;p>辺 $e$ が入る頂点を $head(e)$ と表す．$G = (V, E)$ の branching $B$ に対して，$(B \backslash \lbrace (u, v) \in B : v = head(e) \rbrace) \cup \lbrace e \rbrace$ も branching になるとき，$e$ を eligible という．&lt;/p>
-&lt;h2 id="補題-1">補題 1
-&lt;/h2>&lt;p>maximal critical subgraph $H$ は以下の性質を持ちます．&lt;/p>
-&lt;ol>
-&lt;li>各コンポーネントは高々 1 つの閉路をもち，閉路は互いに素&lt;/li>
-&lt;li>$H$ に閉路がなければ最適 branching&lt;/li>
-&lt;/ol>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;ol>
-&lt;li>
-&lt;p>頂点 $v$ が $2$ つの有向閉路上にあるとします．このとき，次数が少なくとも $2$ 以上の頂点が存在します．これは critical subgraph の条件に反します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$H$ に閉路がなければ $H$は branching です．任意の branching $B$ のすべての頂点 $v$ について以下が成り立ちます．&lt;br>
-$w(B \cap \lbrace e | head(e) = v \rbrace) \le w(H \cap \lbrace e | head(e) = v \rbrace)$&lt;br>
-これらをすべての頂点について足し合わせると $w(B) \le w(H)$ となり，$H$ が最適となります．&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="補題-2">補題 2
-&lt;/h2>&lt;p>辺 $e = (u, v) \in E \backslash B$ が eligible なことと，$B$ 上に $v$ から $u$ への有向パスがないことは同値&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;ul>
-&lt;li>
-&lt;p>「辺 $e = (u, v) \in E \backslash B$ が eligible」なら「$B$ 上に $v$ から $u$ への有向パスがない」&lt;br>
-対偶として，$v$ から $u$ への有向パスがあるなら，$e$ は eligible ではないことを示します．&lt;br>
-$v$ から $u$ への有向パスがあるため，$(u, v)$ を追加すると閉路が発生します．&lt;br>
-これは eligible の定義に反するため，$e$ は eligible ではありません．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>「$B$ 上に $v$ から $u$ への有向パスがない」なら「辺 $e = (u, v) \in E \backslash B$ が eligible」&lt;br>
-$e$ を $B$ に追加したとき，$(x, head(e)) \in B$ の辺を削除すれば $v$ へ入る辺は高々 $1$ 本です．&lt;br>
-また，$B$ には $v \rightarrow u$ パスがないので，$e$ を追加しても閉路は発生しません．&lt;br>
-よって，$e$ は eligible です．&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="補題-3">補題 3
-&lt;/h2>&lt;p>$B$ を $G = (V, E)$ の branching，$C$ を $G$ の有向サイクルとする．$C \backslash B$ に eligible な辺がなければ， $|C \backslash B| = 1$ となる&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;p>$C \backslash B$ に eligible な辺がないとき，$|C \backslash B|$ は 1 以外にならないことを示します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$|C \backslash B| = 0$ にならない&lt;br>
-$B$ は branching なので起こりません&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$|C \backslash B| = 2$ にならない&lt;br>
-$C \backslash B = \lbrace (s_1, t_1), (s_2, t_2) \rbrace$ と仮定します．&lt;br>
-どちらの辺も eligible でないので，$B$ に $t_1$ から $s_1$ への有向パスと $t_2$ から $s_2$ への有向パスが存在します．&lt;br>
-$C$ は閉路なので，$t_2$ から $s_1$ への有向パスと $t_1$ から $s_2$ への有向パスは $C$ 上に存在します．&lt;br>
-よって，$B$ には，$t_2 \rightarrow \cdots \rightarrow \cdots s_1 \rightarrow t_1 \rightarrow \cdots \rightarrow s_2 \rightarrow t_2$ のようなパスができます．&lt;br>
-これは，$B$ の中に閉路があるということになり，$B$ が branching という仮定に矛盾します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$|C \backslash B| = k \gt 2$ にならない&lt;br>
-$|C \backslash B| = 2$ に帰着します．&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/details>
-&lt;h2 id="定理-1">定理 1
-&lt;/h2>&lt;p>$G$ の maximal critical subgraph $H$ に対し，以下の最適 branching $B$ が存在する．&lt;/p>
-&lt;ul>
-&lt;li>$H$ に含まれるすべての有向閉路 $C_i$ について，$| C_i \backslash B| = 1$．&lt;/li>
-&lt;/ul>
-&lt;p>つまり，$H$ の各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;br>
-下の図は $G$ に対する maximul critical subgraph $H$ と最適 branching です．&lt;br>
-$H$ の閉路から $(0, 1)$ と $(3, 5)$ を取り除いた最適 branching が存在することがわかります．&lt;/p>
-&lt;img src="images/theorem1_0.png" width="50%">
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>最適 branching のうち，$H$ の辺を最も多く含んでいるものを $B$ と仮定します．&lt;br>
-補題 2 により，$C \backslash B$ に eligible な辺がなければ，$|C \backslash B| = 1$ となるので，各 $C_i \backslash B$ のすべての辺が eligible でないことを示します．&lt;br>
-$e \in H \backslash B$ が eligible であると矛盾が起きることを示します．&lt;br>
-$e$ は eligible なので，新しい branching $B^{\prime} = \lbrace B \backslash \lbrace e^{\prime} \rbrace \rbrace \cup \lbrace e \rbrace$ を作ることができます．ここで $e^{\prime}$ は，$head(e)$ に入る $B$ 上の辺です．&lt;br>
-このとき，$e \in H$ であり，$e^{\prime} \notin H$ であるため，$B^{\prime}$ は $B$ より多くの $H$ の辺を含みます．&lt;br>
-また，$e$ は critical なので，$B^{\prime}$ は最適 branching です．&lt;br>
-よって，$B$ より$H$ の辺を多く含む最適 branching $B^{\prime}$ ができることとなり，これは仮定に矛盾します．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="定理-2">定理 2
-&lt;/h2>&lt;p>定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}_i$ は $C_i$ で最も重みの小さい辺である．&lt;/p>
-&lt;ol>
-&lt;li>各有向閉路 $C_i$ で $|C_i \backslash B| = 1$&lt;/li>
-&lt;li>もし有向閉路 $C_i$ へ外部から入る辺が $B$ に存在しないなら，$C_i \backslash B = \lbrace e^{0}_i \rbrace$ である．&lt;/li>
-&lt;/ol>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>1.を満たす最適 branching の中で，$\lbrace e^{0}_0, e^{1}_0, \cdots, e^{0}_k \rbrace$ が含まれる数がもっとも多いものを $B$ とします．&lt;br>
-$B$ には $C_i$ に外部から入る辺が存在しないにも関わらず，$C_i$ に $e^{0}_i$ が含まれていると仮定します．&lt;br>
-$C_i \backslash B = \lbrace e \rbrace$ とします．&lt;br>
-$B^{\prime} = (B \backslash \lbrace e^{0}_i \rbrace) \cup \lbrace e \rbrace$ とします．&lt;br>
+&gt;AOJ - 最小全域有向木&lt;/a&gt;の提出コードへのリンクをはっておきます．&lt;/p&gt;
+&lt;h2 id="定義"&gt;定義
+&lt;/h2&gt;&lt;h3 id="critical"&gt;critical
+&lt;/h3&gt;&lt;p&gt;辺 $e = (u, v)$ が以下の 2 条件を満たすとき critical という．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$w(e) \gt 0$&lt;/li&gt;
+&lt;li&gt;$v$ に接続するすべての辺 $e^{\prime}$ に対して，$w(e) \ge w(e^{\prime})$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$G$ の全域部分グラフ $H$ が以下の条件を満たすとき critical subgraph という．特にそれ以上辺を追加できない critical subgraph を maximal critical subgraph という．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H$ のすべての辺は critical&lt;/li&gt;
+&lt;li&gt;$H$ の各頂点の入次数は高々 $1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下の図は maximal critical subgraph の例です．critical な辺を赤線で示しています．&lt;/p&gt;
+&lt;img src="images/maximal_critical_subgraph.png" width="25%"&gt;
+&lt;h3 id="eligible"&gt;eligible
+&lt;/h3&gt;&lt;p&gt;辺 $e$ が入る頂点を $head(e)$ と表す．$G = (V, E)$ の branching $B$ に対して，$(B \backslash \lbrace (u, v) \in B : v = head(e) \rbrace) \cup \lbrace e \rbrace$ も branching になるとき，$e$ を eligible という．&lt;/p&gt;
+&lt;h2 id="補題-1"&gt;補題 1
+&lt;/h2&gt;&lt;p&gt;maximal critical subgraph $H$ は以下の性質を持ちます．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;各コンポーネントは高々 1 つの閉路をもち，閉路は互いに素&lt;/li&gt;
+&lt;li&gt;$H$ に閉路がなければ最適 branching&lt;/li&gt;
+&lt;/ol&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;頂点 $v$ が $2$ つの有向閉路上にあるとします．このとき，次数が少なくとも $2$ 以上の頂点が存在します．これは critical subgraph の条件に反します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$H$ に閉路がなければ $H$は branching です．任意の branching $B$ のすべての頂点 $v$ について以下が成り立ちます．&lt;br&gt;
+$w(B \cap \lbrace e | head(e) = v \rbrace) \le w(H \cap \lbrace e | head(e) = v \rbrace)$&lt;br&gt;
+これらをすべての頂点について足し合わせると $w(B) \le w(H)$ となり，$H$ が最適となります．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="補題-2"&gt;補題 2
+&lt;/h2&gt;&lt;p&gt;辺 $e = (u, v) \in E \backslash B$ が eligible なことと，$B$ 上に $v$ から $u$ への有向パスがないことは同値&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;「辺 $e = (u, v) \in E \backslash B$ が eligible」なら「$B$ 上に $v$ から $u$ への有向パスがない」&lt;br&gt;
+対偶として，$v$ から $u$ への有向パスがあるなら，$e$ は eligible ではないことを示します．&lt;br&gt;
+$v$ から $u$ への有向パスがあるため，$(u, v)$ を追加すると閉路が発生します．&lt;br&gt;
+これは eligible の定義に反するため，$e$ は eligible ではありません．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;「$B$ 上に $v$ から $u$ への有向パスがない」なら「辺 $e = (u, v) \in E \backslash B$ が eligible」&lt;br&gt;
+$e$ を $B$ に追加したとき，$(x, head(e)) \in B$ の辺を削除すれば $v$ へ入る辺は高々 $1$ 本です．&lt;br&gt;
+また，$B$ には $v \rightarrow u$ パスがないので，$e$ を追加しても閉路は発生しません．&lt;br&gt;
+よって，$e$ は eligible です．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="補題-3"&gt;補題 3
+&lt;/h2&gt;&lt;p&gt;$B$ を $G = (V, E)$ の branching，$C$ を $G$ の有向サイクルとする．$C \backslash B$ に eligible な辺がなければ， $|C \backslash B| = 1$ となる&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;p&gt;$C \backslash B$ に eligible な辺がないとき，$|C \backslash B|$ は 1 以外にならないことを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = 0$ にならない&lt;br&gt;
+$B$ は branching なので起こりません&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = 2$ にならない&lt;br&gt;
+$C \backslash B = \lbrace (s_1, t_1), (s_2, t_2) \rbrace$ と仮定します．&lt;br&gt;
+どちらの辺も eligible でないので，$B$ に $t_1$ から $s_1$ への有向パスと $t_2$ から $s_2$ への有向パスが存在します．&lt;br&gt;
+$C$ は閉路なので，$t_2$ から $s_1$ への有向パスと $t_1$ から $s_2$ への有向パスは $C$ 上に存在します．&lt;br&gt;
+よって，$B$ には，$t_2 \rightarrow \cdots \rightarrow \cdots s_1 \rightarrow t_1 \rightarrow \cdots \rightarrow s_2 \rightarrow t_2$ のようなパスができます．&lt;br&gt;
+これは，$B$ の中に閉路があるということになり，$B$ が branching という仮定に矛盾します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = k \gt 2$ にならない&lt;br&gt;
+$|C \backslash B| = 2$ に帰着します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;h2 id="定理-1"&gt;定理 1
+&lt;/h2&gt;&lt;p&gt;$G$ の maximal critical subgraph $H$ に対し，以下の最適 branching $B$ が存在する．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H$ に含まれるすべての有向閉路 $C_i$ について，$| C_i \backslash B| = 1$．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;つまり，$H$ の各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;br&gt;
+下の図は $G$ に対する maximul critical subgraph $H$ と最適 branching です．&lt;br&gt;
+$H$ の閉路から $(0, 1)$ と $(3, 5)$ を取り除いた最適 branching が存在することがわかります．&lt;/p&gt;
+&lt;img src="images/theorem1_0.png" width="50%"&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;最適 branching のうち，$H$ の辺を最も多く含んでいるものを $B$ と仮定します．&lt;br&gt;
+補題 2 により，$C \backslash B$ に eligible な辺がなければ，$|C \backslash B| = 1$ となるので，各 $C_i \backslash B$ のすべての辺が eligible でないことを示します．&lt;br&gt;
+$e \in H \backslash B$ が eligible であると矛盾が起きることを示します．&lt;br&gt;
+$e$ は eligible なので，新しい branching $B^{\prime} = \lbrace B \backslash \lbrace e^{\prime} \rbrace \rbrace \cup \lbrace e \rbrace$ を作ることができます．ここで $e^{\prime}$ は，$head(e)$ に入る $B$ 上の辺です．&lt;br&gt;
+このとき，$e \in H$ であり，$e^{\prime} \notin H$ であるため，$B^{\prime}$ は $B$ より多くの $H$ の辺を含みます．&lt;br&gt;
+また，$e$ は critical なので，$B^{\prime}$ は最適 branching です．&lt;br&gt;
+よって，$B$ より$H$ の辺を多く含む最適 branching $B^{\prime}$ ができることとなり，これは仮定に矛盾します．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="定理-2"&gt;定理 2
+&lt;/h2&gt;&lt;p&gt;定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}_i$ は $C_i$ で最も重みの小さい辺である．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;各有向閉路 $C_i$ で $|C_i \backslash B| = 1$&lt;/li&gt;
+&lt;li&gt;もし有向閉路 $C_i$ へ外部から入る辺が $B$ に存在しないなら，$C_i \backslash B = \lbrace e^{0}_i \rbrace$ である．&lt;/li&gt;
+&lt;/ol&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;1.を満たす最適 branching の中で，$\lbrace e^{0}_0, e^{1}_0, \cdots, e^{0}_k \rbrace$ が含まれる数がもっとも多いものを $B$ とします．&lt;br&gt;
+$B$ には $C_i$ に外部から入る辺が存在しないにも関わらず，$C_i$ に $e^{0}_i$ が含まれていると仮定します．&lt;br&gt;
+$C_i \backslash B = \lbrace e \rbrace$ とします．&lt;br&gt;
+$B^{\prime} = (B \backslash \lbrace e^{0}_i \rbrace) \cup \lbrace e \rbrace$ とします．&lt;br&gt;
 この $B^{\prime}$ は $\lbrace e^{0}_i \rbrace$ を含む最適 branching です．
-これは仮定と矛盾します．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="edmonds-のアルゴリズム">Edmonds のアルゴリズム
-&lt;/h2>&lt;p>グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．&lt;/p>
-&lt;p>まず，maximal critical subgraph を求め，この辺集合を $H$ とします．&lt;br>
-補題 1 により $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p>
-&lt;p>$(V, H)$ が branching でない場合を考えます．&lt;br>
-この場合，$(V, H)$ には有向閉路が 1 つ以上存在します．&lt;br>
-定理 1 により，各閉路から 1 本辺を削除した辺集合を含む最適 branching $B^{\star}$ が存在することがわかります．今後はこの $B^{\star}$ を求めていきます．&lt;/p>
-&lt;p>$B^{\star}$ を求めるためには maximal critical graph の各閉路のどの辺を削除すればいいのかを考ます．&lt;br>
-もし，$B^{\star}$ に（閉路の）外部から閉路に入る辺 $(u, v)$ がある場合，$v$ の入次数が $2$ になるのを避けるために閉路内で $v$ に入る辺を削除することになります．反対に，外部から閉路に入る辺がない場合，定理 2 より閉路内で最小の辺を削除することになります．&lt;br>
-つまり，閉路のどの辺を削除するかは閉路外部の辺構造によって決めることができます．そこで，閉路内部の辺構造（つまり，どの辺を削除するのか）を決めるより先に外部の辺構造を決めてしまいます．&lt;br>
-そのために，閉路外部の重みを適切に調整した上で閉路を $1$ つの超頂点に縮約します．この手続きによって得られるグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$ とします．&lt;br>
-この $G^{\prime}$ の最適 branching に超頂点に入る辺があるかどうかによって，$H$ の閉路のどの辺を削除するかを決めることができます．&lt;/p>
-&lt;p>$G^{\prime}$ の辺の重み $w^{\prime}$ をどう設定するかを考えます．&lt;br>
-$G^{\prime}$ の最適 branching から構成した $G$ の branching も最適 branching であるという条件を満たす必要があります．&lt;br>
-このためには，任意の branching について，$w(B) = w^{\prime}(B^{\prime}) + const$ であることを示せればいいです．$B^{\prime}$ と $B$ の重みの差は定数なので，$B^{\prime}$ が最適なら $B$ も最適といえるためです．&lt;br>
+これは仮定と矛盾します．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="edmonds-のアルゴリズム"&gt;Edmonds のアルゴリズム
+&lt;/h2&gt;&lt;p&gt;グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;p&gt;まず，maximal critical subgraph を求め，この辺集合を $H$ とします．&lt;br&gt;
+補題 1 により $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p&gt;
+&lt;p&gt;$(V, H)$ が branching でない場合を考えます．&lt;br&gt;
+この場合，$(V, H)$ には有向閉路が 1 つ以上存在します．&lt;br&gt;
+定理 1 により，各閉路から 1 本辺を削除した辺集合を含む最適 branching $B^{\star}$ が存在することがわかります．今後はこの $B^{\star}$ を求めていきます．&lt;/p&gt;
+&lt;p&gt;$B^{\star}$ を求めるためには maximal critical graph の各閉路のどの辺を削除すればいいのかを考ます．&lt;br&gt;
+もし，$B^{\star}$ に（閉路の）外部から閉路に入る辺 $(u, v)$ がある場合，$v$ の入次数が $2$ になるのを避けるために閉路内で $v$ に入る辺を削除することになります．反対に，外部から閉路に入る辺がない場合，定理 2 より閉路内で最小の辺を削除することになります．&lt;br&gt;
+つまり，閉路のどの辺を削除するかは閉路外部の辺構造によって決めることができます．そこで，閉路内部の辺構造（つまり，どの辺を削除するのか）を決めるより先に外部の辺構造を決めてしまいます．&lt;br&gt;
+そのために，閉路外部の重みを適切に調整した上で閉路を $1$ つの超頂点に縮約します．この手続きによって得られるグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$ とします．&lt;br&gt;
+この $G^{\prime}$ の最適 branching に超頂点に入る辺があるかどうかによって，$H$ の閉路のどの辺を削除するかを決めることができます．&lt;/p&gt;
+&lt;p&gt;$G^{\prime}$ の辺の重み $w^{\prime}$ をどう設定するかを考えます．&lt;br&gt;
+$G^{\prime}$ の最適 branching から構成した $G$ の branching も最適 branching であるという条件を満たす必要があります．&lt;br&gt;
+このためには，任意の branching について，$w(B) = w^{\prime}(B^{\prime}) + const$ であることを示せればいいです．$B^{\prime}$ と $B$ の重みの差は定数なので，$B^{\prime}$ が最適なら $B$ も最適といえるためです．&lt;br&gt;
 外部から閉路に入る辺を $e = (u, v)$，$v$ に入る閉路内唯一の辺を $\tilde e$，閉路の最小の重みを持つ辺を $e^{0}$ とします．
-この条件を満たすためには，閉路に入る辺 $e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0})$ と設定すればいいです．&lt;br>
-閉路に入る辺以外の重みは $w$ のままとします．&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>$w(B) = w^{\prime}(B^{\prime}) + const$ となることを示します．&lt;br>
-$B^{\prime}$ の超頂点を展開したときの重みの増加分を考えます．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>超頂点に入る辺 $e$ がないとき&lt;/p>
-&lt;ul>
-&lt;li>$e^{0}_i$ 以外の辺を採用するので，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>超頂点に入る辺 $e$ があるとき&lt;/p>
-&lt;ul>
-&lt;li>$w(\tilde e)$ 以外の辺を採用するので，$w(C_i) - w(\tilde e)$ だけ増加します．&lt;br>
-ただし，$e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0}_i)$ と調整していたので，この調整を打ち消すと $w(C_i) - w(\tilde e) - (- w(\tilde e) + w(e^{0}_i)) = w(C_i) - w(e^{0}_i)$ となります．&lt;br>
-結局，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>よって，どちらも $w(C_i) - w(e_i^{0})$ だけ増加するので，すべての閉路についてこの和をとると $w(B) = w^{\prime}(B^{\prime}) + \sum_{i} w(C_i) - \sum_{i} w(e_i^{0})$ となります．&lt;br>
-$\sum_{i} w(C_i) - \sum_{i} w(e^{0}_i)$ の部分は branching のとり方に依存しないため定数とみなすことができ，$w(B) = w^{\prime}(B^{\prime}) + const$ となります．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;p>このように重みを設定した $G^{\prime}$ に対し，最適 branching を求める手続きを再帰的に実行します．&lt;br>
-$G^{\prime}$ は元のグラフより厳密に頂点数が少なくなるため，この手続きは有限回で終了します．&lt;/p>
-&lt;p>$G$ の最適 branching $B$ は，この再帰呼び出しから返される $G^{\prime}$ の最適 branching $B^{\prime}$ に対して，閉路の $1$ 本を除いた残りすべての辺を加えることにより構築することができます．&lt;/p>
-&lt;p>最後に計算量について考えます．&lt;br>
-1 回の手続きで少なくとも 1 つの頂点が減ります．1 回の手続きには $O(|E|)$ かかるので，このアルゴリズムの計算量は $O(|E||V|)$ です．&lt;/p>
-&lt;h2 id="edmonds-のアルゴリズムまとめ">Edmonds のアルゴリズムまとめ
-&lt;/h2>&lt;ul>
-&lt;li>
-&lt;p>step 1: maximal critical subgraph の構築
-maximal critical subgraph を求めます．この辺の集合を $H$ とします．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 2: 閉路のチェック&lt;br>
-$(V, H)$ が branching を形成する場合，$(V, H)$ が最適 branching であるため，これを返します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 3: 閉路の縮約&lt;br>
-$H$ が $1$ つ以上の閉路を含む場合，任意の閉路 $C$ を選び，$C$ を $1$ つの超頂点 $a$​ に縮約します．&lt;br>
-この操作によってできたグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$とします．ここで，$V^{\prime} = (V \backslash C) \cup a$ です．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 4: $G^{\prime}$ における辺の重みの変更&lt;/p>
-&lt;ul>
-&lt;li>$C$ に入る辺：
-&lt;ul>
-&lt;li>辺 $(u \notin C, v \in C)$ に対して、$G^{\prime}$ 内の新しい辺 $(u, a​)$ の重み $w^{\prime}(u, a)$ を $w(u, v) - w(\tilde e) + w(e^{0})$ とします．ここで，$w(\tilde e)$ は $C$ に存在する頂点 $v$ に入る辺の重み，$w(e^{0})$ は $C$ に存在する辺の最小の重みです．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$C$ から出る辺：
-&lt;ul>
-&lt;li>辺 $(u \in C, v \notin C)$ に対して、$G^{\prime}$ 内の新しい辺 $(a, v)$ の重み $w^{\prime}(a​, v)$ を $w(u, v)$ とします．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$C$ に無関係な辺：
-&lt;ul>
-&lt;li>辺 $(u \notin C,v \notin C)$ に対して、$(u, v​)$ の重み $w^{\prime}(u, v​)$ を $w(u, v)$ とします．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>step 5: 再帰呼び出し&lt;br>
-$G^{\prime}$ の最適 branching を再帰的に見つけます．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 6: 展開&lt;br>
-$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持つ場合&lt;/p>
-&lt;ul>
-&lt;li>超頂点を展開します．$a$ に入る辺が展開後 $(u, v)$ であったとします．$C$ に含まれる辺のうち $v$ に入る辺以外の $|C| - 1$ 本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li>
-&lt;/ul>
-&lt;p>$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持たない場合&lt;/p>
-&lt;ul>
-&lt;li>超頂点を展開します．$C$ に含まれる辺のうち，最小の重みの辺以外の $|C| - 1$本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="アルゴリズムの実行例">アルゴリズムの実行例
-&lt;/h2>&lt;p>下のグラフの branching を求めます．&lt;/p>
-&lt;img src="images/edmonds_0.png" width="25%">
-&lt;hr>
-&lt;h3 id="phase1">phase1
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．図では赤色の辺が対応します．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>$(2, 5), (5, 4), (4, 2)$ によって閉路が生じます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>閉路の縮約
-&lt;ul>
-&lt;li>閉路に属する頂点 $\lbrace 2, 4, 5 \rbrace$ を超頂点 $6$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>辺の重みの変更
-&lt;ul>
-&lt;li>超頂点に入る辺 $(0, 2)$ の重みを変更します．$2$ に入る閉路の辺の重みは $5$，閉路最小の重みは $4$ なので，$2 - 5 + 4 = 1$ となります．&lt;/li>
-&lt;li>超頂点に入る辺 $(3, 4)$ の重みを変更します．$4$ に入る閉路の辺の重みは $4$，閉路最小の重みは $4$ なので，$3 - 4 + 4 = 3$ となります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>再帰呼び出し
-&lt;ul>
-&lt;li>新しくできたグラフの最適 branching を求めます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_1.png" width="50%">
-&lt;hr>
-&lt;h3 id="phase2">phase2
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>$(1, 3), (3, 6), (6, 1)$ によって閉路が生じます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>閉路の縮約
-&lt;ul>
-&lt;li>閉路に属する頂点 $\lbrace 1, 3, 6 \rbrace$ を超頂点 $7$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>辺の重みの変更
-&lt;ul>
-&lt;li>超頂点に入る辺 $(0, 6)$ の重みを変更します．$6$ に入る閉路の辺の重みは $3$，閉路最小の重みは $1$ なので，$1 - 3 + 1 = -1$ となります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>再帰呼び出し
-&lt;ul>
-&lt;li>新しくできたグラフの最適 branching を求めます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_2.png" width="50%">
-&lt;hr>
-&lt;h3 id="phase3">phase3
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>閉路が存在しないため，これは最適 branching です．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_3.png" width="25%">
-&lt;hr>
-&lt;h3 id="phase4">phase4
-&lt;/h3>&lt;p>ここからは閉路の展開をしていきます．&lt;br>
-現在は，$(7, 0)$ が branching の辺として選ばれています．&lt;br>
-branching として選ばれた辺は青色の辺で示していきます．&lt;br>
-&lt;img src="images/edmonds_4.png" width="25%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase5">phase5
-&lt;/h3>&lt;p>超頂点 $7$ を展開します．超頂点 $7$ は $(1, 3), (3, 6), (6, 1)$ からなる閉路でした．&lt;br>
+この条件を満たすためには，閉路に入る辺 $e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0})$ と設定すればいいです．&lt;br&gt;
+閉路に入る辺以外の重みは $w$ のままとします．&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;$w(B) = w^{\prime}(B^{\prime}) + const$ となることを示します．&lt;br&gt;
+$B^{\prime}$ の超頂点を展開したときの重みの増加分を考えます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点に入る辺 $e$ がないとき&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$e^{0}_i$ 以外の辺を採用するので，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点に入る辺 $e$ があるとき&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$w(\tilde e)$ 以外の辺を採用するので，$w(C_i) - w(\tilde e)$ だけ増加します．&lt;br&gt;
+ただし，$e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0}_i)$ と調整していたので，この調整を打ち消すと $w(C_i) - w(\tilde e) - (- w(\tilde e) + w(e^{0}_i)) = w(C_i) - w(e^{0}_i)$ となります．&lt;br&gt;
+結局，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;よって，どちらも $w(C_i) - w(e_i^{0})$ だけ増加するので，すべての閉路についてこの和をとると $w(B) = w^{\prime}(B^{\prime}) + \sum_{i} w(C_i) - \sum_{i} w(e_i^{0})$ となります．&lt;br&gt;
+$\sum_{i} w(C_i) - \sum_{i} w(e^{0}_i)$ の部分は branching のとり方に依存しないため定数とみなすことができ，$w(B) = w^{\prime}(B^{\prime}) + const$ となります．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;p&gt;このように重みを設定した $G^{\prime}$ に対し，最適 branching を求める手続きを再帰的に実行します．&lt;br&gt;
+$G^{\prime}$ は元のグラフより厳密に頂点数が少なくなるため，この手続きは有限回で終了します．&lt;/p&gt;
+&lt;p&gt;$G$ の最適 branching $B$ は，この再帰呼び出しから返される $G^{\prime}$ の最適 branching $B^{\prime}$ に対して，閉路の $1$ 本を除いた残りすべての辺を加えることにより構築することができます．&lt;/p&gt;
+&lt;p&gt;最後に計算量について考えます．&lt;br&gt;
+1 回の手続きで少なくとも 1 つの頂点が減ります．1 回の手続きには $O(|E|)$ かかるので，このアルゴリズムの計算量は $O(|E||V|)$ です．&lt;/p&gt;
+&lt;h2 id="edmonds-のアルゴリズムまとめ"&gt;Edmonds のアルゴリズムまとめ
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;step 1: maximal critical subgraph の構築
+maximal critical subgraph を求めます．この辺の集合を $H$ とします．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 2: 閉路のチェック&lt;br&gt;
+$(V, H)$ が branching を形成する場合，$(V, H)$ が最適 branching であるため，これを返します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 3: 閉路の縮約&lt;br&gt;
+$H$ が $1$ つ以上の閉路を含む場合，任意の閉路 $C$ を選び，$C$ を $1$ つの超頂点 $a$​ に縮約します．&lt;br&gt;
+この操作によってできたグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$とします．ここで，$V^{\prime} = (V \backslash C) \cup a$ です．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 4: $G^{\prime}$ における辺の重みの変更&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$C$ に入る辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \notin C, v \in C)$ に対して、$G^{\prime}$ 内の新しい辺 $(u, a​)$ の重み $w^{\prime}(u, a)$ を $w(u, v) - w(\tilde e) + w(e^{0})$ とします．ここで，$w(\tilde e)$ は $C$ に存在する頂点 $v$ に入る辺の重み，$w(e^{0})$ は $C$ に存在する辺の最小の重みです．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$C$ から出る辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \in C, v \notin C)$ に対して、$G^{\prime}$ 内の新しい辺 $(a, v)$ の重み $w^{\prime}(a​, v)$ を $w(u, v)$ とします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$C$ に無関係な辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \notin C,v \notin C)$ に対して、$(u, v​)$ の重み $w^{\prime}(u, v​)$ を $w(u, v)$ とします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 5: 再帰呼び出し&lt;br&gt;
+$G^{\prime}$ の最適 branching を再帰的に見つけます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 6: 展開&lt;br&gt;
+$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持つ場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;超頂点を展開します．$a$ に入る辺が展開後 $(u, v)$ であったとします．$C$ に含まれる辺のうち $v$ に入る辺以外の $|C| - 1$ 本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持たない場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;超頂点を展開します．$C$ に含まれる辺のうち，最小の重みの辺以外の $|C| - 1$本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="アルゴリズムの実行例"&gt;アルゴリズムの実行例
+&lt;/h2&gt;&lt;p&gt;下のグラフの branching を求めます．&lt;/p&gt;
+&lt;img src="images/edmonds_0.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase1"&gt;phase1
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．図では赤色の辺が対応します．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;$(2, 5), (5, 4), (4, 2)$ によって閉路が生じます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉路の縮約
+&lt;ul&gt;
+&lt;li&gt;閉路に属する頂点 $\lbrace 2, 4, 5 \rbrace$ を超頂点 $6$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;辺の重みの変更
+&lt;ul&gt;
+&lt;li&gt;超頂点に入る辺 $(0, 2)$ の重みを変更します．$2$ に入る閉路の辺の重みは $5$，閉路最小の重みは $4$ なので，$2 - 5 + 4 = 1$ となります．&lt;/li&gt;
+&lt;li&gt;超頂点に入る辺 $(3, 4)$ の重みを変更します．$4$ に入る閉路の辺の重みは $4$，閉路最小の重みは $4$ なので，$3 - 4 + 4 = 3$ となります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;再帰呼び出し
+&lt;ul&gt;
+&lt;li&gt;新しくできたグラフの最適 branching を求めます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_1.png" width="50%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase2"&gt;phase2
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;$(1, 3), (3, 6), (6, 1)$ によって閉路が生じます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉路の縮約
+&lt;ul&gt;
+&lt;li&gt;閉路に属する頂点 $\lbrace 1, 3, 6 \rbrace$ を超頂点 $7$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;辺の重みの変更
+&lt;ul&gt;
+&lt;li&gt;超頂点に入る辺 $(0, 6)$ の重みを変更します．$6$ に入る閉路の辺の重みは $3$，閉路最小の重みは $1$ なので，$1 - 3 + 1 = -1$ となります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;再帰呼び出し
+&lt;ul&gt;
+&lt;li&gt;新しくできたグラフの最適 branching を求めます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_2.png" width="50%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase3"&gt;phase3
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;閉路が存在しないため，これは最適 branching です．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_3.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase4"&gt;phase4
+&lt;/h3&gt;&lt;p&gt;ここからは閉路の展開をしていきます．&lt;br&gt;
+現在は，$(7, 0)$ が branching の辺として選ばれています．&lt;br&gt;
+branching として選ばれた辺は青色の辺で示していきます．&lt;br&gt;
+&lt;img src="images/edmonds_4.png" width="25%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase5"&gt;phase5
+&lt;/h3&gt;&lt;p&gt;超頂点 $7$ を展開します．超頂点 $7$ は $(1, 3), (3, 6), (6, 1)$ からなる閉路でした．&lt;br&gt;
 この閉路に入る辺はないので，閉路のなかで最小の辺 $(6, 1)$ を除外し，$(1, 3), (3, 6)$ を採用します．
-&lt;img src="images/edmonds_5.png" width="50%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase6">phase6
-&lt;/h3>&lt;p>超頂点 $6$ を展開します．超頂点 $6$ は $(2, 5), (5, 4), (4, 2)$ からなる閉路でした．&lt;br>
-この閉路には $(3, 4)$ が入るので，閉路の中で $4$ に入る $(5, 4)$ を除外し，$(2, 5), (4, 2)$ を採用します．&lt;br>
-すべての閉路を展開をしたので，アルゴリズムを終了します．&lt;br>
-&lt;img src="images/edmonds_6.png" width="50%">&lt;/p>
-&lt;h2 id="問題のバリエーション">問題のバリエーション
-&lt;/h2>&lt;p>以下の問題は，optimal branching と等価の問題であり，最適 branching のアルゴリズムを使って解くことができます．&lt;/p>
-&lt;h3 id="最小重み有向木問題minimum-weight-arborescence-problem">最小重み有向木問題（Minimum Weight Arborescence Problem）
-&lt;/h3>&lt;p>$G = (V, E)$ の全域有向森ではなく，全域有向木を求める問題です．木の根は任意になります．&lt;br>
-$G$ に全域有向木が存在すると仮定します．&lt;br>
-$G = (V, E)$ に対し，$K = 1 + \sum_{e \in E} |w(e)|$ とします．&lt;br>
-$w^{\prime}(e) = K - w(e)$ と重みを変更した $G$ で最適 branching 問題を解きます．&lt;/p>
-&lt;p>木 $B$ の辺の数を $|B|$ と表します．$|B| \gt |B^{\prime}|$ である任意の $2$ つの有向木 $B$，$B^{\prime}$ に対して，$w^{\prime}(B) - w^{\prime}(B^{\prime}) = (|B| - |B^{\prime}|)K - (w(B) - w(B^{\prime})) \ge 0$ が成り立ちます．&lt;br>
-よって，$|B| \gt |B^{\prime}|$ ならば $w^{\prime}(B) \gt w^{\prime}(B^{\prime})$ であるため，最小重み有向木問題の解を求めることができます．&lt;/p>
-&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem">最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>
-&lt;/h3>&lt;p>最小重み有向木問題で，全域木の根 $r$ が指定されている問題です．&lt;br>
-$G$ に $r$ を根とする全域有向木が存在すると仮定します．&lt;br>
-超頂点 $s$ を用意し，$G^{\prime} = (V(G) \cup \lbrace s \rbrace, E \cup \lbrace (s, r) \rbrace)$，$w(s, r) = 0$ とします．&lt;br>
-$G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削除することで，最小重み根指定有向木問題の解を得ることができます．&lt;/p>
-&lt;h2 id="問題">問題
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
->AOJ - 最小全域有向木&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10616122#1" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Edmonds%27_algorithm" target="_blank" rel="noopener"
->Edmonds&amp;rsquo; algorithm&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://users-math.au.dk/jensen/teaching/2018GraphTheory2/notes.pdf" target="_blank" rel="noopener"
->Lecture notes: Graph Theory 2&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://faculty.fiu.edu/~ramsamuj/graphtheory/chap3.pdf" target="_blank" rel="noopener"
->GRAPH THEORY 3. Trees&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://www.taylorfrancis.com/books/mono/10.1201/b19163" target="_blank" rel="noopener"
->Handbook of Graph Theory, Combinatorial Optimization, and Algorithms&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
->組合せ最適化&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
->組合せ最適化&lt;/a>では最大重み有向森問題（Maximum Weight Branching Problem）と表記されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2">
-&lt;p>重みが最小の branching を求めたいときは重みの正負を反転します&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:3">
-&lt;p>辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:4">
-&lt;p>最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>最小費用流問題の最短路繰り返し法</title><link>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</link><pubDate>Mon, 21 Oct 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</guid><description>&lt;h2 id="最小費用流問題minimum-cost-flow-problem">最小費用流問題(Minimum Cost Flow Problem)
-&lt;/h2>&lt;p>$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br>
+&lt;img src="images/edmonds_5.png" width="50%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase6"&gt;phase6
+&lt;/h3&gt;&lt;p&gt;超頂点 $6$ を展開します．超頂点 $6$ は $(2, 5), (5, 4), (4, 2)$ からなる閉路でした．&lt;br&gt;
+この閉路には $(3, 4)$ が入るので，閉路の中で $4$ に入る $(5, 4)$ を除外し，$(2, 5), (4, 2)$ を採用します．&lt;br&gt;
+すべての閉路を展開をしたので，アルゴリズムを終了します．&lt;br&gt;
+&lt;img src="images/edmonds_6.png" width="50%"&gt;&lt;/p&gt;
+&lt;h2 id="問題のバリエーション"&gt;問題のバリエーション
+&lt;/h2&gt;&lt;p&gt;以下の問題は，optimal branching と等価の問題であり，最適 branching のアルゴリズムを使って解くことができます．&lt;/p&gt;
+&lt;h3 id="最小重み有向木問題minimum-weight-arborescence-problem"&gt;最小重み有向木問題（Minimum Weight Arborescence Problem）
+&lt;/h3&gt;&lt;p&gt;$G = (V, E)$ の全域有向森ではなく，全域有向木を求める問題です．木の根は任意になります．&lt;br&gt;
+$G$ に全域有向木が存在すると仮定します．&lt;br&gt;
+$G = (V, E)$ に対し，$K = 1 + \sum_{e \in E} |w(e)|$ とします．&lt;br&gt;
+$w^{\prime}(e) = K - w(e)$ と重みを変更した $G$ で最適 branching 問題を解きます．&lt;/p&gt;
+&lt;p&gt;木 $B$ の辺の数を $|B|$ と表します．$|B| \gt |B^{\prime}|$ である任意の $2$ つの有向木 $B$，$B^{\prime}$ に対して，$w^{\prime}(B) - w^{\prime}(B^{\prime}) = (|B| - |B^{\prime}|)K - (w(B) - w(B^{\prime})) \ge 0$ が成り立ちます．&lt;br&gt;
+よって，$|B| \gt |B^{\prime}|$ ならば $w^{\prime}(B) \gt w^{\prime}(B^{\prime})$ であるため，最小重み有向木問題の解を求めることができます．&lt;/p&gt;
+&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem"&gt;最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;
+&lt;/h3&gt;&lt;p&gt;最小重み有向木問題で，全域木の根 $r$ が指定されている問題です．&lt;br&gt;
+$G$ に $r$ を根とする全域有向木が存在すると仮定します．&lt;br&gt;
+超頂点 $s$ を用意し，$G^{\prime} = (V(G) \cup \lbrace s \rbrace, E \cup \lbrace (s, r) \rbrace)$，$w(s, r) = 0$ とします．&lt;br&gt;
+$G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削除することで，最小重み根指定有向木問題の解を得ることができます．&lt;/p&gt;
+&lt;h2 id="問題"&gt;問題
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
+&gt;AOJ - 最小全域有向木&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10616122#1" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Edmonds%27_algorithm" target="_blank" rel="noopener"
+&gt;Edmonds&amp;rsquo; algorithm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://users-math.au.dk/jensen/teaching/2018GraphTheory2/notes.pdf" target="_blank" rel="noopener"
+&gt;Lecture notes: Graph Theory 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://faculty.fiu.edu/~ramsamuj/graphtheory/chap3.pdf" target="_blank" rel="noopener"
+&gt;GRAPH THEORY 3. Trees&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.taylorfrancis.com/books/mono/10.1201/b19163" target="_blank" rel="noopener"
+&gt;Handbook of Graph Theory, Combinatorial Optimization, and Algorithms&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
+&gt;組合せ最適化&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
+&gt;組合せ最適化&lt;/a&gt;では最大重み有向森問題（Maximum Weight Branching Problem）と表記されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;重みが最小の branching を求めたいときは重みの正負を反転します&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>最小費用流問題の最短路繰り返し法</title><link>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</link><pubDate>Mon, 21 Oct 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/minimum-cost-flow-successive-shortest-path/</guid><description>&lt;h2 id="最小費用流問題minimum-cost-flow-problem"&gt;最小費用流問題(Minimum Cost Flow Problem)
+&lt;/h2&gt;&lt;p&gt;$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br&gt;
 1 つめの制約を流量保存則と呼び，第一項は頂点 $i$ から出る流量，第二項は頂点 $i$ に入る流量を表します．
-2 つめの制約を容量制約と呼びます．&lt;/p>
+2 つめの制約を容量制約と呼びます．&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \sum_{(i, j) \in A} c_{ij} x_{ij} \\
@@ -580,109 +580,109 @@ $$
 &amp;&amp; \sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i &amp;&amp; \forall i \in N \\
 &amp; &amp;&amp; l_{ij} \le x_{ij} \leq u_{ij} &amp;&amp; \forall (i, j) \in A
 \end{aligned}
-$$&lt;p>以下ではコスト，流量，需要/供給，下限容量，上限容量はすべて整数とします．また，$\sum_{i \in N} b_i = 0$，コストを非負，下限容量を $0$ とします．&lt;/p>
-&lt;h2 id="用語定義">用語・定義
-&lt;/h2>&lt;ul>
-&lt;li>
-&lt;p>pseudoflow&lt;/p>
-&lt;ul>
-&lt;li>容量制約を満たす flow を pseudoflow と呼びます．流量保存則には違反していてもかまいません．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>残余容量&lt;/p>
-&lt;ul>
-&lt;li>$r_{ij} = u_{ij} - x_{ij}$ を辺 (i, j) の残余容量と呼びます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>imbalance&lt;/p>
-&lt;ul>
-&lt;li>pseudoflow $\bold x$ に対し，頂点 $i$ の imbalance を次のように定義します．第 2 項は $i$ に入ってくる流量の合計，第 3 項は $i$ から出ていく流量の合計です．&lt;br>
-$e(i) = b(i) + \sum_{j:(j, i) \in A} x_{ji} - \sum_{j:(i,j) \in A} x_{ij}$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>reduced cost&lt;/p>
-&lt;ul>
-&lt;li>各頂点のポテンシャル $\bold \pi$ が与えられたとき，$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を辺 (i, j) の reduced cost と呼びます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="reduced-cost-最適性">Reduced Cost 最適性
-&lt;/h2>&lt;p>最小費用流問題の実行可能な flow $\bold x$ が最適であるための必要十分条件は，残余ネットワークのすべての辺 (i, j) に対して$c^{\pi}_{ij} \ge 0$ となるポテンシャル $\bold \pi$ が存在することです．&lt;/p>
-&lt;h2 id="最短路繰り返し法successive-shortest-path-algorithm">最短路繰り返し法(Successive Shortest Path Algorithm)
-&lt;/h2>&lt;p>最短路繰り返し法は，容量制約を満たすが流量保存則に違反する pseudoflow $\bold x$ から開始します．&lt;br>
-アルゴリズムの各ステップでは reduced cost 最適性を維持しつつ，主問題の実行不能解 $\bold x$ を実行可能解に近づけます．&lt;br>
-具体的には，残余ネットワーク上で $e(k) \gt 0$ である頂点 $k$ から $e(l) \lt 0$ である頂点 $l$ へ，最短路に沿って flow を流すことで実行可能性を高めていきます．&lt;br>
-実行可能解が得られたときアルゴリズムは終了します．&lt;/p>
-&lt;p>最短路繰り返し法の流れは以下のようになります&lt;/p>
-&lt;ul>
-&lt;li>初期解の構築
-&lt;ul>
-&lt;li>$\bold x = \bold 0$，$\bold \pi = \bold 0$ とする&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>実行可能解が得られるまで以下を繰り返す
-&lt;ul>
-&lt;li>$e(k) \gt 0$ である頂点 $k$ を選ぶ．各辺の reduced cost を距離とする残余ネットワーク上で，$k$ から各頂点への最短路を求める．$\bold P$ を $k$ から各頂点への最短路，$\bold d$ を最短距離とする&lt;/li>
-&lt;li>ポテンシャルの更新
-&lt;ul>
-&lt;li>$\bold \pi^{\prime} = \bold \pi - \bold d$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>flow の更新
-&lt;ul>
-&lt;li>$\delta = min[e(k), min(r_{ij} : (i,j) \in P)]$とし，$\bold P$ に沿って辺の flow を $\delta$ 増加する&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>imbalance の更新
-&lt;ul>
-&lt;li>$e(k) = e(k) - \delta$，$e(l) = e(l) + \delta$ と更新する&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>次節からアルゴリズムの各ステップで常に reduced cost 最適性を維持することを確認していきます．&lt;/p>
-&lt;h2 id="初期解の構築">初期解の構築
-&lt;/h2>&lt;p>初期解が容量制約と reduced cost 最適性を満たすことを確認します．&lt;br>
-仮定より，下限容量は $0$ のため $\bold x = \bold 0$ は容量制約を満たします．&lt;br>
-$\bold \pi = \bold 0$ のため $c_{ij}^{\pi} = c_{ij}$ です．辺のコストはすべて非負を仮定しているため $c_{ij}^{\pi} \ge 0$ となり reduced cost 最適性を満たします．&lt;/p>
-&lt;h2 id="ポテンシャルの更新">ポテンシャルの更新
-&lt;/h2>&lt;p>ある $\bold x$ に対し $\bold \pi$ が reduced cost 最適性を満たしているとき，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新しても reduced cost 最適性を満たすことを示します&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．&lt;/p>
-&lt;p>$\bold d$ は reduced cost を距離とした残余ネットワーク上での頂点 $k$ から各頂点への最短距離であるため，各辺 (i, j) は $d(j) \le d(i) + c_{ij}^{\pi}$ を満たします．&lt;/p>
-&lt;p>上の式に $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を代入します．&lt;br>
-$d(j) \le d(i) + c_{ij} - \pi(i) + \pi(j)$&lt;/p>
-&lt;p>$d(j)$を移項し，頂点ごとにまとめます．&lt;br>
-$c_{ij} - (\pi(i) - d(i)) + (\pi(j) - d(j)) \ge 0$&lt;/p>
-&lt;p>ポテンシャルの更新の仕方から以下が成り立ちます．&lt;br>
-$c_{ij} - \pi^{\prime}(i) + \pi^{\prime}(j) = c^{\pi_{ij}^{\prime}} \ge 0$&lt;/p>
-&lt;p>よって，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新しても reduced cost 最適性を満たすことがわかりました．&lt;/p>
-&lt;h2 id="flow-の更新">flow の更新
-&lt;/h2>&lt;p>最短路に沿って flow を更新したとき reduced cost 最適性を満たすことを確認します．&lt;/p>
-&lt;p>まず，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新したとき，頂点 $k$ から各頂点への最短路の辺の reduced cost が $0$ となることを確認します．&lt;br>
-頂点 $k$ から頂点 $l$ の最短路を考えます．最短路であるため，この経路の各辺は $d(j) = d(i) + c_{ij}^{\pi}$ を満たします．&lt;/p>
-&lt;p>上の式に $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を代入します．&lt;br>
-$d(j) = d(i) + c_{ij} - \pi(i) + \pi(j)$&lt;/p>
-&lt;p>$d(j)$ を移項し，頂点ごとにまとめます．&lt;br>
-$c_{ij} - (\pi(i) - d(i)) + (\pi(j) - d(j)) = 0$&lt;/p>
-&lt;p>ポテンシャルの更新の仕方から以下が成り立ちます．&lt;br>
-$c_{ij} - \pi^{\prime}(i) + \pi^{\prime}(j) = c^{\pi_{ij}^{\prime}} = 0$&lt;/p>
-&lt;p>よって，頂点 $k$ から各頂点への最短路の辺の reduced cost は $0$ となることがわかりました．&lt;/p>
-&lt;p>次に，flow を更新したとき reduced cost 最適性を満たすことを確認します．&lt;br>
-$\delta = min[e(s), min(r_{ij} : (i,j) \in P)]$ とし，最短路に沿って辺の flow を更新します．&lt;br>
-$\delta$ 選び方から，このように flow を更新しても容量制約を満たします．また，reduced cost が $0$ であるため，辺に flow を流すことで残余ネットワーク上に逆辺が生じたとしても reduced cost 最適性には違反しません．&lt;br>
-よって，最短路に沿って flow を更新したとき reduced cost 最適性を満たすことがわかりました．&lt;/p>
-&lt;h2 id="計算量">計算量
-&lt;/h2>&lt;p>$U$ を最大の供給量，$C$ をコストの最大値とします．&lt;br>
+$$&lt;p&gt;以下ではコスト，流量，需要/供給，下限容量，上限容量はすべて整数とします．また，$\sum_{i \in N} b_i = 0$，コストを非負，下限容量を $0$ とします．&lt;/p&gt;
+&lt;h2 id="用語定義"&gt;用語・定義
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;pseudoflow&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;容量制約を満たす flow を pseudoflow と呼びます．流量保存則には違反していてもかまいません．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;残余容量&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$r_{ij} = u_{ij} - x_{ij}$ を辺 (i, j) の残余容量と呼びます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;imbalance&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;pseudoflow $\bold x$ に対し，頂点 $i$ の imbalance を次のように定義します．第 2 項は $i$ に入ってくる流量の合計，第 3 項は $i$ から出ていく流量の合計です．&lt;br&gt;
+$e(i) = b(i) + \sum_{j:(j, i) \in A} x_{ji} - \sum_{j:(i,j) \in A} x_{ij}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reduced cost&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;各頂点のポテンシャル $\bold \pi$ が与えられたとき，$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を辺 (i, j) の reduced cost と呼びます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="reduced-cost-最適性"&gt;Reduced Cost 最適性
+&lt;/h2&gt;&lt;p&gt;最小費用流問題の実行可能な flow $\bold x$ が最適であるための必要十分条件は，残余ネットワークのすべての辺 (i, j) に対して$c^{\pi}_{ij} \ge 0$ となるポテンシャル $\bold \pi$ が存在することです．&lt;/p&gt;
+&lt;h2 id="最短路繰り返し法successive-shortest-path-algorithm"&gt;最短路繰り返し法(Successive Shortest Path Algorithm)
+&lt;/h2&gt;&lt;p&gt;最短路繰り返し法は，容量制約を満たすが流量保存則に違反する pseudoflow $\bold x$ から開始します．&lt;br&gt;
+アルゴリズムの各ステップでは reduced cost 最適性を維持しつつ，主問題の実行不能解 $\bold x$ を実行可能解に近づけます．&lt;br&gt;
+具体的には，残余ネットワーク上で $e(k) \gt 0$ である頂点 $k$ から $e(l) \lt 0$ である頂点 $l$ へ，最短路に沿って flow を流すことで実行可能性を高めていきます．&lt;br&gt;
+実行可能解が得られたときアルゴリズムは終了します．&lt;/p&gt;
+&lt;p&gt;最短路繰り返し法の流れは以下のようになります&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初期解の構築
+&lt;ul&gt;
+&lt;li&gt;$\bold x = \bold 0$，$\bold \pi = \bold 0$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;実行可能解が得られるまで以下を繰り返す
+&lt;ul&gt;
+&lt;li&gt;$e(k) \gt 0$ である頂点 $k$ を選ぶ．各辺の reduced cost を距離とする残余ネットワーク上で，$k$ から各頂点への最短路を求める．$\bold P$ を $k$ から各頂点への最短路，$\bold d$ を最短距離とする&lt;/li&gt;
+&lt;li&gt;ポテンシャルの更新
+&lt;ul&gt;
+&lt;li&gt;$\bold \pi^{\prime} = \bold \pi - \bold d$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;flow の更新
+&lt;ul&gt;
+&lt;li&gt;$\delta = min[e(k), min(r_{ij} : (i,j) \in P)]$とし，$\bold P$ に沿って辺の flow を $\delta$ 増加する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;imbalance の更新
+&lt;ul&gt;
+&lt;li&gt;$e(k) = e(k) - \delta$，$e(l) = e(l) + \delta$ と更新する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;次節からアルゴリズムの各ステップで常に reduced cost 最適性を維持することを確認していきます．&lt;/p&gt;
+&lt;h2 id="初期解の構築"&gt;初期解の構築
+&lt;/h2&gt;&lt;p&gt;初期解が容量制約と reduced cost 最適性を満たすことを確認します．&lt;br&gt;
+仮定より，下限容量は $0$ のため $\bold x = \bold 0$ は容量制約を満たします．&lt;br&gt;
+$\bold \pi = \bold 0$ のため $c_{ij}^{\pi} = c_{ij}$ です．辺のコストはすべて非負を仮定しているため $c_{ij}^{\pi} \ge 0$ となり reduced cost 最適性を満たします．&lt;/p&gt;
+&lt;h2 id="ポテンシャルの更新"&gt;ポテンシャルの更新
+&lt;/h2&gt;&lt;p&gt;ある $\bold x$ に対し $\bold \pi$ が reduced cost 最適性を満たしているとき，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新しても reduced cost 最適性を満たすことを示します&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;p&gt;$\bold d$ は reduced cost を距離とした残余ネットワーク上での頂点 $k$ から各頂点への最短距離であるため，各辺 (i, j) は $d(j) \le d(i) + c_{ij}^{\pi}$ を満たします．&lt;/p&gt;
+&lt;p&gt;上の式に $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を代入します．&lt;br&gt;
+$d(j) \le d(i) + c_{ij} - \pi(i) + \pi(j)$&lt;/p&gt;
+&lt;p&gt;$d(j)$を移項し，頂点ごとにまとめます．&lt;br&gt;
+$c_{ij} - (\pi(i) - d(i)) + (\pi(j) - d(j)) \ge 0$&lt;/p&gt;
+&lt;p&gt;ポテンシャルの更新の仕方から以下が成り立ちます．&lt;br&gt;
+$c_{ij} - \pi^{\prime}(i) + \pi^{\prime}(j) = c^{\pi_{ij}^{\prime}} \ge 0$&lt;/p&gt;
+&lt;p&gt;よって，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新しても reduced cost 最適性を満たすことがわかりました．&lt;/p&gt;
+&lt;h2 id="flow-の更新"&gt;flow の更新
+&lt;/h2&gt;&lt;p&gt;最短路に沿って flow を更新したとき reduced cost 最適性を満たすことを確認します．&lt;/p&gt;
+&lt;p&gt;まず，ポテンシャルを $\bold \pi^{\prime} = \bold \pi - \bold d$ と更新したとき，頂点 $k$ から各頂点への最短路の辺の reduced cost が $0$ となることを確認します．&lt;br&gt;
+頂点 $k$ から頂点 $l$ の最短路を考えます．最短路であるため，この経路の各辺は $d(j) = d(i) + c_{ij}^{\pi}$ を満たします．&lt;/p&gt;
+&lt;p&gt;上の式に $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ を代入します．&lt;br&gt;
+$d(j) = d(i) + c_{ij} - \pi(i) + \pi(j)$&lt;/p&gt;
+&lt;p&gt;$d(j)$ を移項し，頂点ごとにまとめます．&lt;br&gt;
+$c_{ij} - (\pi(i) - d(i)) + (\pi(j) - d(j)) = 0$&lt;/p&gt;
+&lt;p&gt;ポテンシャルの更新の仕方から以下が成り立ちます．&lt;br&gt;
+$c_{ij} - \pi^{\prime}(i) + \pi^{\prime}(j) = c^{\pi_{ij}^{\prime}} = 0$&lt;/p&gt;
+&lt;p&gt;よって，頂点 $k$ から各頂点への最短路の辺の reduced cost は $0$ となることがわかりました．&lt;/p&gt;
+&lt;p&gt;次に，flow を更新したとき reduced cost 最適性を満たすことを確認します．&lt;br&gt;
+$\delta = min[e(s), min(r_{ij} : (i,j) \in P)]$ とし，最短路に沿って辺の flow を更新します．&lt;br&gt;
+$\delta$ 選び方から，このように flow を更新しても容量制約を満たします．また，reduced cost が $0$ であるため，辺に flow を流すことで残余ネットワーク上に逆辺が生じたとしても reduced cost 最適性には違反しません．&lt;br&gt;
+よって，最短路に沿って flow を更新したとき reduced cost 最適性を満たすことがわかりました．&lt;/p&gt;
+&lt;h2 id="計算量"&gt;計算量
+&lt;/h2&gt;&lt;p&gt;$U$ を最大の供給量，$C$ をコストの最大値とします．&lt;br&gt;
 アルゴリズムは各イテレーションで最短路問題を解き，供給量は厳密に減少します．
-よって，$nU$ 回のイテレーションでアルゴリズムは終了します．最短路問題に 2 分ヒープを使った dijkstra 法を使うとすると $O((m + n) \log n)$ となります．&lt;br>
-よって，全体で $O(nU (m + n) \log n)$ となります．&lt;/p>
-&lt;h2 id="補足ポテンシャルの更新の改善">補足：ポテンシャルの更新の改善
-&lt;/h2>&lt;p>上記のアルゴリズムの説明では頂点 $k$ からすべての頂点に対する最短路を求めましたが，$e(l) \lt 0$ のような頂点を見つけたとき探索を終了することができます．&lt;br>
-dijkstra 法で最短距離を求めているとします．最短距離が確定した頂点を permanently labeled node，まだ確定していない頂点を temporarily labeled node と呼びます．&lt;br>
-このとき，ポテンシャルは以下のように更新することができます．&lt;/p>
+よって，$nU$ 回のイテレーションでアルゴリズムは終了します．最短路問題に 2 分ヒープを使った dijkstra 法を使うとすると $O((m + n) \log n)$ となります．&lt;br&gt;
+よって，全体で $O(nU (m + n) \log n)$ となります．&lt;/p&gt;
+&lt;h2 id="補足ポテンシャルの更新の改善"&gt;補足：ポテンシャルの更新の改善
+&lt;/h2&gt;&lt;p&gt;上記のアルゴリズムの説明では頂点 $k$ からすべての頂点に対する最短路を求めましたが，$e(l) \lt 0$ のような頂点を見つけたとき探索を終了することができます．&lt;br&gt;
+dijkstra 法で最短距離を求めているとします．最短距離が確定した頂点を permanently labeled node，まだ確定していない頂点を temporarily labeled node と呼びます．&lt;br&gt;
+このとき，ポテンシャルは以下のように更新することができます．&lt;/p&gt;
 $$
 \pi^{\prime} = \left\{
 \begin{array}{ll}
@@ -690,26 +690,26 @@ $$
 \pi_{i} - d_{l} &amp; \text{node i is temporarily labeled}
 \end{array}
 \right.
-$$&lt;details>
-&lt;summary>証明&lt;/summary>
+$$&lt;details&gt;
+&lt;summary&gt;証明&lt;/summary&gt;
 $S$ を permanently labeled node の集合，$\bar{S}$ を temporarily labeled node の集合とします．
 頂点 $i$ と頂点 $j$ が $S$ と $T$ のどちらに属するかの 4 つ場合について，ポテンシャルが $\boldd \pi$ から $\bold \pi^{\prime}$ に変更されたときを考えます．
-&lt;h3 id="1-i-in-s-j-in-s-の場合">1. $i \in S, j \in S$ の場合
-&lt;/h3>&lt;p>「ポテンシャルの更新」の節と同じです．&lt;/p>
-&lt;h3 id="2-i-in-s-j-in-bars-の場合">2. $i \in S, j \in \bar{S}$ の場合
-&lt;/h3>&lt;p>$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(i) - d(l)$ と更新されます．&lt;br>
-頂点 $j$ は最短距離と確定していないため，$d(l) \le d(j)$ です．&lt;br>
-また，頂点 $i$ は最短距離と確定しているため，dijkstra 法のアルゴリズムから $d(j) \le d(i) + c_{ij}^{\pi}$ が成り立ちます．&lt;br>
-よって，$d(l) \le d(i) + c_{ij}^{\pi}$ であるため $c_{ij}^{\pi^{\prime}} \ge 0$ を満たします．&lt;/p>
-&lt;h3 id="3-i-in-bars-j-in-s-の場合">3. $i \in \bar{S}, j \in S$ の場合
-&lt;/h3>&lt;p>$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(l) - d(j)$ と更新されます．&lt;br>
-頂点 $j$ は最短距離と確定しているため，$d(j) \le d(l)$ です．&lt;br>
-よって，$c_{ij}^{\pi^{\prime}} \ge 0$ を満たします．&lt;/p>
-&lt;h3 id="4-i-in-bars-j-in-bars-の場合">4. $i \in \bar{S}, j \in \bar{S}$ の場合
-&lt;/h3>&lt;p>$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(l) - d(l)$ と更新されます．&lt;br>
-よって，$c_{ij}^{\pi} \ge 0$ を満たします．&lt;/p>
-&lt;/details>
-&lt;p>また，すべてのポテンシャルに定数を加算しても reduced cost 最適性に影響はないため，全体に $d(l)$ を加算することで以下のように更新することもできます．&lt;/p>
+&lt;h3 id="1--の場合"&gt;1. $i \in S, j \in S$ の場合
+&lt;/h3&gt;&lt;p&gt;「ポテンシャルの更新」の節と同じです．&lt;/p&gt;
+&lt;h3 id="2--の場合"&gt;2. $i \in S, j \in \bar{S}$ の場合
+&lt;/h3&gt;&lt;p&gt;$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(i) - d(l)$ と更新されます．&lt;br&gt;
+頂点 $j$ は最短距離と確定していないため，$d(l) \le d(j)$ です．&lt;br&gt;
+また，頂点 $i$ は最短距離と確定しているため，dijkstra 法のアルゴリズムから $d(j) \le d(i) + c_{ij}^{\pi}$ が成り立ちます．&lt;br&gt;
+よって，$d(l) \le d(i) + c_{ij}^{\pi}$ であるため $c_{ij}^{\pi^{\prime}} \ge 0$ を満たします．&lt;/p&gt;
+&lt;h3 id="3--の場合"&gt;3. $i \in \bar{S}, j \in S$ の場合
+&lt;/h3&gt;&lt;p&gt;$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(l) - d(j)$ と更新されます．&lt;br&gt;
+頂点 $j$ は最短距離と確定しているため，$d(j) \le d(l)$ です．&lt;br&gt;
+よって，$c\_{ij}^{\pi^{\prime}} \ge 0$ を満たします．&lt;/p&gt;
+&lt;h3 id="4--の場合"&gt;4. $i \in \bar{S}, j \in \bar{S}$ の場合
+&lt;/h3&gt;&lt;p&gt;$c^{\pi^{\prime}} = c_{ij}^{\pi} + d(l) - d(l)$ と更新されます．&lt;br&gt;
+よって，$c_{ij}^{\pi} \ge 0$ を満たします．&lt;/p&gt;
+&lt;/details&gt;
+&lt;p&gt;また，すべてのポテンシャルに定数を加算しても reduced cost 最適性に影響はないため，全体に $d(l)$ を加算することで以下のように更新することもできます．&lt;/p&gt;
 $$
 \pi^{\prime} = \left\{
 \begin{array}{ll}
@@ -717,22 +717,22 @@ $$
 \pi_{i} &amp; \text{node i is temporarily labeled}
 \end{array}
 \right.
-$$&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
->Network Flows: Pearson New International Edition&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>すべての頂点の距離が定まることを仮定しています．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>最小費用流問題の Primal Network Simplex 法</title><link>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</link><pubDate>Wed, 11 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</guid><description>&lt;img src="https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/images/%E3%83%9D%E3%83%86%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%AB%E3%81%AE%E6%9B%B4%E6%96%B0.png" alt="Featured image of post 最小費用流問題の Primal Network Simplex 法" />&lt;h2 id="最小費用流問題minimum-cost-flow-problem">最小費用流問題(Minimum Cost Flow Problem)
-&lt;/h2>&lt;p>$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br>
+$$&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
+&gt;Network Flows: Pearson New International Edition&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;すべての頂点の距離が定まることを仮定しています．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>最小費用流問題の Primal Network Simplex 法</title><link>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</link><pubDate>Wed, 11 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/</guid><description>&lt;img src="https://miti-7.github.io/post/%E6%9C%80%E5%B0%8F%E8%B2%BB%E7%94%A8%E6%B5%81%E5%95%8F%E9%A1%8C%E3%81%AE-primal-network-simplex-%E6%B3%95/images/%E3%83%9D%E3%83%86%E3%83%B3%E3%82%B7%E3%83%A3%E3%83%AB%E3%81%AE%E6%9B%B4%E6%96%B0.png" alt="Featured image of post 最小費用流問題の Primal Network Simplex 法" /&gt;&lt;h2 id="最小費用流問題minimum-cost-flow-problem"&gt;最小費用流問題(Minimum Cost Flow Problem)
+&lt;/h2&gt;&lt;p&gt;$N$ を頂点の集合，$A$ を辺の集合，$c_{ij}$ を辺 $(i, j)$ の単位流量あたりのコスト，$x_{ij}$ を辺 $(i, j)$ の流量，$b_i$ を頂点 i の需要/供給量，$l$ を辺の下限容量，$u$ を辺の上限容量としたとき，最小費用流問題（以下 MCFP）は以下のように定式化されます．&lt;br&gt;
 1 つめの制約を流量保存則と呼び，第一項は頂点 i から出る流量，第二項は頂点 i に入る流量を表します．
-2 つめの制約を容量制約と呼びます．&lt;/p>
+2 つめの制約を容量制約と呼びます．&lt;/p&gt;
 $$
 \begin{aligned}
 &amp;\text{minimize} &amp;&amp; \sum_{(i, j) \in A} c_{ij} x_{ij} \\
@@ -740,147 +740,147 @@ $$
 &amp;&amp; \sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i &amp;&amp; \forall i \in N \\
 &amp; &amp;&amp; l_{ij} \le x_{ij} \leq u_{ij} &amp;&amp; \forall (i, j) \in A
 \end{aligned}
-$$&lt;p>以下ではコスト，流量，需要/供給，下限容量，上限容量はすべて整数とします．また，$\sum_{i \in N} b_i = 0$ を仮定します．&lt;/p>
-&lt;h2 id="primal-network-simplex-法">Primal Network Simplex 法
-&lt;/h2>&lt;p>primal network simplex 法は，ネットワーク構造を利用することで simplex 法を効率化させたアルゴリズムです．今回は primal network simplex 法で MCFP を解いていきます．&lt;br>
-MCFP が必ず 最適 spanning tree solution という解を持つことを利用し，spanning tree solution のみを探索することで効率的に最適解を見つけることができます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．&lt;/p>
-&lt;p>primal network simplex 法は，simplex 法の観点と負閉路除去法の観点から説明することができますが，今回は負閉路除去法の観点で説明します．
-節 1 で spanning tree solution の定義をします．節 2 で spanning tree solution は spanning tree structure として表せることと，spanning tree structure が最適解となる条件について示します．節 3 で primal network simplex 法の流れについて説明し，節 4 から 節 8 でアルゴリズムの各段階の詳細について述べます．節 9 から節 11 で退化について説明します．&lt;/p>
-&lt;h2 id="1-spanning-tree-solution">1. spanning tree solution
-&lt;/h2>&lt;p>ある実行可能解 $x$ に対して， $l_{ij} &amp;lt; x_{ij} &amp;lt; u_{ij}$ を満たす辺を free arc，$x_{ij} = l_{ij}$ か $x_{ij} = u_{ij}$ を満たす辺を restricted arc と呼びます．
-解 $x$ とそれに関連する全域木が以下の条件を満たすとき，spanning tree solution と呼びます．特に，$x$ が 最適解であるとき最適 spanning tree solution と呼びます．&lt;/p>
-&lt;ul>
-&lt;li>$x$ が実行可能解である&lt;/li>
-&lt;li>全域木に含まれない辺（non-tree arc）がすべて restricted arc である&lt;/li>
-&lt;/ul>
-&lt;p>具体例を示します．簡単のため，辺容量の下限はすべて 0 としコストは省略します．$b(0) = 2$，$b(3) = -2$ とします．&lt;br>
-下の図のグラフでは辺 (0, 1)，(2, 3) が free arc，辺 (0, 2)，(1, 2)，(1, 3) が restricted arc です．&lt;br>
-解 $x$ は流量保存則と容量制約を満たすため実行可能解です．全域木として，青色の辺 (0, 1)，(0, 2)，(2, 3) を選ぶ&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>と，non-tree arc は (1, 2) と (1, 3) となり，すべて restricted arc であるため spanning tree solution となります．&lt;/p>
-&lt;img src="images/spanning_tree_solutionの例1.png" width="50%">
-&lt;p>また，全域木として，青色の辺 (0, 1)，(1, 2)，(2, 3) を選んでも spanning tree solution となります．
-このように，1 つの実行可能解に複数の spanning tree solution が対応することがあります．&lt;/p>
-&lt;img src="images/spanning_tree_solutionの例2.png" width="50%">
-&lt;h2 id="2-spanning-tree-structure-と最適性条件">2. spanning tree structure と最適性条件
-&lt;/h2>&lt;p>spanning tree solution は辺集合を次の 3 つに分割します．&lt;/p>
-&lt;ul>
-&lt;li>T: 全域木の辺&lt;/li>
-&lt;li>L: non-tree arc のうち，flow が下限の辺&lt;/li>
-&lt;li>U: non-tree arc のうち，flow が上限の辺&lt;/li>
-&lt;/ul>
-&lt;p>この 3 つ組 (T, L, U) を spanning tree structure と呼びます．spanning tree structure は spanning tree solution から一意に構築されます．&lt;/p>
-&lt;p>頂点 i のポテンシャルを $\pi(i)$，辺 (i, j) の reduced cost を $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ で表します．spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となります．このような，spanning tree structure を最適 spanning tree structure と呼びます．&lt;/p>
+$$&lt;p&gt;以下ではコスト，流量，需要/供給，下限容量，上限容量はすべて整数とします．また，$\sum_{i \in N} b_i = 0$ を仮定します．&lt;/p&gt;
+&lt;h2 id="primal-network-simplex-法"&gt;Primal Network Simplex 法
+&lt;/h2&gt;&lt;p&gt;primal network simplex 法は，ネットワーク構造を利用することで simplex 法を効率化させたアルゴリズムです．今回は primal network simplex 法で MCFP を解いていきます．&lt;br&gt;
+MCFP が必ず 最適 spanning tree solution という解を持つことを利用し，spanning tree solution のみを探索することで効率的に最適解を見つけることができます&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;p&gt;primal network simplex 法は，simplex 法の観点と負閉路除去法の観点から説明することができますが，今回は負閉路除去法の観点で説明します．
+節 1 で spanning tree solution の定義をします．節 2 で spanning tree solution は spanning tree structure として表せることと，spanning tree structure が最適解となる条件について示します．節 3 で primal network simplex 法の流れについて説明し，節 4 から 節 8 でアルゴリズムの各段階の詳細について述べます．節 9 から節 11 で退化について説明します．&lt;/p&gt;
+&lt;h2 id="1-spanning-tree-solution"&gt;1. spanning tree solution
+&lt;/h2&gt;&lt;p&gt;ある実行可能解 $x$ に対して， $l_{ij} &lt; x_{ij} &lt; u_{ij}$ を満たす辺を free arc，$x_{ij} = l_{ij}$ か $x_{ij} = u_{ij}$ を満たす辺を restricted arc と呼びます．
+解 $x$ とそれに関連する全域木が以下の条件を満たすとき，spanning tree solution と呼びます．特に，$x$ が 最適解であるとき最適 spanning tree solution と呼びます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$x$ が実行可能解である&lt;/li&gt;
+&lt;li&gt;全域木に含まれない辺（non-tree arc）がすべて restricted arc である&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具体例を示します．簡単のため，辺容量の下限はすべて 0 としコストは省略します．$b(0) = 2$，$b(3) = -2$ とします．&lt;br&gt;
+下の図のグラフでは辺 (0, 1)，(2, 3) が free arc，辺 (0, 2)，(1, 2)，(1, 3) が restricted arc です．&lt;br&gt;
+解 $x$ は流量保存則と容量制約を満たすため実行可能解です．全域木として，青色の辺 (0, 1)，(0, 2)，(2, 3) を選ぶ&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;と，non-tree arc は (1, 2) と (1, 3) となり，すべて restricted arc であるため spanning tree solution となります．&lt;/p&gt;
+&lt;img src="images/spanning_tree_solutionの例1.png" width="50%"&gt;
+&lt;p&gt;また，全域木として，青色の辺 (0, 1)，(1, 2)，(2, 3) を選んでも spanning tree solution となります．
+このように，1 つの実行可能解に複数の spanning tree solution が対応することがあります．&lt;/p&gt;
+&lt;img src="images/spanning_tree_solutionの例2.png" width="50%"&gt;
+&lt;h2 id="2-spanning-tree-structure-と最適性条件"&gt;2. spanning tree structure と最適性条件
+&lt;/h2&gt;&lt;p&gt;spanning tree solution は辺集合を次の 3 つに分割します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;T: 全域木の辺&lt;/li&gt;
+&lt;li&gt;L: non-tree arc のうち，flow が下限の辺&lt;/li&gt;
+&lt;li&gt;U: non-tree arc のうち，flow が上限の辺&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;この 3 つ組 (T, L, U) を spanning tree structure と呼びます．spanning tree structure は spanning tree solution から一意に構築されます．&lt;/p&gt;
+&lt;p&gt;頂点 i のポテンシャルを $\pi(i)$，辺 (i, j) の reduced cost を $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ で表します．spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となります．このような，spanning tree structure を最適 spanning tree structure と呼びます．&lt;/p&gt;
 $$
 \begin{aligned}
 c^{\pi}_{ij} = 0 &amp;&amp; \forall (i, j) \in T \\
 c^{\pi}_{ij} \ge 0 &amp;&amp; \forall (i, j) \in L \\
 c^{\pi}_{ij} \le 0 &amp;&amp; \forall (i, j) \in U \\
 \end{aligned}
-$$&lt;p>全域木の根のポテンシャルを 0 と固定すると $T$ に属する辺 (i, j) が $c^{\pi}_{ij} = 0$ を満たすように各頂点のポテンシャル $\pi$ を定めることができます．このとき，$-\pi(i)$ は根から頂点 i への木のパスの長さとみなすことができます．
-具体例として，下の図の全域木について各頂点のポテンシャルを求めていきます．頂点 0 を根とします．&lt;/p>
-&lt;p>頂点 1 のポテンシャルを求めます．
-辺 (i, j) の reduced cost は $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ です．全域木の辺の reduced cost は 0，辺 (0, 1) のコストは 1，頂点 0 のポテンシャルは 0 であることから，$0 = 1 - 0 + \pi(1)$ となり，$\pi(1) = -1$と求められます．&lt;/p>
-&lt;p>頂点 2 のポテンシャルを求めます．
-辺 (2, 1) のコストは 5 ，頂点 1 のポテンシャルは -1 なので，$0 = 5 - \pi(2) + (-1)$ となり，$\pi(2) = 4$ と求められます．&lt;/p>
-&lt;p>同様の計算を行うことで，全頂点のポテンシャルを計算することができます．&lt;/p>
-&lt;img src="images/ポテンシャルの計算.png" width="50%">
-&lt;p>全頂点のポテンシャルを求めると，$L$ と $U$ に属する辺の reduced cost を計算することができます．すべての辺が最適性条件を満たすならば，最適 spanning tree structure と判定できます．&lt;/p>
-&lt;h2 id="3-network-simplex-法のアルゴリズムの流れ">3. Network Simplex 法のアルゴリズムの流れ
-&lt;/h2>&lt;p>spanning tree structure が与えられたとき，全域木の reduced cost が 0 となるように各頂点のポテンシャルを計算し，各辺の reduced cost を求めることで最適 spanning structure かどうか判定することができました．
+$$&lt;p&gt;全域木の根のポテンシャルを 0 と固定すると $T$ に属する辺 (i, j) が $c^{\pi}_{ij} = 0$ を満たすように各頂点のポテンシャル $\pi$ を定めることができます．このとき，$-\pi(i)$ は根から頂点 i への木のパスの長さとみなすことができます．
+具体例として，下の図の全域木について各頂点のポテンシャルを求めていきます．頂点 0 を根とします．&lt;/p&gt;
+&lt;p&gt;頂点 1 のポテンシャルを求めます．
+辺 (i, j) の reduced cost は $c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ です．全域木の辺の reduced cost は 0，辺 (0, 1) のコストは 1，頂点 0 のポテンシャルは 0 であることから，$0 = 1 - 0 + \pi(1)$ となり，$\pi(1) = -1$と求められます．&lt;/p&gt;
+&lt;p&gt;頂点 2 のポテンシャルを求めます．
+辺 (2, 1) のコストは 5 ，頂点 1 のポテンシャルは -1 なので，$0 = 5 - \pi(2) + (-1)$ となり，$\pi(2) = 4$ と求められます．&lt;/p&gt;
+&lt;p&gt;同様の計算を行うことで，全頂点のポテンシャルを計算することができます．&lt;/p&gt;
+&lt;img src="images/ポテンシャルの計算.png" width="50%"&gt;
+&lt;p&gt;全頂点のポテンシャルを求めると，$L$ と $U$ に属する辺の reduced cost を計算することができます．すべての辺が最適性条件を満たすならば，最適 spanning tree structure と判定できます．&lt;/p&gt;
+&lt;h2 id="3-network-simplex-法のアルゴリズムの流れ"&gt;3. Network Simplex 法のアルゴリズムの流れ
+&lt;/h2&gt;&lt;p&gt;spanning tree structure が与えられたとき，全域木の reduced cost が 0 となるように各頂点のポテンシャルを計算し，各辺の reduced cost を求めることで最適 spanning structure かどうか判定することができました．
 最適 spanning tree structure でない場合， $L$ に属する $c_{ij}^{\pi} \lt 0$ である辺か，$U$ に属する $c_{ij}^{\pi} \gt 0$ である辺が 1 つ以上存在することになります．
-これらの辺を $T$ に追加したときを考えます．&lt;/p>
-&lt;h3 id="l-に属する-cpi_ij-lt-0-である辺を-t-に追加">$L$ に属する $c^{\pi}_{ij} \lt 0$ である辺を $T$ に追加
-&lt;/h3>&lt;p>$L$ に属する $c_{ij}^{\pi} \lt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br>
-このとき，根から i，i から j，j から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 増加します．&lt;/p>
-&lt;p>具体例を見てみます．下の図の全域木にコスト -8 の辺 (2, 4) を追加したとします．この辺の reduced cost は $-8 - 4 + (-3) = -15$ です．&lt;br>
-辺 (0, 1)，(2, 1)，(2, 4)，(3, 4)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，1 + (-5) + (-8) + (-5) + 2 = -15 となり，目的関数値が 15 減少する（-15 増加する）ことがわかります&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．&lt;/p>
-&lt;img src="images/全域木にLの辺を追加.png" width="50%">
-&lt;h3 id="u-に属する-cpi_ij-gt-0-である辺を-t-に追加">$U$ に属する $c^{\pi}_{ij} \gt 0$ である辺を $T$ に追加
-&lt;/h3>&lt;p>$U$ に属する $c_{ij}^{\pi} \gt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br>
-このとき，根から j， j から i，i から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 減少します．&lt;/p>
-&lt;p>下の図の全域木にコスト -5 の辺 (6, 4) を追加したとします．この辺の reduced cost は $(-5) - (-11) + (-3) = 3$ です．&lt;br>
-辺 (3, 0)，(3, 4)，(6, 4)，(5, 6)，(3, 5)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，-2 + 5 + (-(-5)) + (-7) + (-6) + 2 = -3 となり，目的関数値が 3 減少することがわかります．&lt;br>
-また，辺 (0, 3) に対し，頂点 0 から 頂点 3 に flow を流し，頂点 3 から頂点 0 に flow を流すと flow は打ち消し合うため，追加した辺によって生じる閉路のみを考慮すればいいこともわかります．&lt;/p>
-&lt;img src="images/全域木にUの辺を追加.png" width="50%">
-&lt;p>以上のことから，spanning tree structure が最適でないとき，最適性条件に違反する辺を全域木に追加したことによって生じる閉路の flow を更新することで目的関数値を減少できることがわかりました．&lt;br>
-閉路の flow を限界まで増加させると，1 本以上の辺の flow が下限容量か上限容量に達するため，その辺を取り除くことによって新しい spanning tree solution を生成することができます．&lt;br>
-primal network simplex 法は これらの処理を最適性条件を満たすまで繰り返すことで最適解を求めます．&lt;/p>
-&lt;p>primal network simplex 法の流れは以下のようになります&lt;/p>
-&lt;ul>
-&lt;li>初期 spanning tree structure を構築する&lt;/li>
-&lt;li>spanning tree structure が最適性条件を満たさない間，以下を繰り返す
-&lt;ul>
-&lt;li>最適性条件に違反する辺を $U$ か $L$ から選び，全域木に追加する&lt;/li>
-&lt;li>閉路の flow を更新する&lt;/li>
-&lt;li>flow が下限容量か上限容量に達した辺を閉路から 1 つ取り除き新しく全域木を作成する&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>次節からアルゴリズムの各段階の詳細について説明していきます．&lt;/p>
-&lt;h2 id="4-初期-spanning-tree-structre-の構築">4. 初期 spanning tree structre の構築
-&lt;/h2>&lt;p>初期 spanning tree structre (T, L, U) を構築します．&lt;br>
-まず，人工頂点 $s$ を作り，$s$ と既存の各頂点 $u$ の間に以下のように辺をはります．&lt;/p>
-&lt;ul>
-&lt;li>$b(u) \ge 0$ の場合，流量 $b(u)$ の辺 $(u, s)$ を加える&lt;/li>
-&lt;li>$b(u) \lt 0$ の場合，流量 $-b(u)$ の辺 $(s, u)$ を加える&lt;/li>
-&lt;/ul>
-&lt;p>いずれの人工辺も容量とコストは十分大きい値とします．人工辺は $T$ に，もとからある辺は $L$ に，$U$ は空とします.&lt;br>
-このように作られた spanning tree structure は実行可能解です．今後はこの拡張された network 上で問題を解いていきます．人工辺のコストは十分大きいため最適解が得られたとき人工辺に flow は流れていません．&lt;/p>
-&lt;p>例として下のグラフの初期 spanning tree structure を構築します．&lt;br>
-$b(0) = 2$，$b(3) = -2$，他の頂点の需要/供給は 0 とします．また，すべての辺の下限容量は 0 とします&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>．&lt;/p>
-&lt;img src="images/初期解の問題例.png" width="50%">
-&lt;p>まず，人工頂点として，$s$ を追加します．&lt;br>
-$b(u) \ge 0$ である頂点 0, 1, 2 から s に向けて辺を追加します．$b(0) = 2$ であるため，辺 (0, s)の flow は 2 とします．&lt;br>
-s から $b(u) \lt 0$ である頂点 3 に向けて辺を追加します．$b(3) = -2$ であるため，辺 (s, 3)の flow は 2 とします．&lt;/p>
-&lt;img src="images/初期解の構築.png" width="50%">
-&lt;p>初期 spanning tree structure は以下のようになります．&lt;/p>
-&lt;ul>
-&lt;li>$T$ に属する辺：(0, s)，(1, s)，(2, s)，(s, 3)&lt;/li>
-&lt;li>$L$ に属する辺：(0, 1)，(0, 2)，(1, 2)，(1, 3)，(2, 3)&lt;/li>
-&lt;li>$U$ に属する辺：なし&lt;/li>
-&lt;/ul>
-&lt;h2 id="5-entring-arc-の選択">5. entring arc の選択
-&lt;/h2>&lt;p>$T$ に追加する辺（entring arc）を $U$ か $L$ から選びます．&lt;br>
-このとき，以下のような最適性条件を満たさない辺（eligible arc）を選びます．また，$|c^{\pi}_{ij}|$ を violation と呼びます．&lt;/p>
+これらの辺を $T$ に追加したときを考えます．&lt;/p&gt;
+&lt;h3 id="に属する--である辺を--に追加"&gt;$L$ に属する $c^{\pi}_{ij} \lt 0$ である辺を $T$ に追加
+&lt;/h3&gt;&lt;p&gt;$L$ に属する $c_{ij}^{\pi} \lt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br&gt;
+このとき，根から i，i から j，j から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 増加します．&lt;/p&gt;
+&lt;p&gt;具体例を見てみます．下の図の全域木にコスト -8 の辺 (2, 4) を追加したとします．この辺の reduced cost は $-8 - 4 + (-3) = -15$ です．&lt;br&gt;
+辺 (0, 1)，(2, 1)，(2, 4)，(3, 4)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，1 + (-5) + (-8) + (-5) + 2 = -15 となり，目的関数値が 15 減少する（-15 増加する）ことがわかります&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;img src="images/全域木にLの辺を追加.png" width="50%"&gt;
+&lt;h3 id="に属する--である辺を--に追加-1"&gt;$U$ に属する $c^{\pi}_{ij} \gt 0$ である辺を $T$ に追加
+&lt;/h3&gt;&lt;p&gt;$U$ に属する $c_{ij}^{\pi} \gt 0$ である辺 (i, j) を $T$ に追加したとします．&lt;br&gt;
+このとき，根から j， j から i，i から根をたどるパスの flow を 1 増加すると，目的関数値は $c^{\pi}_{ij}$ 減少します．&lt;/p&gt;
+&lt;p&gt;下の図の全域木にコスト -5 の辺 (6, 4) を追加したとします．この辺の reduced cost は $(-5) - (-11) + (-3) = 3$ です．&lt;br&gt;
+辺 (3, 0)，(3, 4)，(6, 4)，(5, 6)，(3, 5)，(3, 0) の順に flow を 1 単位流すと，全体のコストの合計は，-2 + 5 + (-(-5)) + (-7) + (-6) + 2 = -3 となり，目的関数値が 3 減少することがわかります．&lt;br&gt;
+また，辺 (0, 3) に対し，頂点 0 から 頂点 3 に flow を流し，頂点 3 から頂点 0 に flow を流すと flow は打ち消し合うため，追加した辺によって生じる閉路のみを考慮すればいいこともわかります．&lt;/p&gt;
+&lt;img src="images/全域木にUの辺を追加.png" width="50%"&gt;
+&lt;p&gt;以上のことから，spanning tree structure が最適でないとき，最適性条件に違反する辺を全域木に追加したことによって生じる閉路の flow を更新することで目的関数値を減少できることがわかりました．&lt;br&gt;
+閉路の flow を限界まで増加させると，1 本以上の辺の flow が下限容量か上限容量に達するため，その辺を取り除くことによって新しい spanning tree solution を生成することができます．&lt;br&gt;
+primal network simplex 法は これらの処理を最適性条件を満たすまで繰り返すことで最適解を求めます．&lt;/p&gt;
+&lt;p&gt;primal network simplex 法の流れは以下のようになります&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;初期 spanning tree structure を構築する&lt;/li&gt;
+&lt;li&gt;spanning tree structure が最適性条件を満たさない間，以下を繰り返す
+&lt;ul&gt;
+&lt;li&gt;最適性条件に違反する辺を $U$ か $L$ から選び，全域木に追加する&lt;/li&gt;
+&lt;li&gt;閉路の flow を更新する&lt;/li&gt;
+&lt;li&gt;flow が下限容量か上限容量に達した辺を閉路から 1 つ取り除き新しく全域木を作成する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;次節からアルゴリズムの各段階の詳細について説明していきます．&lt;/p&gt;
+&lt;h2 id="4-初期-spanning-tree-structre-の構築"&gt;4. 初期 spanning tree structre の構築
+&lt;/h2&gt;&lt;p&gt;初期 spanning tree structre (T, L, U) を構築します．&lt;br&gt;
+まず，人工頂点 $s$ を作り，$s$ と既存の各頂点 $u$ の間に以下のように辺をはります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$b(u) \ge 0$ の場合，流量 $b(u)$ の辺 $(u, s)$ を加える&lt;/li&gt;
+&lt;li&gt;$b(u) \lt 0$ の場合，流量 $-b(u)$ の辺 $(s, u)$ を加える&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;いずれの人工辺も容量とコストは十分大きい値とします．人工辺は $T$ に，もとからある辺は $L$ に，$U$ は空とします.&lt;br&gt;
+このように作られた spanning tree structure は実行可能解です．今後はこの拡張された network 上で問題を解いていきます．人工辺のコストは十分大きいため最適解が得られたとき人工辺に flow は流れていません．&lt;/p&gt;
+&lt;p&gt;例として下のグラフの初期 spanning tree structure を構築します．&lt;br&gt;
+$b(0) = 2$，$b(3) = -2$，他の頂点の需要/供給は 0 とします．また，すべての辺の下限容量は 0 とします&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;img src="images/初期解の問題例.png" width="50%"&gt;
+&lt;p&gt;まず，人工頂点として，$s$ を追加します．&lt;br&gt;
+$b(u) \ge 0$ である頂点 0, 1, 2 から s に向けて辺を追加します．$b(0) = 2$ であるため，辺 (0, s)の flow は 2 とします．&lt;br&gt;
+s から $b(u) \lt 0$ である頂点 3 に向けて辺を追加します．$b(3) = -2$ であるため，辺 (s, 3)の flow は 2 とします．&lt;/p&gt;
+&lt;img src="images/初期解の構築.png" width="50%"&gt;
+&lt;p&gt;初期 spanning tree structure は以下のようになります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$T$ に属する辺：(0, s)，(1, s)，(2, s)，(s, 3)&lt;/li&gt;
+&lt;li&gt;$L$ に属する辺：(0, 1)，(0, 2)，(1, 2)，(1, 3)，(2, 3)&lt;/li&gt;
+&lt;li&gt;$U$ に属する辺：なし&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="5-entring-arc-の選択"&gt;5. entring arc の選択
+&lt;/h2&gt;&lt;p&gt;$T$ に追加する辺（entring arc）を $U$ か $L$ から選びます．&lt;br&gt;
+このとき，以下のような最適性条件を満たさない辺（eligible arc）を選びます．また，$|c^{\pi}_{ij}|$ を violation と呼びます．&lt;/p&gt;
 $$
 \begin{aligned}
 c^{\pi}_{ij} \lt 0 &amp;&amp; \forall (i, j) \in L \\
 c^{\pi}_{ij} \gt 0 &amp;&amp; \forall (i, j) \in U
 \end{aligned}
-$$&lt;p>代表的な辺の選択方法は以下の 3 つです．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>Best eligible arc pivot rule(Dantzig&amp;rsquo;s pivot rule)&lt;/p>
-&lt;ul>
-&lt;li>violation の最も大きい eligible arc を entring arc とする&lt;/li>
-&lt;li>1 flow 単位の改善が最も大きいため，イテレーションの回数は少なくなる&lt;/li>
-&lt;li>すべての non-tree arc を調べる必要があるため，1 回のイテレーションのコストが大きい&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>First eligible arc pivot rule&lt;/p>
-&lt;ul>
-&lt;li>最初に見つけた eligible arc を entring arc とする．次のイテレーションでは，前回選択した辺の次から探索を開始する．最後の辺まで探索をしたら先頭に戻る&lt;/li>
-&lt;li>1 回のイテレーションのコストが小さい&lt;/li>
-&lt;li>1 flow 単位の改善が小さくなるので，イテレーションの回数が多くなる&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>Block search pivot rule&lt;/p>
-&lt;ul>
-&lt;li>辺をブロックに分割し，ブロックの中で violation の最も大きい eligible arc を entring arc とする．ブロック内で見つからなかった場合，次のブロックを探索する&lt;/li>
-&lt;li>すべての辺を同じブロックにしたとき，Best eligible arc pivot rule と同じ挙動になる&lt;/li>
-&lt;li>すべての辺を違うブロックにしたとき，First eligible arc pivot rule と同じ挙動になる&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="6-flow-の更新">6. flow の更新
-&lt;/h2>&lt;p>全域木に辺を追加すると閉路 $W$ がちょうど 1 つできます．この閉路の flow を 1 単位増加するごとに，MCFP の目的関数値は $|c^{\pi}_{ij}|$ 減少するため，$W$ の flow を容量制約を満たす限界まで増加します．&lt;br>
-閉路 $W$ の向きを次のように定めます．&lt;/p>
-&lt;ul>
-&lt;li>$(k, l) \in L$ のとき，辺 (k, l) と同じ方向&lt;/li>
-&lt;li>$(k, l) \in U$ のとき，辺 (k, l) と逆方向&lt;/li>
-&lt;/ul>
-&lt;p>閉路 $W$ の順辺の集合を $\bar W$，逆辺の集合を $\underbar W$ で表したとき，$W$ の各辺の flow の増加できる量は以下のようになります．&lt;/p>
+$$&lt;p&gt;代表的な辺の選択方法は以下の 3 つです．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Best eligible arc pivot rule(Dantzig&amp;rsquo;s pivot rule)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;violation の最も大きい eligible arc を entring arc とする&lt;/li&gt;
+&lt;li&gt;1 flow 単位の改善が最も大きいため，イテレーションの回数は少なくなる&lt;/li&gt;
+&lt;li&gt;すべての non-tree arc を調べる必要があるため，1 回のイテレーションのコストが大きい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;First eligible arc pivot rule&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最初に見つけた eligible arc を entring arc とする．次のイテレーションでは，前回選択した辺の次から探索を開始する．最後の辺まで探索をしたら先頭に戻る&lt;/li&gt;
+&lt;li&gt;1 回のイテレーションのコストが小さい&lt;/li&gt;
+&lt;li&gt;1 flow 単位の改善が小さくなるので，イテレーションの回数が多くなる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Block search pivot rule&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;辺をブロックに分割し，ブロックの中で violation の最も大きい eligible arc を entring arc とする．ブロック内で見つからなかった場合，次のブロックを探索する&lt;/li&gt;
+&lt;li&gt;すべての辺を同じブロックにしたとき，Best eligible arc pivot rule と同じ挙動になる&lt;/li&gt;
+&lt;li&gt;すべての辺を違うブロックにしたとき，First eligible arc pivot rule と同じ挙動になる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="6-flow-の更新"&gt;6. flow の更新
+&lt;/h2&gt;&lt;p&gt;全域木に辺を追加すると閉路 $W$ がちょうど 1 つできます．この閉路の flow を 1 単位増加するごとに，MCFP の目的関数値は $|c^{\pi}_{ij}|$ 減少するため，$W$ の flow を容量制約を満たす限界まで増加します．&lt;br&gt;
+閉路 $W$ の向きを次のように定めます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$(k, l) \in L$ のとき，辺 (k, l) と同じ方向&lt;/li&gt;
+&lt;li&gt;$(k, l) \in U$ のとき，辺 (k, l) と逆方向&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;閉路 $W$ の順辺の集合を $\bar W$，逆辺の集合を $\underbar W$ で表したとき，$W$ の各辺の flow の増加できる量は以下のようになります．&lt;/p&gt;
 $$
 \delta_{ij} = \left\{
 \begin{array}{ll}
@@ -888,7 +888,7 @@ u_{ij} - x_{ij} &amp; (i, j) \in \bar{W}\\
 x_{ij} - l_{ij} &amp; (i, j) \in \underbar{W}
 \end{array}
 \right.
-$$&lt;p>$\delta = min \lbrace \delta_{ij} : (i, j) \in W \rbrace$ とし，$W$ の各辺の flow を以下のように更新します．&lt;/p>
+$$&lt;p&gt;$\delta = min \lbrace \delta_{ij} : (i, j) \in W \rbrace$ とし，$W$ の各辺の flow を以下のように更新します．&lt;/p&gt;
 $$
 x_{ij} = \left\{
 \begin{array}{ll}
@@ -896,226 +896,226 @@ x_{ij} + \delta &amp; (i, j) \in \bar{W}\\
 x_{ij} - \delta &amp; (i, j) \in \underbar{W}
 \end{array}
 \right.
-$$&lt;p>具体例を見ます．すべての辺の下限は 0 とします．&lt;br>
-$U$ に属する辺 (6, 4) を $T$ に追加すると，辺 (6, 4)，(5, 6)，(3, 5)，(3, 4) からなる閉路ができます．&lt;br>
-辺 (6, 4) は $U$ に属するので，(6, 4) と逆方向である反時計回りを $W$ の向きとします．$\bar W$ に属する辺は，(3, 4)，$\underbar W$ に属する辺は，(6, 4)，(5, 6)，(3, 5) です．&lt;br>
-各辺の $\delta_{ij}$ と $\delta$ は以下の通りです．&lt;/p>
-&lt;ul>
-&lt;li>$\delta_{64} = 6 - 0 = 6$&lt;/li>
-&lt;li>$\delta_{56} = 2 - 0 = 2$&lt;/li>
-&lt;li>$\delta_{35} = 4 - 0 = 4$&lt;/li>
-&lt;li>$\delta_{34} = 3 - 1 = 2$&lt;/li>
-&lt;li>$\delta = min \lbrace 6, 2, 4, 2 \rbrace = 2$&lt;/li>
-&lt;/ul>
-&lt;img src="images/閉路のflowの更新.png" width="50%">
-&lt;p>閉路 $W$ の flow を 2 増加すると以下のようになります．&lt;/p>
-&lt;img src="images/閉路のflowの更新結果.png" width="50%">
-&lt;p>別の例をみます．
-辺 (3, 4) の flow が 3 のとき，各辺の $\delta_{ij}$は以下のようになります．&lt;/p>
-&lt;ul>
-&lt;li>$\delta_{64} = 6 - 0 = 6$&lt;/li>
-&lt;li>$\delta_{56} = 2 - 0 = 2$&lt;/li>
-&lt;li>$\delta_{35} = 4 - 0 = 4$&lt;/li>
-&lt;li>$\delta_{34} = 3 - 3 = 0$&lt;/li>
-&lt;li>$\delta = min \lbrace 6, 2, 4, 0 \rbrace = 0$&lt;/li>
-&lt;/ul>
-&lt;p>このように全域木に $x_{ij} = l_{ij}$ や $x_{ij} = u_{ij}$ の辺があると flow が更新できないことがあります．&lt;/p>
-&lt;img src="images/閉路のflowを更新できない例.png" width="50%">
-&lt;h2 id="7-leaving-arc-の選択">7. leaving arc の選択
-&lt;/h2>&lt;p>閉路の flow を限界まで増加したとき 1 本以上の辺が $\delta = \delta_{ij}$ となります．この辺を blocking arc と呼びます．&lt;br>
-blocking arc を取り除く辺（leaving arc）として選びます（複数ある場合は任意の辺を選びます）．&lt;br>
-辺 (i, j) が $x_{ij}$ = $l_{ij}$ になったときは $L$ に，$x_{ij} = u_{ij}$ になったときは $U$ に入ります．&lt;/p>
-&lt;p>閉路 $W$ の flow を更新した結果，辺 (5, 6) の flow が下限容量に，辺 (3, 4) の flow が上限容量になった場合を考えます．&lt;/p>
-&lt;img src="images/閉路のflowの更新結果.png" width="50%">
-&lt;p>辺 (5, 6) と辺 (3, 4) のどちらかを取り除くことができます．辺 (5, 6) を取り除き $L$ に追加すると下の全域木 $T$ が得られます．&lt;/p>
-&lt;img src="images/閉路の辺の削除.png" width="50%">
-&lt;h2 id="8-ポテンシャルの更新">8. ポテンシャルの更新
-&lt;/h2>&lt;p>辺 (p, q) を削除したとき，木は 2 つの部分木に分割されます．根がある方の部分木を $T_1$，ない方の部分木を $T_2$ とします．&lt;br>
-木の根のポテンシャルを 0 に固定し， 辺の reduced cost が 0 になるようにポテンシャルを算出していたことを考えると，$T_1$ に含まれる頂点のポテンシャルは変化せず，$T_2$ に含まれる頂点のポテンシャルのみ変化することがわかります．&lt;/p>
-&lt;p>全域木に辺 (k, l) が追加され，頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合を考えます．&lt;br>
-$T_2$ は頂点 q を根とする部分木から頂点 l を根とする部分木に変化するため，$T_2$ に属する頂点のポテンシャルを更新する必要があります．&lt;br>
-木のすべての頂点のポテンシャルに定数を加算しても reduced cost は保たれるため，新しい $\pi(l)$ と現在の $\pi(l)$ の差分 $d$ が求められれば，$T_2$ に属するすべての頂点に $d$ を加算することでポテンシャルを正しい値に更新できます．&lt;br>
-頂点 k のポテンシャルは変化しないことから，頂点 l の新しいポテンシャル $\pi^{\prime}(l)$ は $0 - c_{kl} + \pi(k)$ となります．&lt;br>
-よって，頂点 l の新しいポテンシャルとの現在のポテンシャルの差は $\pi^{\prime}(l) - \pi(l) = 0 - c_{kl} + \pi(k) - \pi(l) = -(c_{kl} - \pi(k) + \pi(l))$ となり，これは $-c_{kl}^{\pi}$ です．&lt;br>
-以上のことから，$T_2$ に属するすべての頂点に $-c_{kl}^{\pi}$ を加算することでポテンシャルを正しい値に更新できることがわかりました．&lt;br>
-頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合も同様の議論により，$c_{kl}^{\pi}$ 増加することが示せます．&lt;/p>
-&lt;p>まとめると，辺 (k, l)を追加したとき $T_2$ に含まれる頂点のポテンシャルは以下のように更新されます．&lt;/p>
-&lt;ul>
-&lt;li>頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合
-&lt;ul>
-&lt;li>$T_2$ に含まれる頂点のポテンシャルは $-c^{\pi}_{kl}$ 増加&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合
-&lt;ul>
-&lt;li>$T_2$ に含まれる頂点のポテンシャルは $c^{\pi}_{kl}$ 増加&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/ポテンシャルの更新.png" width="75%">
-&lt;h2 id="9-strongly-feasible-spanning-tree">9. Strongly Feasible Spanning Tree
-&lt;/h2>&lt;p>primal network simplex 法が有限回で終了するのかを考えます．&lt;br>
-アルゴリズムの各イテレーションでは，全域木に辺を追加するこことで閉路を作り，この閉路の flow を更新することで目的関数値を減少させます．&lt;br>
-目的関数値は flow 1 単位あたり $|c^{\pi}_{ij}|$ 減少するため，常に正の量の flow を流せるならアルゴリズムは有限回で終了します．&lt;br>
-しかし，節 6 の最後の例のように閉路に restricted arc があると flow が増加できないイテレーションが発生することがあります．このイテレーションを degenerate iteration といいます．&lt;br>
-実は primal network simplex 法は entring arc と leaving arc を任意に選ぶと degenerate iteration が無限に発生しアルゴリズムが有限回で終了しないことがあります．&lt;/p>
-&lt;p>そこで，strongly feasible spanning tree という概念を導入します．&lt;br>
-常に strongly feasible spanning tree を維持することによって，アルゴリズムが有限回で終了することが保証できます．&lt;/p>
-&lt;h3 id="strongly-feasible-spanning-tree">strongly feasible spanning tree
-&lt;/h3>&lt;p>次の条件を満たす spanning tree を strongly feasible spanning tree と呼びます．&lt;/p>
-&lt;ul>
-&lt;li>任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる&lt;/li>
-&lt;/ul>
-&lt;p>下の図は strongly feasible spanning tree の例です．&lt;br>
-すべての頂点から頂点 0 に向かって 1 以上の flow を送ることができます．&lt;br>
-strongly feasible spanning tree は flow が下限の辺のは根に向いていて，flow が上限の辺は根と反対を向いている全域木とみなすこともできます．&lt;/p>
-&lt;img src="images/strongly_feasible_spanning_treeの例.png" width="50%">
-&lt;p>下の図は strongly feasible spanning tree ではない例です．&lt;br>
-辺 (2, 1) の flow は上限容量であるため，頂点 2 から根に flow を送ることはできません．また，辺 (3, 4) の flow は下限容量であるため，頂点 4 から根に flow を送ることはできません．&lt;/p>
-&lt;img src="images/strongly_feasible_spanning_treeではない例.png" width="50%">
-&lt;p>節 4 の「初期 spanning tree structure の構築」は strongly feasible spanning tree を構築します．次の節で leaving arc をどのように選べば strongly feasible spanning tree を維持できるのか見ていきます．&lt;/p>
-&lt;h2 id="10-strongly-feasible-spanning-tree-を保つ-leaving-arc-の選び方">10. Strongly Feasible Spanning Tree を保つ leaving arc の選び方
-&lt;/h2>&lt;p>辺 (k, l) を entring arc とします．頂点 k と l の最小共通祖先を頂点 w とします．&lt;br>
-このとき閉路 $W$ に沿って，頂点 w から開始して最後に見つけた blocking arc を leaving arc とすると，spanning tree は strongly feasible を維持できます．&lt;/p>
-&lt;p>具体例をみます．&lt;br>
-$L$ に属する辺 (k, l) が追加され閉路 $W$ が生成されたとします．閉路の向きは辺 (k, l) と同じ向きです．&lt;br>
-この閉路には flow を流すことができず，辺 (w, 1) と辺 (p, q) が blocking arc になります．&lt;br>
-頂点 w から閉路の向きに沿って探索し，最後に見つかる blocking arc は辺 (p, q) であるため，この辺を leaving arc とします．&lt;/p>
-&lt;img src="images/strongly_feasible_spanning_treeを維持するようなleaving_arcの選び方.png" width="30%">
-&lt;p>strongly feasible spanning tree から上記の方法で leaving arc を選んだとき，strongly feasible spanning tree が維持されることを示します．pivot 操作の直前は strongly feasible spanning tree であるという前提を利用します．&lt;/p>
-&lt;p>頂点 w から頂点 q のパスを $W_1$，頂点 p から頂点 w のパスを $W_2$ とします．&lt;br>
-「$W_1$」，「$W_2$」，「閉路以外の頂点」の 3 つについて，「任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる」という条件を満たすか確認します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$W_1$ 内の頂点&lt;/p>
-&lt;ul>
-&lt;li>直前が non-degenerate pivot&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup> の場合
-&lt;ul>
-&lt;li>$\delta \gt 0$ であるため，頂点 w から$W_1$ 内の頂点に flow が送られている．$W_1$ の各頂点からは頂点 w まで $\delta$ の flow を押し戻すことができるため条件を満たす&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>直前が degenerate pivot&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup> の場合
-&lt;ul>
-&lt;li>前提から，pivot の直前では頂点 l から頂点 w のパスで flow を送れていたため，このパス内に blocking arc は存在しない．よって $W_1$ は頂点 w と頂点 k の間にある&lt;/li>
-&lt;li>$\delta = 0$ であり，頂点 w から頂点 k のどの辺の flow にも変化はないため条件を満たす&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$W_2$ 内の頂点&lt;/p>
-&lt;ul>
-&lt;li>leaving arc の選び方を考えると，$W_2$ 内に blocking arc はないため条件を満たす&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$W$ 以外の頂点&lt;/p>
-&lt;ul>
-&lt;li>頂点 u から根へのパスに閉路 $W$ が含まれないとき
-&lt;ul>
-&lt;li>前提から，閉路以外の flow に変化はないため，条件を満たす&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>頂点 u から根へのパスに閉路 $W$ が含まれるとき
-&lt;ul>
-&lt;li>u から閉路までのパスは，flow に変化がないため条件を満たす．閉路に到達したとき閉路から根まで条件を満たすので全体として条件を満たす&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>以上のことから，leaving arc に $W$ に沿って最後に見つけた blocking arc を選ぶことで，常に strongly feasible spanning tree を維持できることがわかりました．&lt;/p>
-&lt;h2 id="11-アルゴリズムが有限回で終了することの証明">11. アルゴリズムが有限回で終了することの証明
-&lt;/h2>&lt;p>2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることを示します．&lt;/p>
-&lt;p>degenerate pivot が発生したとき，ノードのポテンシャルが単調減少することを示します．$n$ を頂点の数，$C$ をコストの絶対値の最大値としたとき，ノードのポテンシャルの下界は $-nC$ であるため連続する degenerate pivot は有限回で終了します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>entring arc (k, l) が $L$ に属していた場合&lt;/p>
-&lt;ul>
-&lt;li>辺 (k, l) は $L$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \lt 0$ です．&lt;/li>
-&lt;li>全域木は常に strongly feasible spanning tree を維持していることを考えると，degenerate pivot の場合は頂点 l から頂点 w の間に blocking arc は存在しないため，新しく作成される木は頂点 l に 頂点 k がぶら下がる形になります．&lt;/li>
-&lt;li>頂点 k を根とする部分木のポテンシャルは $c^{\pi}_{kl} \lt 0$ 増加するため，ノードのポテンシャルは単調減少します&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>entring arc (k, l) が $U$ に属していた場合&lt;/p>
-&lt;ul>
-&lt;li>辺 (k, l) は $U$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \gt 0$ です．&lt;/li>
-&lt;li>新しく作成される木は頂点 k に 頂点 l がぶら下がる形になります．&lt;/li>
-&lt;li>頂点 l を根とする部分木のポテンシャルは $c^{\pi}_{kl} \gt 0$ 減少するため，ノードのポテンシャルは単調減少します&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>以上のことから 2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることがわかりました．
-non-degenerate pivot は目的関数値を厳密に減少させるため，アルゴリズムは有限回で終了します．&lt;/p>
-&lt;h2 id="補足-1-最適-spanning-tree-solution-が必ず存在することについて">補足 1. 最適 spanning tree solution が必ず存在することについて
-&lt;/h2>&lt;h3 id="cycle-free-solution">cycle free solution
-&lt;/h3>&lt;p>free arc のみからなる閉路を持たないような実行可能解 $x$ を cycle free solution といいます．&lt;/p>
-&lt;p>下の図は cycle free solution の例です．辺の上に (流量，コスト) を示し，下限容量は 0，上限容量は無限とします．&lt;br>
-青色の辺 (0, 1)，(1, 3)，(3, 4) が free arc です．free arc のみからなる閉路がないため cycle free solution です．この解の目的関数値は $(2 \times 0) + (2 \times 1) + (2 \times 0) = 2$ です．&lt;/p>
-&lt;img src="images/cycle_free_solutionの例.png" width="50%">
-&lt;p>下の図は cycle free solution ではない例です．&lt;br>
-青色の辺 (0, 1)，(1, 2)，(1, 3)，(2, 4)，(3, 4) が free arc です．free arc のみからなる閉路があるため cycle free solution ではありません．この解の目的関数値は $(2 \times 0) + (1 \times 3) + (1 \times 1) + (1 \times -1) + (1 \times 0) = 3$ です．&lt;/p>
-&lt;img src="images/cycle_free_solutionではない例.png" width="50%">
-&lt;p>cycle free solution でない解が与えられたとき，閉路の flow を操作することで，目的関数値が大きくならないように cycle free solution にすることができます．&lt;br>
-この解の場合，時計回りに flow を 1 増加すると，辺 (2, 4)，(1, 2) の flow が 1 減り，辺(1, 3)，(3, 4) の flow が 1 増えます．結果，この解の目的関数値は $(2 \times 0) + (0 \times 3) + (2 \times 1) + (0 \times -1) + (2 \times 0) = 2$ と 1 小さくなり，さらに cycle free solution になりました．&lt;/p>
-&lt;img src="images/cycle_free_solutionに変形.png" width="50%">
-&lt;p>このように，cycle free でない解は閉路の flow を操作することで目的関数値が大きくならないように cycle free solution にできるため，MCFP に最適解があるとき，常に同じ目的関数値である cycle free solution を持つことがわかります．&lt;/p>
-&lt;h3 id="cycle-free-solution-から-spanning-tree-solution-を求める">cycle free solution から spanning tree solution を求める
-&lt;/h3>&lt;p>cycle free solution は辺を適切に選ぶことで spanning tree solution を求めるとができます．&lt;br>
-下の図では，青色の辺(0, 1)，(1, 2)，(1, 3)，(3, 4) を全域木として選んでいます．&lt;/p>
-&lt;img src="images/cycle_free_solutionをspanning_tree_solutionに.png" width="50%">
-&lt;p>以上のことから，MCFP に最適解があるとき，常に同じ目的関数値である最適 spanning tree solution を持つことがわかりました．&lt;/p>
-&lt;h2 id="補足-2-spanning-tree-structure-の最適性条件">補足 2. Spanning Tree Structure の最適性条件
-&lt;/h2>&lt;p>spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となることを示します．&lt;/p>
+$$&lt;p&gt;具体例を見ます．すべての辺の下限は 0 とします．&lt;br&gt;
+$U$ に属する辺 (6, 4) を $T$ に追加すると，辺 (6, 4)，(5, 6)，(3, 5)，(3, 4) からなる閉路ができます．&lt;br&gt;
+辺 (6, 4) は $U$ に属するので，(6, 4) と逆方向である反時計回りを $W$ の向きとします．$\bar W$ に属する辺は，(3, 4)，$\underbar W$ に属する辺は，(6, 4)，(5, 6)，(3, 5) です．&lt;br&gt;
+各辺の $\delta_{ij}$ と $\delta$ は以下の通りです．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\delta_{64} = 6 - 0 = 6$&lt;/li&gt;
+&lt;li&gt;$\delta_{56} = 2 - 0 = 2$&lt;/li&gt;
+&lt;li&gt;$\delta_{35} = 4 - 0 = 4$&lt;/li&gt;
+&lt;li&gt;$\delta_{34} = 3 - 1 = 2$&lt;/li&gt;
+&lt;li&gt;$\delta = min \lbrace 6, 2, 4, 2 \rbrace = 2$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/閉路のflowの更新.png" width="50%"&gt;
+&lt;p&gt;閉路 $W$ の flow を 2 増加すると以下のようになります．&lt;/p&gt;
+&lt;img src="images/閉路のflowの更新結果.png" width="50%"&gt;
+&lt;p&gt;別の例をみます．
+辺 (3, 4) の flow が 3 のとき，各辺の $\delta_{ij}$は以下のようになります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\delta_{64} = 6 - 0 = 6$&lt;/li&gt;
+&lt;li&gt;$\delta_{56} = 2 - 0 = 2$&lt;/li&gt;
+&lt;li&gt;$\delta_{35} = 4 - 0 = 4$&lt;/li&gt;
+&lt;li&gt;$\delta_{34} = 3 - 3 = 0$&lt;/li&gt;
+&lt;li&gt;$\delta = min \lbrace 6, 2, 4, 0 \rbrace = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;このように全域木に $x_{ij} = l_{ij}$ や $x_{ij} = u_{ij}$ の辺があると flow が更新できないことがあります．&lt;/p&gt;
+&lt;img src="images/閉路のflowを更新できない例.png" width="50%"&gt;
+&lt;h2 id="7-leaving-arc-の選択"&gt;7. leaving arc の選択
+&lt;/h2&gt;&lt;p&gt;閉路の flow を限界まで増加したとき 1 本以上の辺が $\delta = \delta_{ij}$ となります．この辺を blocking arc と呼びます．&lt;br&gt;
+blocking arc を取り除く辺（leaving arc）として選びます（複数ある場合は任意の辺を選びます）．&lt;br&gt;
+辺 (i, j) が $x_{ij}$ = $l_{ij}$ になったときは $L$ に，$x_{ij} = u_{ij}$ になったときは $U$ に入ります．&lt;/p&gt;
+&lt;p&gt;閉路 $W$ の flow を更新した結果，辺 (5, 6) の flow が下限容量に，辺 (3, 4) の flow が上限容量になった場合を考えます．&lt;/p&gt;
+&lt;img src="images/閉路のflowの更新結果.png" width="50%"&gt;
+&lt;p&gt;辺 (5, 6) と辺 (3, 4) のどちらかを取り除くことができます．辺 (5, 6) を取り除き $L$ に追加すると下の全域木 $T$ が得られます．&lt;/p&gt;
+&lt;img src="images/閉路の辺の削除.png" width="50%"&gt;
+&lt;h2 id="8-ポテンシャルの更新"&gt;8. ポテンシャルの更新
+&lt;/h2&gt;&lt;p&gt;辺 (p, q) を削除したとき，木は 2 つの部分木に分割されます．根がある方の部分木を $T_1$，ない方の部分木を $T_2$ とします．&lt;br&gt;
+木の根のポテンシャルを 0 に固定し， 辺の reduced cost が 0 になるようにポテンシャルを算出していたことを考えると，$T_1$ に含まれる頂点のポテンシャルは変化せず，$T_2$ に含まれる頂点のポテンシャルのみ変化することがわかります．&lt;/p&gt;
+&lt;p&gt;全域木に辺 (k, l) が追加され，頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合を考えます．&lt;br&gt;
+$T_2$ は頂点 q を根とする部分木から頂点 l を根とする部分木に変化するため，$T_2$ に属する頂点のポテンシャルを更新する必要があります．&lt;br&gt;
+木のすべての頂点のポテンシャルに定数を加算しても reduced cost は保たれるため，新しい $\pi(l)$ と現在の $\pi(l)$ の差分 $d$ が求められれば，$T_2$ に属するすべての頂点に $d$ を加算することでポテンシャルを正しい値に更新できます．&lt;br&gt;
+頂点 k のポテンシャルは変化しないことから，頂点 l の新しいポテンシャル $\pi^{\prime}(l)$ は $0 - c_{kl} + \pi(k)$ となります．&lt;br&gt;
+よって，頂点 l の新しいポテンシャルとの現在のポテンシャルの差は $\pi^{\prime}(l) - \pi(l) = 0 - c_{kl} + \pi(k) - \pi(l) = -(c_{kl} - \pi(k) + \pi(l))$ となり，これは $-c_{kl}^{\pi}$ です．&lt;br&gt;
+以上のことから，$T_2$ に属するすべての頂点に $-c_{kl}^{\pi}$ を加算することでポテンシャルを正しい値に更新できることがわかりました．&lt;br&gt;
+頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合も同様の議論により，$c_{kl}^{\pi}$ 増加することが示せます．&lt;/p&gt;
+&lt;p&gt;まとめると，辺 (k, l)を追加したとき $T_2$ に含まれる頂点のポテンシャルは以下のように更新されます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;頂点 k が $T_1$ に，頂点 l が $T_2$ に含まれる場合
+&lt;ul&gt;
+&lt;li&gt;$T_2$ に含まれる頂点のポテンシャルは $-c^{\pi}_{kl}$ 増加&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;頂点 l が $T_1$ に，頂点 k が $T_2$ に含まれる場合
+&lt;ul&gt;
+&lt;li&gt;$T_2$ に含まれる頂点のポテンシャルは $c^{\pi}_{kl}$ 増加&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/ポテンシャルの更新.png" width="75%"&gt;
+&lt;h2 id="9-strongly-feasible-spanning-tree"&gt;9. Strongly Feasible Spanning Tree
+&lt;/h2&gt;&lt;p&gt;primal network simplex 法が有限回で終了するのかを考えます．&lt;br&gt;
+アルゴリズムの各イテレーションでは，全域木に辺を追加するこことで閉路を作り，この閉路の flow を更新することで目的関数値を減少させます．&lt;br&gt;
+目的関数値は flow 1 単位あたり $|c^{\pi}_{ij}|$ 減少するため，常に正の量の flow を流せるならアルゴリズムは有限回で終了します．&lt;br&gt;
+しかし，節 6 の最後の例のように閉路に restricted arc があると flow が増加できないイテレーションが発生することがあります．このイテレーションを degenerate iteration といいます．&lt;br&gt;
+実は primal network simplex 法は entring arc と leaving arc を任意に選ぶと degenerate iteration が無限に発生しアルゴリズムが有限回で終了しないことがあります．&lt;/p&gt;
+&lt;p&gt;そこで，strongly feasible spanning tree という概念を導入します．&lt;br&gt;
+常に strongly feasible spanning tree を維持することによって，アルゴリズムが有限回で終了することが保証できます．&lt;/p&gt;
+&lt;h3 id="strongly-feasible-spanning-tree"&gt;strongly feasible spanning tree
+&lt;/h3&gt;&lt;p&gt;次の条件を満たす spanning tree を strongly feasible spanning tree と呼びます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下の図は strongly feasible spanning tree の例です．&lt;br&gt;
+すべての頂点から頂点 0 に向かって 1 以上の flow を送ることができます．&lt;br&gt;
+strongly feasible spanning tree は flow が下限の辺のは根に向いていて，flow が上限の辺は根と反対を向いている全域木とみなすこともできます．&lt;/p&gt;
+&lt;img src="images/strongly_feasible_spanning_treeの例.png" width="50%"&gt;
+&lt;p&gt;下の図は strongly feasible spanning tree ではない例です．&lt;br&gt;
+辺 (2, 1) の flow は上限容量であるため，頂点 2 から根に flow を送ることはできません．また，辺 (3, 4) の flow は下限容量であるため，頂点 4 から根に flow を送ることはできません．&lt;/p&gt;
+&lt;img src="images/strongly_feasible_spanning_treeではない例.png" width="50%"&gt;
+&lt;p&gt;節 4 の「初期 spanning tree structure の構築」は strongly feasible spanning tree を構築します．次の節で leaving arc をどのように選べば strongly feasible spanning tree を維持できるのか見ていきます．&lt;/p&gt;
+&lt;h2 id="10-strongly-feasible-spanning-tree-を保つ-leaving-arc-の選び方"&gt;10. Strongly Feasible Spanning Tree を保つ leaving arc の選び方
+&lt;/h2&gt;&lt;p&gt;辺 (k, l) を entring arc とします．頂点 k と l の最小共通祖先を頂点 w とします．&lt;br&gt;
+このとき閉路 $W$ に沿って，頂点 w から開始して最後に見つけた blocking arc を leaving arc とすると，spanning tree は strongly feasible を維持できます．&lt;/p&gt;
+&lt;p&gt;具体例をみます．&lt;br&gt;
+$L$ に属する辺 (k, l) が追加され閉路 $W$ が生成されたとします．閉路の向きは辺 (k, l) と同じ向きです．&lt;br&gt;
+この閉路には flow を流すことができず，辺 (w, 1) と辺 (p, q) が blocking arc になります．&lt;br&gt;
+頂点 w から閉路の向きに沿って探索し，最後に見つかる blocking arc は辺 (p, q) であるため，この辺を leaving arc とします．&lt;/p&gt;
+&lt;img src="images/strongly_feasible_spanning_treeを維持するようなleaving_arcの選び方.png" width="30%"&gt;
+&lt;p&gt;strongly feasible spanning tree から上記の方法で leaving arc を選んだとき，strongly feasible spanning tree が維持されることを示します．pivot 操作の直前は strongly feasible spanning tree であるという前提を利用します．&lt;/p&gt;
+&lt;p&gt;頂点 w から頂点 q のパスを $W_1$，頂点 p から頂点 w のパスを $W_2$ とします．&lt;br&gt;
+「$W_1$」，「$W_2$」，「閉路以外の頂点」の 3 つについて，「任意の頂点から正の量の flow を容量制約に違反することなく木に沿って根に送ることができる」という条件を満たすか確認します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$W_1$ 内の頂点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;直前が non-degenerate pivot&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; の場合
+&lt;ul&gt;
+&lt;li&gt;$\delta \gt 0$ であるため，頂点 w から$W_1$ 内の頂点に flow が送られている．$W_1$ の各頂点からは頂点 w まで $\delta$ の flow を押し戻すことができるため条件を満たす&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;直前が degenerate pivot&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; の場合
+&lt;ul&gt;
+&lt;li&gt;前提から，pivot の直前では頂点 l から頂点 w のパスで flow を送れていたため，このパス内に blocking arc は存在しない．よって $W_1$ は頂点 w と頂点 k の間にある&lt;/li&gt;
+&lt;li&gt;$\delta = 0$ であり，頂点 w から頂点 k のどの辺の flow にも変化はないため条件を満たす&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$W_2$ 内の頂点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;leaving arc の選び方を考えると，$W_2$ 内に blocking arc はないため条件を満たす&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$W$ 以外の頂点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;頂点 u から根へのパスに閉路 $W$ が含まれないとき
+&lt;ul&gt;
+&lt;li&gt;前提から，閉路以外の flow に変化はないため，条件を満たす&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;頂点 u から根へのパスに閉路 $W$ が含まれるとき
+&lt;ul&gt;
+&lt;li&gt;u から閉路までのパスは，flow に変化がないため条件を満たす．閉路に到達したとき閉路から根まで条件を満たすので全体として条件を満たす&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上のことから，leaving arc に $W$ に沿って最後に見つけた blocking arc を選ぶことで，常に strongly feasible spanning tree を維持できることがわかりました．&lt;/p&gt;
+&lt;h2 id="11-アルゴリズムが有限回で終了することの証明"&gt;11. アルゴリズムが有限回で終了することの証明
+&lt;/h2&gt;&lt;p&gt;2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることを示します．&lt;/p&gt;
+&lt;p&gt;degenerate pivot が発生したとき，ノードのポテンシャルが単調減少することを示します．$n$ を頂点の数，$C$ をコストの絶対値の最大値としたとき，ノードのポテンシャルの下界は $-nC$ であるため連続する degenerate pivot は有限回で終了します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;entring arc (k, l) が $L$ に属していた場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;辺 (k, l) は $L$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \lt 0$ です．&lt;/li&gt;
+&lt;li&gt;全域木は常に strongly feasible spanning tree を維持していることを考えると，degenerate pivot の場合は頂点 l から頂点 w の間に blocking arc は存在しないため，新しく作成される木は頂点 l に 頂点 k がぶら下がる形になります．&lt;/li&gt;
+&lt;li&gt;頂点 k を根とする部分木のポテンシャルは $c^{\pi}_{kl} \lt 0$ 増加するため，ノードのポテンシャルは単調減少します&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;entring arc (k, l) が $U$ に属していた場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;辺 (k, l) は $U$ に属し，最適性条件に違反するため，reduced cost は $c^{\pi}_{kl} \gt 0$ です．&lt;/li&gt;
+&lt;li&gt;新しく作成される木は頂点 k に 頂点 l がぶら下がる形になります．&lt;/li&gt;
+&lt;li&gt;頂点 l を根とする部分木のポテンシャルは $c^{\pi}_{kl} \gt 0$ 減少するため，ノードのポテンシャルは単調減少します&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上のことから 2 つの non-degenerate pivot の間の連続する degenerate pivot が有限回であることがわかりました．
+non-degenerate pivot は目的関数値を厳密に減少させるため，アルゴリズムは有限回で終了します．&lt;/p&gt;
+&lt;h2 id="補足-1-最適-spanning-tree-solution-が必ず存在することについて"&gt;補足 1. 最適 spanning tree solution が必ず存在することについて
+&lt;/h2&gt;&lt;h3 id="cycle-free-solution"&gt;cycle free solution
+&lt;/h3&gt;&lt;p&gt;free arc のみからなる閉路を持たないような実行可能解 $x$ を cycle free solution といいます．&lt;/p&gt;
+&lt;p&gt;下の図は cycle free solution の例です．辺の上に (流量，コスト) を示し，下限容量は 0，上限容量は無限とします．&lt;br&gt;
+青色の辺 (0, 1)，(1, 3)，(3, 4) が free arc です．free arc のみからなる閉路がないため cycle free solution です．この解の目的関数値は $(2 \times 0) + (2 \times 1) + (2 \times 0) = 2$ です．&lt;/p&gt;
+&lt;img src="images/cycle_free_solutionの例.png" width="50%"&gt;
+&lt;p&gt;下の図は cycle free solution ではない例です．&lt;br&gt;
+青色の辺 (0, 1)，(1, 2)，(1, 3)，(2, 4)，(3, 4) が free arc です．free arc のみからなる閉路があるため cycle free solution ではありません．この解の目的関数値は $(2 \times 0) + (1 \times 3) + (1 \times 1) + (1 \times -1) + (1 \times 0) = 3$ です．&lt;/p&gt;
+&lt;img src="images/cycle_free_solutionではない例.png" width="50%"&gt;
+&lt;p&gt;cycle free solution でない解が与えられたとき，閉路の flow を操作することで，目的関数値が大きくならないように cycle free solution にすることができます．&lt;br&gt;
+この解の場合，時計回りに flow を 1 増加すると，辺 (2, 4)，(1, 2) の flow が 1 減り，辺(1, 3)，(3, 4) の flow が 1 増えます．結果，この解の目的関数値は $(2 \times 0) + (0 \times 3) + (2 \times 1) + (0 \times -1) + (2 \times 0) = 2$ と 1 小さくなり，さらに cycle free solution になりました．&lt;/p&gt;
+&lt;img src="images/cycle_free_solutionに変形.png" width="50%"&gt;
+&lt;p&gt;このように，cycle free でない解は閉路の flow を操作することで目的関数値が大きくならないように cycle free solution にできるため，MCFP に最適解があるとき，常に同じ目的関数値である cycle free solution を持つことがわかります．&lt;/p&gt;
+&lt;h3 id="cycle-free-solution-から-spanning-tree-solution-を求める"&gt;cycle free solution から spanning tree solution を求める
+&lt;/h3&gt;&lt;p&gt;cycle free solution は辺を適切に選ぶことで spanning tree solution を求めるとができます．&lt;br&gt;
+下の図では，青色の辺(0, 1)，(1, 2)，(1, 3)，(3, 4) を全域木として選んでいます．&lt;/p&gt;
+&lt;img src="images/cycle_free_solutionをspanning_tree_solutionに.png" width="50%"&gt;
+&lt;p&gt;以上のことから，MCFP に最適解があるとき，常に同じ目的関数値である最適 spanning tree solution を持つことがわかりました．&lt;/p&gt;
+&lt;h2 id="補足-2-spanning-tree-structure-の最適性条件"&gt;補足 2. Spanning Tree Structure の最適性条件
+&lt;/h2&gt;&lt;p&gt;spanning tree structure が次の条件を満たすとき，spanning tree structure に対応する spanning tree solution は最適 spanning solution となることを示します．&lt;/p&gt;
 $$
 \begin{aligned}
 c^{\pi}_{ij} = 0 &amp;&amp; \forall (i, j) \in T \\
 c^{\pi}_{ij} \ge 0 &amp;&amp; \forall (i, j) \in L \\
 c^{\pi}_{ij} \le 0 &amp;&amp; \forall (i, j) \in U \\
 \end{aligned}
-$$&lt;p>まず，$\sum_{(i, j) \in A} c_{ij} x_{ij}$ を最小化することは $\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することと等しいことを示します．&lt;/p>
-&lt;p>$z(\pi) = \sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ とします．$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，$z(0) = \sum_{(i, j) \in A} c_{ij} x_{ij}$ です．&lt;br>
-頂点 k のポテンシャルを $0$ から $\pi(k)$ まで増加したとします．&lt;br>
-$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，reduced cost は頂点 k から流出する flow 1 単位あたり $\pi(k)$ 減少し，頂点 k に流入する flow 1 単位あたり $\pi(k)$ 増加します．よって，全体の reduced cost は $ - \pi(k) \times k$ からの流出量 + $\pi(k) \times k$ への流入量だけ変化します．&lt;/p>
-&lt;p>MCFP の制約条件から，各頂点 i の流出量と流入量の関係は $\sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i$ です．&lt;br>
-よって，頂点 k のポテンシャルを $\pi(k)$ 増加すると，目的関数値は $\pi(k)b(k)$ 減少することになります．&lt;br>
-すべての頂点に同様のことがいえるので，$z(0) - z(\pi) = \sum_{i \in N} \pi(i)b(i) = \pi b$ となります．&lt;br>
-$\pi b$ は定数のため，$z(\pi)$ を最小化する flow は $z(0)$ を最小化することがわかりました．&lt;/p>
-&lt;p>次に，$x^{\ast}$ を上の最適性条件を満たす (T, L, U) に対応する解としたとき，これが最適解であることを示します．&lt;br>
-最適性条件を満たすポテンシャルを $\pi$ としたとき，$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ の最小化を考えます．&lt;br>
-$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することは $\sum_{(i, j) \in L} c_{ij}^{\pi} x_{ij} - \sum_{(i, j) \in U} |c_{ij}^{\pi}| x_{ij}$ を最小化すること等しいです．&lt;/p>
-&lt;p>$\forall (i, j) \in L$ に対して $x_{ij} \ge x_{ij}^{\ast} = l_{ij}$ であり，$\forall (i, j) \in U$ に対して $x_{ij} \le x_{ij}^{\ast} = u_{ij}$ であるため，$x^{\ast}$ の目的関数値は $x$ の目的関数値以下となります．&lt;br>
-以上のことから，最適性条件を満たす spanning tree structure は最適解となることがわかりました．&lt;/p>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
->Network Flows: Pearson New International Edition&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://homes.di.unimi.it/righini/Didattica/OttimizzazioneCombinatoria/MaterialeOC/9b%20-%20NetworkSimplex.pdf" target="_blank" rel="noopener"
->The network simplex algorithm&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://coral.ise.lehigh.edu/~ted/teaching/ie411/" target="_blank" rel="noopener"
->IE 411: Graphs and Network Flows (Python)&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>正確には，実行可能領域に下界が存在するならば最適 spanning tree solution が少なくとも 1 つ存在します．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2">
-&lt;p>全域木の辺として restricted arc を選ぶこともできます&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:3">
-&lt;p>辺 (i, j) に対し頂点 j から頂点 i に flow を流すと，辺 (i, j) の flow を減らすことになります．例えば，辺 (2, 1) に対して頂点 1 から頂点 2 に flow を流すと，辺 (2, 1) の flow は 1 減り，コストは 5 下がります．&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:4">
-&lt;p>辺の lower が 0 でない場合，先に lower 分の flow を流しておきます．&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:5">
-&lt;p>$\delta \gt 0$ である pivot&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:6">
-&lt;p>$\delta = 0$ である pivot&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item></channel></rss>
+$$&lt;p&gt;まず，$\sum_{(i, j) \in A} c_{ij} x_{ij}$ を最小化することは $\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することと等しいことを示します．&lt;/p&gt;
+&lt;p&gt;$z(\pi) = \sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ とします．$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，$z(0) = \sum_{(i, j) \in A} c_{ij} x_{ij}$ です．&lt;br&gt;
+頂点 k のポテンシャルを $0$ から $\pi(k)$ まで増加したとします．&lt;br&gt;
+$c_{ij}^{\pi} = c_{ij} - \pi(i) + \pi(j)$ なので，reduced cost は頂点 k から流出する flow 1 単位あたり $\pi(k)$ 減少し，頂点 k に流入する flow 1 単位あたり $\pi(k)$ 増加します．よって，全体の reduced cost は $ - \pi(k) \times k$ からの流出量 + $\pi(k) \times k$ への流入量だけ変化します．&lt;/p&gt;
+&lt;p&gt;MCFP の制約条件から，各頂点 i の流出量と流入量の関係は $\sum_{j:(i, j) \in A} x_{ij} - \sum_{j:(j,i) \in A} x_{ji} = b_i$ です．&lt;br&gt;
+よって，頂点 k のポテンシャルを $\pi(k)$ 増加すると，目的関数値は $\pi(k)b(k)$ 減少することになります．&lt;br&gt;
+すべての頂点に同様のことがいえるので，$z(0) - z(\pi) = \sum_{i \in N} \pi(i)b(i) = \pi b$ となります．&lt;br&gt;
+$\pi b$ は定数のため，$z(\pi)$ を最小化する flow は $z(0)$ を最小化することがわかりました．&lt;/p&gt;
+&lt;p&gt;次に，$x^{\ast}$ を上の最適性条件を満たす (T, L, U) に対応する解としたとき，これが最適解であることを示します．&lt;br&gt;
+最適性条件を満たすポテンシャルを $\pi$ としたとき，$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ の最小化を考えます．&lt;br&gt;
+$\sum_{(i, j) \in A} c_{ij}^{\pi} x_{ij}$ を最小化することは $\sum_{(i, j) \in L} c_{ij}^{\pi} x_{ij} - \sum_{(i, j) \in U} |c_{ij}^{\pi}| x_{ij}$ を最小化すること等しいです．&lt;/p&gt;
+&lt;p&gt;$\forall (i, j) \in L$ に対して $x_{ij} \ge x_{ij}^{\ast} = l_{ij}$ であり，$\forall (i, j) \in U$ に対して $x_{ij} \le x_{ij}^{\ast} = u_{ij}$ であるため，$x^{\ast}$ の目的関数値は $x$ の目的関数値以下となります．&lt;br&gt;
+以上のことから，最適性条件を満たす spanning tree structure は最適解となることがわかりました．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
+&gt;Network Flows: Pearson New International Edition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://homes.di.unimi.it/righini/Didattica/OttimizzazioneCombinatoria/MaterialeOC/9b%20-%20NetworkSimplex.pdf" target="_blank" rel="noopener"
+&gt;The network simplex algorithm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://coral.ise.lehigh.edu/~ted/teaching/ie411/" target="_blank" rel="noopener"
+&gt;IE 411: Graphs and Network Flows (Python)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;正確には，実行可能領域に下界が存在するならば最適 spanning tree solution が少なくとも 1 つ存在します．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;全域木の辺として restricted arc を選ぶこともできます&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;辺 (i, j) に対し頂点 j から頂点 i に flow を流すと，辺 (i, j) の flow を減らすことになります．例えば，辺 (2, 1) に対して頂点 1 から頂点 2 に flow を流すと，辺 (2, 1) の flow は 1 減り，コストは 5 下がります．&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;辺の lower が 0 でない場合，先に lower 分の flow を流しておきます．&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;$\delta \gt 0$ である pivot&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;$\delta = 0$ である pivot&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>

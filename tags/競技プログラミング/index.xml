@@ -1,302 +1,302 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>競技プログラミング on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/</link><description>Recent content in 競技プログラミング on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Thu, 09 Jan 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Quadratic Pseudo-Boolean Optimization</title><link>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</link><pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</guid><description>&lt;img src="https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/images/general_sample_ab_1.png" alt="Featured image of post Quadratic Pseudo-Boolean Optimization" />&lt;h2 id="quadratic-pseudo-boolean-optimization">Quadratic Pseudo-Boolean Optimization
-&lt;/h2>&lt;p>次の関数 $E(\bold x)$ を最小化する問題を考えます．$x_{p} \in \lbrace 0, 1 \rbrace$ とし，$\theta_{const}$ は定数を表します．この問題を &lt;a class="link" href="https://en.wikipedia.org/wiki/Quadratic_pseudo-Boolean_optimization" target="_blank" rel="noopener"
->Quadratic Pseudo-Boolean Optimization&lt;/a>(以下 QPBO)と呼びます．&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>競技プログラミング on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/</link><description>Recent content in 競技プログラミング on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Thu, 09 Jan 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E7%AB%B6%E6%8A%80%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Quadratic Pseudo-Boolean Optimization</title><link>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</link><pubDate>Thu, 09 Jan 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/</guid><description>&lt;img src="https://miti-7.github.io/post/quadratic-pseudo-boolean-optimization/images/general_sample_ab_1.png" alt="Featured image of post Quadratic Pseudo-Boolean Optimization" /&gt;&lt;h2 id="quadratic-pseudo-boolean-optimization"&gt;Quadratic Pseudo-Boolean Optimization
+&lt;/h2&gt;&lt;p&gt;次の関数 $E(\bold x)$ を最小化する問題を考えます．$x_{p} \in \lbrace 0, 1 \rbrace$ とし，$\theta_{const}$ は定数を表します．この問題を &lt;a class="link" href="https://en.wikipedia.org/wiki/Quadratic_pseudo-Boolean_optimization" target="_blank" rel="noopener"
+&gt;Quadratic Pseudo-Boolean Optimization&lt;/a&gt;(以下 QPBO)と呼びます．&lt;/p&gt;
 $$
 \begin{equation}
 E(\bold x) = \theta_{const} + \sum_p \theta_{p}(x_p) + \sum_{p \lt q} \theta_{pq}(x_p, x_q)
 \end{equation}
-$$&lt;p>競プロ界隈で「燃やす埋める」や「Project Selection Problem」などと言われる問題は QPBO に帰着することができます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．&lt;br>
+$$&lt;p&gt;競プロ界隈で「燃やす埋める」や「Project Selection Problem」などと言われる問題は QPBO に帰着することができます&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
 これらの問題は minimum s-t cut に帰着して解くことができますが，どのように辺を張るかなど混乱しがちです．本記事の目的は QPBO を解くアルゴリズムをライブラリ化することで，問題を解くときに辺の張り方や変数のフリップ操作などを考えなくてすむようにすることです．実装は &lt;a class="link" href="https://github.com/MitI-7/CompetitiveProgrammingLibrary/blob/1c8b83e0e54a6729cce7cf2c7eee09d1de0e4c05/library/cpp/optimization/QPBO.hpp" target="_blank" rel="noopener"
->QPBO.hpp&lt;/a> にあります．&lt;/p>
-&lt;p>記事の構成は以下の通りです．&lt;br>
-&lt;a class="link" href="#1-s-t-cut" >節 1&lt;/a> では s-t cut と minimum s-t cut の説明をします．minimum s-t cut は多項式時間で求めることができます．&lt;/p>
-&lt;p>&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >節 2&lt;/a> では関数 $E(\bold x)$ が $\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ であり，どの関数も $0$ 以上の値を返すという単純な関数の場合について考えます．
-この場合は minimum s-t cut を見つける問題にそのまま帰着できます．&lt;/p>
-&lt;p>&lt;a class="link" href="#3-%e5%8a%a3%e3%83%a2%e3%82%b8%e3%83%a5%e3%83%a9%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >節 3&lt;/a> では節 2 の仮定を排除し，関数 $E(\bold x)$ が劣モジュラ関数であるという仮定のみをおいた場合について考えます．&lt;br>
-この場合は再パラメータ化という操作を行うことで単純な関数の場合に帰着させることができます．&lt;/p>
-&lt;p>&lt;a class="link" href="#4-%e4%b8%80%e8%88%ac%e3%81%ae%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >節 4&lt;/a> では関数 $E(\bold x)$ が一般の関数の場合について考えます．&lt;br>
-$E(\bold x)$ が一般の関数の場合，これを最小化する問題は NP-hard であり，多項式時間で解くことは(今のところ)できそうもありません．この場合は問題を緩和することで劣モジュラ関数の場合に帰着させ近似解を得ることができます．さらに，ここで得られた解は最適解の一部となることが保証されます．&lt;/p>
-&lt;p>&lt;a class="link" href="#5-%e5%95%8f%e9%a1%8c" >節 5&lt;/a> では競プロの問題をいくつか解いていきます．&lt;/p>
-&lt;h2 id="1-s-t-cut">1. s-t cut
-&lt;/h2>&lt;p>頂点集合 $V$ と 有向辺 $E$ からなる有向グラフ $G = (V, E)$ が与えられます．辺 $(i, j)$ には容量 $c_{ij} \ge 0$ が定まっているものとします．&lt;br>
-頂点集合 $V$ を 2 つの部分集合 $S$ と $T = V \backslash S$ に分割します．2 つのノード $s$ と $t$ について $s \in S$，$t \in T$ となるような分割を s-t cut と呼びます．&lt;br>
-$S$ から出て $T$ に入るような辺の容量の総和を s-t cut の容量と呼び，以下で定義されます．すべての s-t cut のうち最小のものを minimum s-t cut と呼びます．&lt;/p>
+&gt;QPBO.hpp&lt;/a&gt; にあります．&lt;/p&gt;
+&lt;p&gt;記事の構成は以下の通りです．&lt;br&gt;
+&lt;a class="link" href="#1-s-t-cut" &gt;節 1&lt;/a&gt; では s-t cut と minimum s-t cut の説明をします．minimum s-t cut は多項式時間で求めることができます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;節 2&lt;/a&gt; では関数 $E(\bold x)$ が $\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ であり，どの関数も $0$ 以上の値を返すという単純な関数の場合について考えます．
+この場合は minimum s-t cut を見つける問題にそのまま帰着できます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="#3-%e5%8a%a3%e3%83%a2%e3%82%b8%e3%83%a5%e3%83%a9%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;節 3&lt;/a&gt; では節 2 の仮定を排除し，関数 $E(\bold x)$ が劣モジュラ関数であるという仮定のみをおいた場合について考えます．&lt;br&gt;
+この場合は再パラメータ化という操作を行うことで単純な関数の場合に帰着させることができます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="#4-%e4%b8%80%e8%88%ac%e3%81%ae%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;節 4&lt;/a&gt; では関数 $E(\bold x)$ が一般の関数の場合について考えます．&lt;br&gt;
+$E(\bold x)$ が一般の関数の場合，これを最小化する問題は NP-hard であり，多項式時間で解くことは(今のところ)できそうもありません．この場合は問題を緩和することで劣モジュラ関数の場合に帰着させ近似解を得ることができます．さらに，ここで得られた解は最適解の一部となることが保証されます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="#5-%e5%95%8f%e9%a1%8c" &gt;節 5&lt;/a&gt; では競プロの問題をいくつか解いていきます．&lt;/p&gt;
+&lt;h2 id="1-s-t-cut"&gt;1. s-t cut
+&lt;/h2&gt;&lt;p&gt;頂点集合 $V$ と 有向辺 $E$ からなる有向グラフ $G = (V, E)$ が与えられます．辺 $(i, j)$ には容量 $c_{ij} \ge 0$ が定まっているものとします．&lt;br&gt;
+頂点集合 $V$ を 2 つの部分集合 $S$ と $T = V \backslash S$ に分割します．2 つのノード $s$ と $t$ について $s \in S$，$t \in T$ となるような分割を s-t cut と呼びます．&lt;br&gt;
+$S$ から出て $T$ に入るような辺の容量の総和を s-t cut の容量と呼び，以下で定義されます．すべての s-t cut のうち最小のものを minimum s-t cut と呼びます．&lt;/p&gt;
 $$
 \begin{aligned}
 c(S) = \sum_{(i, j) \in (S, T)} c_{ij}
 \end{aligned}
-$$&lt;p>下のグラフの s-t cut の例をいくつか見ていきます &lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>．&lt;/p>
-&lt;img src="images/s-t-cut_sample1.png" width="50%">
-&lt;p>頂点の部分集合として，$S = \lbrace s, 0, 1 \rbrace$ を選んだとします．&lt;br>
-$S$ に属する頂点を赤，$T = V \backslash S$ に属する頂点を青で示します． $S$ から出て $T$ に入るような辺は辺 (0, 2) と辺 (1, 3) です．よって，この s-t cut の容量は 3 + 2 = 5 となります．&lt;br>
-すべての s-t cut の中でこのカットより容量の小さい s-t cut は存在しないのでこれは minimum s-t cut です．&lt;/p>
-&lt;img src="images/s-t-cut_sample2.png" width="50%">
-&lt;p>頂点の部分集合として $S = \lbrace s, 0, 1, 2, 3 \rbrace$ を選んだとします．&lt;br>
-この s-t cut の容量は 2 + 3 = 5 となります．&lt;br>
-このカットも minimum s-t cut です．このように minimum s-t cut は複数存在することがあります．&lt;/p>
-&lt;img src="images/s-t-cut_sample3.png" width="50%">
-&lt;p>頂点の部分集合として $S = \lbrace s, 1, 2 \rbrace$ を選んだとします．&lt;br>
-この s-t cut の容量は，3 + 2 + 4 + 2 = 11 となります．&lt;br>
-辺 (0, 1) や辺 (0, 2) は $T$ から $S$ に入る辺なので含まれません．&lt;/p>
-&lt;img src="images/s-t-cut_sample4.png" width="50%">
-&lt;p>minimum s-t cut は最大流問題を解き，残余ネットワーク上で頂点 $s$ から到達できる頂点集合を $S$ とすることで求められます．詳しくは &lt;a class="link" href="https://ja.wikipedia.org/wiki/%E6%9C%80%E5%A4%A7%E3%83%95%E3%83%AD%E3%83%BC%E6%9C%80%E5%B0%8F%E3%82%AB%E3%83%83%E3%83%88%E5%AE%9A%E7%90%86" target="_blank" rel="noopener"
->最大フロー最小カット定理&lt;/a> などを参照してください．&lt;br>
-次節から s-t cut を使って $E(\bold x)$ を最小化する方法を見ていきます．&lt;/p>
-&lt;h2 id="2-単純な関数の場合">2. 単純な関数の場合
-&lt;/h2>&lt;p>関数 $E(\bold x)$ を最小化する方法を考えていきます．$x_{p} \in \lbrace 0, 1 \rbrace$ なので，変数の個数が $n$ 個のとき解は $2^n$ 個存在します．この $2^n$ 個の解のなかから最小のものを見つけるのが目標です．&lt;/p>
+$$&lt;p&gt;下のグラフの s-t cut の例をいくつか見ていきます &lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample1.png" width="50%"&gt;
+&lt;p&gt;頂点の部分集合として，$S = \lbrace s, 0, 1 \rbrace$ を選んだとします．&lt;br&gt;
+$S$ に属する頂点を赤，$T = V \backslash S$ に属する頂点を青で示します． $S$ から出て $T$ に入るような辺は辺 (0, 2) と辺 (1, 3) です．よって，この s-t cut の容量は 3 + 2 = 5 となります．&lt;br&gt;
+すべての s-t cut の中でこのカットより容量の小さい s-t cut は存在しないのでこれは minimum s-t cut です．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample2.png" width="50%"&gt;
+&lt;p&gt;頂点の部分集合として $S = \lbrace s, 0, 1, 2, 3 \rbrace$ を選んだとします．&lt;br&gt;
+この s-t cut の容量は 2 + 3 = 5 となります．&lt;br&gt;
+このカットも minimum s-t cut です．このように minimum s-t cut は複数存在することがあります．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample3.png" width="50%"&gt;
+&lt;p&gt;頂点の部分集合として $S = \lbrace s, 1, 2 \rbrace$ を選んだとします．&lt;br&gt;
+この s-t cut の容量は，3 + 2 + 4 + 2 = 11 となります．&lt;br&gt;
+辺 (0, 1) や辺 (0, 2) は $T$ から $S$ に入る辺なので含まれません．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample4.png" width="50%"&gt;
+&lt;p&gt;minimum s-t cut は最大流問題を解き，残余ネットワーク上で頂点 $s$ から到達できる頂点集合を $S$ とすることで求められます．詳しくは &lt;a class="link" href="https://ja.wikipedia.org/wiki/%E6%9C%80%E5%A4%A7%E3%83%95%E3%83%AD%E3%83%BC%E6%9C%80%E5%B0%8F%E3%82%AB%E3%83%83%E3%83%88%E5%AE%9A%E7%90%86" target="_blank" rel="noopener"
+&gt;最大フロー最小カット定理&lt;/a&gt; などを参照してください．&lt;br&gt;
+次節から s-t cut を使って $E(\bold x)$ を最小化する方法を見ていきます．&lt;/p&gt;
+&lt;h2 id="2-単純な関数の場合"&gt;2. 単純な関数の場合
+&lt;/h2&gt;&lt;p&gt;関数 $E(\bold x)$ を最小化する方法を考えていきます．$x_{p} \in \lbrace 0, 1 \rbrace$ なので，変数の個数が $n$ 個のとき解は $2^n$ 個存在します．この $2^n$ 個の解のなかから最小のものを見つけるのが目標です．&lt;/p&gt;
 $$
 \begin{equation}
 E(\bold x) = \theta_{const} + \sum_{p} \theta_{p}(x_p) + \sum_{p \lt q} \theta_{pq}(x_p, x_q) \tag {1}
 \end{equation}
-$$&lt;p>単純な関数の場合を考えたいので，$\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ であり，すべて 0 以上の値を返すと仮定します．&lt;br>
-この仮定を満たす関数の場合は $E(\bold x)$ の解と s-t cut の解が 1 対 1 対応するようなグラフを作成することができます．よって，グラフの最小 s-t cut がわかれば $E(\bold x)$ の最小値（= 最適解）を求めることができます．&lt;/p>
-&lt;p>グラフは各変数を頂点とし，これに特別な頂点 $s$ と $t$ を加えた $n + 2$ 個の頂点から構成されます．辺は下記のルールにしたがって張ります．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>関数&lt;/th>
-&lt;th>辺&lt;/th>
-&lt;th>容量&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>$\theta_{p}(0)$&lt;/td>
-&lt;td>$p \rightarrow t$&lt;/td>
-&lt;td>$\theta_{p}(0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{p}(1)$&lt;/td>
-&lt;td>$s \rightarrow p$&lt;/td>
-&lt;td>$\theta_{p}(1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(0, 1)$&lt;/td>
-&lt;td>$p \rightarrow q$&lt;/td>
-&lt;td>$\theta_{pq}(0, 1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(1, 0)$&lt;/td>
-&lt;td>$q \rightarrow p$&lt;/td>
-&lt;td>$\theta_{pq}(1, 0)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>具体例として，変数が $a$ と $b$ の 2 つだけの場合を見てみます．&lt;br>
-各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．$\theta_{ab}(0, 0)$ と $\theta_{ab}(1, 1)$ の値は $0$ であり，$\theta_{const}$ は定数のため省略しています．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>a&lt;/th>
-&lt;th>b&lt;/th>
-&lt;th>$E(\bold x)$&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{a}(0) + \theta_{b}(0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{a}(1) + \theta_{b}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{a}(1) + \theta_{b}(1)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>ルールに従うと下のグラフが構築されます．&lt;br>
-このグラフの s-t cut をいくつか見ていきます．&lt;/p>
-&lt;img src="images/simple_sample.png" width="25%">
-&lt;p>$S = \lbrace s, a, b \rbrace$ とします．この s-t cut の容量は $\theta_{a}(0) + \theta_{b}(0)$ です．&lt;br>
-また，$a = 0$，$b = 0$ としたとき $E(\bold x)$ の値は $\theta_{a}(0) + \theta_{b}(0)$ です．&lt;br>
-よって，$S = \lbrace s, a, b \rbrace$ としたときの s-t cut の容量と，$a = 0$，$b = 0$ としたときの $E(\bold x)$ の関数値は一致しています．&lt;/p>
-&lt;img src="images/simple_cut1.png" width="25%">
-&lt;p>別の s-t cut の例をみます．&lt;br>
-$S = \lbrace s, a \rbrace$ とします．この s-t cut の容量は $\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$ です．&lt;br>
-また，$a = 0$，$b = 1$ としたとき $E(\bold x)$ の値は $\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$ です．&lt;br>
-よって，$S = \lbrace s, a \rbrace$ としたときの s-t cut の容量と，$a = 0$，$b = 1$ としたときの $E(\bold x)$ の関数値は一致しています．&lt;/p>
-&lt;img src="images/simple_cut2.png" width="25%">
-&lt;p>変数が 2 つの場合は s-t cut は $2^2$ 通りあります．すべてのパターンは以下の通りです．&lt;/p>
-&lt;img src="images/simple_cut_all.png" width="50%">
-&lt;p>このように s-t cut の構成と $E(\bold x) $ の構成が 1 対 1 対応するため，minimum s-t cut を計算することで $E(\bold x)$ の最小値を求めることができます．&lt;br>
-minimum s-t cut を計算し，$S$ に属する頂点に対応する変数の値を $0$，$T$ に属する頂点に対応する変数の値を $1$ と設定することで最適な $\bold x$ を構成できます．&lt;/p>
-&lt;h2 id="3-劣モジュラ関数の場合">3. 劣モジュラ関数の場合
-&lt;/h2>&lt;p>「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」では，$\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ とし，どの関数も $0$ 以上の値を返すことを仮定していました．&lt;br>
-この節ではこの仮定を排除し，関数は劣モジュラであることのみを仮定します．今回は 2 値変数を考えているので，$\theta_{pq}(0, 1) + \theta_{pq}(1, 0) \ge \theta_{pq}(0, 0) + \theta_{pq}(1, 1)$ を満たすことになります．&lt;/p>
-&lt;p>$\theta_{pq}(0, 0)$ や $\theta_{pq}(1, 1)$ が $0$ 以外の値をとったり関数値が負の値をとる場合があるので，今回はルール通りにグラフを作ることはできません．そこで再パラメータ化という操作を行います．再パラメータ化とは，$E(\bold x)$ の関数値を保ちつつ $\theta_{pq}(1, 0)$ などの各関数値を変化させる操作です．&lt;br>
-再パラメータ化を行うと標準形とよばれる以下の条件を満たす形になります&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．標準形ではどの関数も $0$ 以上の値をとります．&lt;/p>
-&lt;ul>
-&lt;li>$min \lbrace \theta_{p}(0), \theta_{p}(1) \rbrace = 0$&lt;/li>
-&lt;li>$min \lbrace \theta_{pq}(0, 0), \theta_{pq}(1, 0) \rbrace = 0$&lt;/li>
-&lt;li>$min \lbrace \theta_{pq}(0, 1), \theta_{pq}(1, 1) \rbrace = 0$&lt;/li>
-&lt;/ul>
-&lt;p>再パラメータ化をすると，関数 $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラの場合は $\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ に，関数 $\theta_{pq}(x_{p}, x_{q})$ が優モジュラの場合は $\theta_{pq}(0, 1) = \theta_{pq}(1, 0) = 0$ になります&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>．&lt;br>
-よって，すべての $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラ関数の場合は，再パラメータ化をすることで「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >2. 単純な関数の場合&lt;/a>」に帰着することができます．&lt;br>
-再パラメータ化の手続きは以下の通りです．&lt;/p>
-&lt;ul>
-&lt;li>step1
-&lt;ul>
-&lt;li>すべての (p, q) の各 $j \in \lbrace 0, 1 \rbrace$ について
-&lt;ul>
-&lt;li>$\delta = min \lbrace \theta_{pq}(0, j), P_{pq}(1, j) \rbrace$&lt;/li>
-&lt;li>$\theta_{pq}(0, j) = \theta_{pq}(0, j) - \delta$&lt;/li>
-&lt;li>$\theta_{pq}(1, j) = \theta_{pq}(1, j) - \delta$&lt;/li>
-&lt;li>$\theta_{q}(j) = \theta_{q}(j) + \delta$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>step2
-&lt;ul>
-&lt;li>$\delta = min \lbrace \theta_p(0), \theta_p(1) \rbrace$&lt;/li>
-&lt;li>$\theta_{p}(0) = \theta_{p}(0) - \delta$&lt;/li>
-&lt;li>$\theta_{p}(1) = \theta_{p}(1) - \delta$&lt;/li>
-&lt;li>$\theta_{const} = \theta_{const} + \delta$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>再パラメータ化をしたとき，目的関数値が変化しないことを確認します．&lt;br>
-step 1 の $j = 0$ では，$\theta_{pq}(0, 0)$ と $\theta_{pq}(1, 0)$ から $\delta$ を引き，$\theta_{q}(0)$ に $\delta$ を加えます．&lt;br>
-この操作を行うと $E(\bold x)$ は以下の表のように変化します．$\delta$ が打ち消し合って，目的関数値が保たれていることが確認できます．&lt;br>
-また，$\delta$ として $min \lbrace \theta_{pq}(0, 0), P_{pq}(1, 0) \rbrace$ を選んでいるので，$min \lbrace \theta_{pq;00}, \theta_{pq;10} \rbrace = 0$ を満たすようになります．&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>p&lt;/th>
-&lt;th>q&lt;/th>
-&lt;th>$E(\bold x)$&lt;/th>
-&lt;th>$E^{\prime}(\bold x)$&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + (\theta_{q}(0) + \delta) + (\theta_{ab}(0, 0) - \delta)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + (\theta_{q}(0) + \delta) + (\theta_{ab}(1, 0) - \delta)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>step 1 の $j = 1$ では，$\theta_{pq}(0, 1)$ と $\theta_{pq}(1, 1)$ から $\delta$ を引き，$\theta_{q}(1)$ に $\delta$ を加えます．&lt;br>
-$\delta$ として $min \lbrace \theta_{pq}(0, 1), P_{pq}(1, 1) \rbrace$ を選んでいるので，$min \lbrace \theta_{pq;01}, \theta_{pq;11} \rbrace = 0$ を満たすようになります．&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>p&lt;/th>
-&lt;th>q&lt;/th>
-&lt;th>$E(\bold x)$&lt;/th>
-&lt;th>$E^{\prime}(\bold x)$&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + (\theta_{q}(1) + \delta) + (\theta_{ab}(0, 1) - \delta)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + (\theta_{q}(1) + \delta) + (\theta_{ab}(1, 1) - \delta)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>step 2 では，$\theta_{p}(0)$ と $\theta_{p}(1)$ から $\delta$ を引き，$\theta_{const}$ に $\delta$ を加えます．&lt;br>
-$\delta$ として $min \lbrace \theta_p(0), \theta_p(1) \rbrace$ を選んでいるので，$min \lbrace \theta_{p;0}, \theta_{p;1} \rbrace = 0$ を満たすようになります．&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>p&lt;/th>
-&lt;th>q&lt;/th>
-&lt;th>$E(\bold x)$&lt;/th>
-&lt;th>$E^{\prime}(\bold x)$&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;td>$(\theta_{const} + \delta) + (\theta_{p}(0) - \delta) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;td>$(\theta_{const} + \delta) + (\theta_{p}(0) - \delta) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;td>$(\theta_{const} + \delta) + (\theta_{p}(1) - \delta) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;td>$(\theta_{const} + \delta) + (\theta_{p}(1) - \delta) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h1 id="4-一般の関数の場合">4. 一般の関数の場合
-&lt;/h1>&lt;p>関数に何も仮定を置かない場合は $E(\bold x)$ の最小化は NP-hard なので，minimum s-t cut 問題に帰着できない場合があります．&lt;br>
-この場合でも最適解はだせなくても問題を解けるだけ解く QPBO 法というアルゴリズムがあります&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>．QPBO 法は解として $x_p = \lbrace 0, 1, \emptyset \rbrace$ のいずれかを与えます．$\emptyset$ は解が不明であることを表します．$x_p$ に $0$ か $1$ の値が与えられたとき，$x_p$ はラベル付けされたといいます．&lt;br>
-このアルゴリズムは次のような性質があります．&lt;/p>
-&lt;ol>
-&lt;li>アルゴリズムの出力を $\bold x$ とする．完全にラベル付けされた任意の解 $\bold y$ があるとき，以下のように $\bold z$ を定めると常に $E(\bold z) \le E(\bold y)$ を満たす．&lt;/li>
-&lt;/ol>
+$$&lt;p&gt;単純な関数の場合を考えたいので，$\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ であり，すべて 0 以上の値を返すと仮定します．&lt;br&gt;
+この仮定を満たす関数の場合は $E(\bold x)$ の解と s-t cut の解が 1 対 1 対応するようなグラフを作成することができます．よって，グラフの最小 s-t cut がわかれば $E(\bold x)$ の最小値（= 最適解）を求めることができます．&lt;/p&gt;
+&lt;p&gt;グラフは各変数を頂点とし，これに特別な頂点 $s$ と $t$ を加えた $n + 2$ 個の頂点から構成されます．辺は下記のルールにしたがって張ります．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;関数&lt;/th&gt;
+&lt;th&gt;辺&lt;/th&gt;
+&lt;th&gt;容量&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p}(0)$&lt;/td&gt;
+&lt;td&gt;$p \rightarrow t$&lt;/td&gt;
+&lt;td&gt;$\theta_{p}(0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p}(1)$&lt;/td&gt;
+&lt;td&gt;$s \rightarrow p$&lt;/td&gt;
+&lt;td&gt;$\theta_{p}(1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(0, 1)$&lt;/td&gt;
+&lt;td&gt;$p \rightarrow q$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq}(0, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(1, 0)$&lt;/td&gt;
+&lt;td&gt;$q \rightarrow p$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq}(1, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;具体例として，変数が $a$ と $b$ の 2 つだけの場合を見てみます．&lt;br&gt;
+各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．$\theta_{ab}(0, 0)$ と $\theta_{ab}(1, 1)$ の値は $0$ であり，$\theta_{const}$ は定数のため省略しています．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;a&lt;/th&gt;
+&lt;th&gt;b&lt;/th&gt;
+&lt;th&gt;$E(\bold x)$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(0) + \theta_{b}(0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(1) + \theta_{b}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(1) + \theta_{b}(1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;ルールに従うと下のグラフが構築されます．&lt;br&gt;
+このグラフの s-t cut をいくつか見ていきます．&lt;/p&gt;
+&lt;img src="images/simple_sample.png" width="25%"&gt;
+&lt;p&gt;$S = \lbrace s, a, b \rbrace$ とします．この s-t cut の容量は $\theta_{a}(0) + \theta_{b}(0)$ です．&lt;br&gt;
+また，$a = 0$，$b = 0$ としたとき $E(\bold x)$ の値は $\theta_{a}(0) + \theta_{b}(0)$ です．&lt;br&gt;
+よって，$S = \lbrace s, a, b \rbrace$ としたときの s-t cut の容量と，$a = 0$，$b = 0$ としたときの $E(\bold x)$ の関数値は一致しています．&lt;/p&gt;
+&lt;img src="images/simple_cut1.png" width="25%"&gt;
+&lt;p&gt;別の s-t cut の例をみます．&lt;br&gt;
+$S = \lbrace s, a \rbrace$ とします．この s-t cut の容量は $\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$ です．&lt;br&gt;
+また，$a = 0$，$b = 1$ としたとき $E(\bold x)$ の値は $\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$ です．&lt;br&gt;
+よって，$S = \lbrace s, a \rbrace$ としたときの s-t cut の容量と，$a = 0$，$b = 1$ としたときの $E(\bold x)$ の関数値は一致しています．&lt;/p&gt;
+&lt;img src="images/simple_cut2.png" width="25%"&gt;
+&lt;p&gt;変数が 2 つの場合は s-t cut は $2^2$ 通りあります．すべてのパターンは以下の通りです．&lt;/p&gt;
+&lt;img src="images/simple_cut_all.png" width="50%"&gt;
+&lt;p&gt;このように s-t cut の構成と $E(\bold x) $ の構成が 1 対 1 対応するため，minimum s-t cut を計算することで $E(\bold x)$ の最小値を求めることができます．&lt;br&gt;
+minimum s-t cut を計算し，$S$ に属する頂点に対応する変数の値を $0$，$T$ に属する頂点に対応する変数の値を $1$ と設定することで最適な $\bold x$ を構成できます．&lt;/p&gt;
+&lt;h2 id="3-劣モジュラ関数の場合"&gt;3. 劣モジュラ関数の場合
+&lt;/h2&gt;&lt;p&gt;「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;2. 単純な関数の場合&lt;/a&gt;」では，$\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ とし，どの関数も $0$ 以上の値を返すことを仮定していました．&lt;br&gt;
+この節ではこの仮定を排除し，関数は劣モジュラであることのみを仮定します．今回は 2 値変数を考えているので，$\theta_{pq}(0, 1) + \theta_{pq}(1, 0) \ge \theta_{pq}(0, 0) + \theta_{pq}(1, 1)$ を満たすことになります．&lt;/p&gt;
+&lt;p&gt;$\theta_{pq}(0, 0)$ や $\theta_{pq}(1, 1)$ が $0$ 以外の値をとったり関数値が負の値をとる場合があるので，今回はルール通りにグラフを作ることはできません．そこで再パラメータ化という操作を行います．再パラメータ化とは，$E(\bold x)$ の関数値を保ちつつ $\theta_{pq}(1, 0)$ などの各関数値を変化させる操作です．&lt;br&gt;
+再パラメータ化を行うと標準形とよばれる以下の条件を満たす形になります&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;．標準形ではどの関数も $0$ 以上の値をとります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$min \lbrace \theta_{p}(0), \theta_{p}(1) \rbrace = 0$&lt;/li&gt;
+&lt;li&gt;$min \lbrace \theta_{pq}(0, 0), \theta_{pq}(1, 0) \rbrace = 0$&lt;/li&gt;
+&lt;li&gt;$min \lbrace \theta_{pq}(0, 1), \theta_{pq}(1, 1) \rbrace = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;再パラメータ化をすると，関数 $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラの場合は $\theta_{pq}(0, 0) = \theta_{pq}(1, 1) = 0$ に，関数 $\theta_{pq}(x_{p}, x_{q})$ が優モジュラの場合は $\theta_{pq}(0, 1) = \theta_{pq}(1, 0) = 0$ になります&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+よって，すべての $\theta_{pq}(x_{p}, x_{q})$ が劣モジュラ関数の場合は，再パラメータ化をすることで「&lt;a class="link" href="#2-%e5%8d%98%e7%b4%94%e3%81%aa%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;2. 単純な関数の場合&lt;/a&gt;」に帰着することができます．&lt;br&gt;
+再パラメータ化の手続きは以下の通りです．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;step1
+&lt;ul&gt;
+&lt;li&gt;すべての (p, q) の各 $j \in \lbrace 0, 1 \rbrace$ について
+&lt;ul&gt;
+&lt;li&gt;$\delta = min \lbrace \theta_{pq}(0, j), P_{pq}(1, j) \rbrace$&lt;/li&gt;
+&lt;li&gt;$\theta_{pq}(0, j) = \theta_{pq}(0, j) - \delta$&lt;/li&gt;
+&lt;li&gt;$\theta_{pq}(1, j) = \theta_{pq}(1, j) - \delta$&lt;/li&gt;
+&lt;li&gt;$\theta_{q}(j) = \theta_{q}(j) + \delta$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;step2
+&lt;ul&gt;
+&lt;li&gt;$\delta = min \lbrace \theta_p(0), \theta_p(1) \rbrace$&lt;/li&gt;
+&lt;li&gt;$\theta_{p}(0) = \theta_{p}(0) - \delta$&lt;/li&gt;
+&lt;li&gt;$\theta_{p}(1) = \theta_{p}(1) - \delta$&lt;/li&gt;
+&lt;li&gt;$\theta_{const} = \theta_{const} + \delta$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;再パラメータ化をしたとき，目的関数値が変化しないことを確認します．&lt;br&gt;
+step 1 の $j = 0$ では，$\theta_{pq}(0, 0)$ と $\theta_{pq}(1, 0)$ から $\delta$ を引き，$\theta_{q}(0)$ に $\delta$ を加えます．&lt;br&gt;
+この操作を行うと $E(\bold x)$ は以下の表のように変化します．$\delta$ が打ち消し合って，目的関数値が保たれていることが確認できます．&lt;br&gt;
+また，$\delta$ として $min \lbrace \theta_{pq}(0, 0), P_{pq}(1, 0) \rbrace$ を選んでいるので，$min \lbrace \theta_{pq;00}, \theta_{pq;10} \rbrace = 0$ を満たすようになります．&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;p&lt;/th&gt;
+&lt;th&gt;q&lt;/th&gt;
+&lt;th&gt;$E(\bold x)$&lt;/th&gt;
+&lt;th&gt;$E^{\prime}(\bold x)$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + (\theta_{q}(0) + \delta) + (\theta_{ab}(0, 0) - \delta)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + (\theta_{q}(0) + \delta) + (\theta_{ab}(1, 0) - \delta)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;step 1 の $j = 1$ では，$\theta_{pq}(0, 1)$ と $\theta_{pq}(1, 1)$ から $\delta$ を引き，$\theta_{q}(1)$ に $\delta$ を加えます．&lt;br&gt;
+$\delta$ として $min \lbrace \theta_{pq}(0, 1), P_{pq}(1, 1) \rbrace$ を選んでいるので，$min \lbrace \theta_{pq;01}, \theta_{pq;11} \rbrace = 0$ を満たすようになります．&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;p&lt;/th&gt;
+&lt;th&gt;q&lt;/th&gt;
+&lt;th&gt;$E(\bold x)$&lt;/th&gt;
+&lt;th&gt;$E^{\prime}(\bold x)$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + (\theta_{q}(1) + \delta) + (\theta_{ab}(0, 1) - \delta)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + (\theta_{q}(1) + \delta) + (\theta_{ab}(1, 1) - \delta)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;step 2 では，$\theta_{p}(0)$ と $\theta_{p}(1)$ から $\delta$ を引き，$\theta_{const}$ に $\delta$ を加えます．&lt;br&gt;
+$\delta$ として $min \lbrace \theta_p(0), \theta_p(1) \rbrace$ を選んでいるので，$min \lbrace \theta_{p;0}, \theta_{p;1} \rbrace = 0$ を満たすようになります．&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;p&lt;/th&gt;
+&lt;th&gt;q&lt;/th&gt;
+&lt;th&gt;$E(\bold x)$&lt;/th&gt;
+&lt;th&gt;$E^{\prime}(\bold x)$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;td&gt;$(\theta_{const} + \delta) + (\theta_{p}(0) - \delta) + \theta_{q}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(0) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;td&gt;$(\theta_{const} + \delta) + (\theta_{p}(0) - \delta) + \theta_{q}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;td&gt;$(\theta_{const} + \delta) + (\theta_{p}(1) - \delta) + \theta_{q}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{const} + \theta_{p}(1) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;td&gt;$(\theta_{const} + \delta) + (\theta_{p}(1) - \delta) + \theta_{q}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id="4-一般の関数の場合"&gt;4. 一般の関数の場合
+&lt;/h1&gt;&lt;p&gt;関数に何も仮定を置かない場合は $E(\bold x)$ の最小化は NP-hard なので，minimum s-t cut 問題に帰着できない場合があります．&lt;br&gt;
+この場合でも最適解はだせなくても問題を解けるだけ解く QPBO 法というアルゴリズムがあります&lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt;．QPBO 法は解として $x_p = \lbrace 0, 1, \emptyset \rbrace$ のいずれかを与えます．$\emptyset$ は解が不明であることを表します．$x_p$ に $0$ か $1$ の値が与えられたとき，$x_p$ はラベル付けされたといいます．&lt;br&gt;
+このアルゴリズムは次のような性質があります．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;アルゴリズムの出力を $\bold x$ とする．完全にラベル付けされた任意の解 $\bold y$ があるとき，以下のように $\bold z$ を定めると常に $E(\bold z) \le E(\bold y)$ を満たす．&lt;/li&gt;
+&lt;/ol&gt;
 $$
 z_p = \left\{
 \begin{array}{ll}
@@ -304,53 +304,53 @@ x_p &amp; \text{if} \space x_p \in \lbrace 0, 1 \rbrace \\
 y_p &amp; \text{if} \space x_p = \emptyset
 \end{array}
 \right.
-$$&lt;ol start="2">
-&lt;li>関数のすべての項が劣モジュラのとき最適解が求まる．&lt;/li>
-&lt;li>アルゴリズムはフリップ操作に対して不変である．&lt;/li>
-&lt;/ol>
-&lt;p>性質 1 で $\bold y$ に最適解を選べば $\bold x$ は常に最適解の一部となることがわかります．&lt;br>
-競プロで役に立つのは性質 2 と 3 です．この 2 つの性質から，すべての項を劣モジュラにするようなフリップ操作がある場合に QPBO 法は最適解を求めることがわかります．&lt;/p>
-&lt;p>QPBO 法を説明します．&lt;br>
-以降は表記が煩雑になるのを避けるためこの節では関数値を以下のように表記することがあります．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>$\theta_{p}(0)$&lt;/td>
-&lt;td>$\theta_{p;0}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{p}(1)$&lt;/td>
-&lt;td>$\theta_{p;1}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(0,0)$&lt;/td>
-&lt;td>$\theta_{pq;00}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(0,1)$&lt;/td>
-&lt;td>$\theta_{pq;01}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(1,0)$&lt;/td>
-&lt;td>$\theta_{pq;10}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq}(1,1)$&lt;/td>
-&lt;td>$\theta_{pq;11}$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>各変数 $x_p$ に対して，$x_{\bar{p}} = 1 - x_{p}$ を導入し，$E(\bold x) = \sum \theta_{p}(x_p) + \sum \theta_{pq}(x_p, x_q)$ を変形します．&lt;/p>
+$$&lt;ol start="2"&gt;
+&lt;li&gt;関数のすべての項が劣モジュラのとき最適解が求まる．&lt;/li&gt;
+&lt;li&gt;アルゴリズムはフリップ操作に対して不変である．&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;性質 1 で $\bold y$ に最適解を選べば $\bold x$ は常に最適解の一部となることがわかります．&lt;br&gt;
+競プロで役に立つのは性質 2 と 3 です．この 2 つの性質から，すべての項を劣モジュラにするようなフリップ操作がある場合に QPBO 法は最適解を求めることがわかります．&lt;/p&gt;
+&lt;p&gt;QPBO 法を説明します．&lt;br&gt;
+以降は表記が煩雑になるのを避けるためこの節では関数値を以下のように表記することがあります．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p}(0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{p;0}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p}(1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{p;1}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(0,0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq;00}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(0,1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq;01}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(1,0)$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq;10}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq}(1,1)$&lt;/td&gt;
+&lt;td&gt;$\theta_{pq;11}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;各変数 $x_p$ に対して，$x_{\bar{p}} = 1 - x_{p}$ を導入し，$E(\bold x) = \sum \theta_{p}(x_p) + \sum \theta_{pq}(x_p, x_q)$ を変形します．&lt;/p&gt;
 $$
 \begin{alignedat}{2}
 E(\bold x)
@@ -384,233 +384,233 @@ E(\bold x)
 \frac{\theta_{pq;10}}{2} \big(x_p (1 - x_q) + (1 - x_{\bar{p}}) x_{\bar{q}} \big)
 \bigg)
 \end{alignedat}
-$$&lt;p>ここで，$x_{\bar{p}} = 1 - x_p$ という制約を緩和し，$x_p$ と $x_{\bar{p}}$ が独立に値をとれる緩和問題を考えます．&lt;br>
+$$&lt;p&gt;ここで，$x_{\bar{p}} = 1 - x_p$ という制約を緩和し，$x_p$ と $x_{\bar{p}}$ が独立に値をとれる緩和問題を考えます．&lt;br&gt;
 各変数の係数を比較すると下の関数に分割できることがわかります．
-再パラメータ化をしてから関数を分割することですべての関数値が $0$ 以上であることが保証されます．これらの関数は劣モジュラ関数なので「&lt;a class="link" href="#3-%e5%8a%a3%e3%83%a2%e3%82%b8%e3%83%a5%e3%83%a9%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" >3. 劣モジュラ関数の場合&lt;/a>」に帰着することができます．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_p$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{p;0}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{p;1}$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_{\bar{p}}$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{p;1}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{p;0}$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_p$&lt;/th>
-&lt;th>$x_q$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;01}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;10}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_p$&lt;/th>
-&lt;th>$x_{\bar{q}}$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;00}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;11}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_{\bar{p}}$&lt;/th>
-&lt;th>$x_q$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;11}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;00}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$x_{\bar{p}}$&lt;/th>
-&lt;th>$x_{\bar{q}}$&lt;/th>
-&lt;th>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;01}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\frac{1}{2}\theta_{pq;10}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>上記関数について，ルールに従ってグラフを構築します．
-整理すると以下のルールに従ってグラフを構築すればいいことがわかります．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>$\theta$&lt;/th>
-&lt;th>edge&lt;/th>
-&lt;th>capacity&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>$\theta_{p;0}$&lt;/td>
-&lt;td>$(p \rightarrow t), (s \rightarrow \bar p)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{p;0}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{p;1}$&lt;/td>
-&lt;td>$(s \rightarrow p), (\bar p \rightarrow t)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{p;1}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq;01}$&lt;/td>
-&lt;td>$(p \rightarrow q), (\bar q \rightarrow \bar p)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{pq;01}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq;10}$&lt;/td>
-&lt;td>$(q \rightarrow p), (\bar p \rightarrow \bar q)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{pq;10}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq;00}$&lt;/td>
-&lt;td>$(p \rightarrow \bar q), (q \rightarrow \bar p)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{pq;00}$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>$\theta_{pq;11}$&lt;/td>
-&lt;td>$(\bar q \rightarrow p), (\bar p \rightarrow q)$&lt;/td>
-&lt;td>$\frac{1}{2} \theta_{pq;11}$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>このグラフの s-t minimum cut を計算します．各変数の値は，$S$ に属する場合は 0，$T$ に属する場合は 1 をとります．ただし，$x_{\bar{p}} = 1 - x_{p}$ という制約を満たす必要があります．よって，$\bold x$ は次のように構成されます．&lt;/p>
+再パラメータ化をしてから関数を分割することですべての関数値が $0$ 以上であることが保証されます．これらの関数は劣モジュラ関数なので「&lt;a class="link" href="#3-%e5%8a%a3%e3%83%a2%e3%82%b8%e3%83%a5%e3%83%a9%e9%96%a2%e6%95%b0%e3%81%ae%e5%a0%b4%e5%90%88" &gt;3. 劣モジュラ関数の場合&lt;/a&gt;」に帰着することができます．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_p$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{p;0}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{p;1}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_{\bar{p}}$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{p;1}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{p;0}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_p$&lt;/th&gt;
+&lt;th&gt;$x_q$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;01}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;10}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_p$&lt;/th&gt;
+&lt;th&gt;$x_{\bar{q}}$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;00}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;11}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_{\bar{p}}$&lt;/th&gt;
+&lt;th&gt;$x_q$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;11}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;00}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$x_{\bar{p}}$&lt;/th&gt;
+&lt;th&gt;$x_{\bar{q}}$&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;01}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2}\theta_{pq;10}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;上記関数について，ルールに従ってグラフを構築します．
+整理すると以下のルールに従ってグラフを構築すればいいことがわかります．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$\theta$&lt;/th&gt;
+&lt;th&gt;edge&lt;/th&gt;
+&lt;th&gt;capacity&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p;0}$&lt;/td&gt;
+&lt;td&gt;$(p \rightarrow t), (s \rightarrow \bar p)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{p;0}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{p;1}$&lt;/td&gt;
+&lt;td&gt;$(s \rightarrow p), (\bar p \rightarrow t)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{p;1}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq;01}$&lt;/td&gt;
+&lt;td&gt;$(p \rightarrow q), (\bar q \rightarrow \bar p)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{pq;01}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq;10}$&lt;/td&gt;
+&lt;td&gt;$(q \rightarrow p), (\bar p \rightarrow \bar q)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{pq;10}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq;00}$&lt;/td&gt;
+&lt;td&gt;$(p \rightarrow \bar q), (q \rightarrow \bar p)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{pq;00}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$\theta_{pq;11}$&lt;/td&gt;
+&lt;td&gt;$(\bar q \rightarrow p), (\bar p \rightarrow q)$&lt;/td&gt;
+&lt;td&gt;$\frac{1}{2} \theta_{pq;11}$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;このグラフの s-t minimum cut を計算します．各変数の値は，$S$ に属する場合は 0，$T$ に属する場合は 1 をとります．ただし，$x_{\bar{p}} = 1 - x_{p}$ という制約を満たす必要があります．よって，$\bold x$ は次のように構成されます．&lt;/p&gt;
 $$
 x_{p} = \left\{
 \begin{array}{ll}
@@ -619,212 +619,212 @@ x_{p} = \left\{
 \emptyset &amp; \text{otherwise}
 \end{array}
 \right.
-$$&lt;p>具体例として，変数が $a$ と $b$ の 2 つだけの場合を考えます．&lt;br>
-各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．&lt;/p>
-&lt;div style="display: flex; gap: 20px;">
-&lt;div>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>a&lt;/th>
-&lt;th>b&lt;/th>
-&lt;th>$E(\bold x)$&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{a}(0) + \theta_{b}(0) + \theta_{ab}(0, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>0&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>0&lt;/td>
-&lt;td>$\theta_{a}(1) + \theta_{b}(0) + \theta_{ab}(1, 0)$&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>1&lt;/td>
-&lt;td>1&lt;/td>
-&lt;td>$\theta_{a}(1) + \theta_{b}(1) + \theta_{ab}(1, 1)$&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;/div>
-&lt;/div>
-&lt;p>対応するグラフは以下のようになります．表記が煩雑になるので図では $\frac{1}{2}$ を除外しています．このグラフの s-t cut の例をいくつか見ていきます．&lt;/p>
-&lt;img src="images/general_sample_ab.png" width="50%">
-&lt;p>$S = \lbrace s, a, b \rbrace$ とします．この s-t cut の容量は $\frac{1}{2} (\theta_{a}(0) + \theta_{a}(0) + \theta_{b}(0) + \theta_{b}(0) + \theta_{ab}(0, 0) + \theta_{ab}(0, 0))$ です．&lt;br>
-この値は $a = 0$，$b = 0$ としたときの $E(\bold x)$ の目的関数と一致します．&lt;/p>
-&lt;img src="images/general_sample_ab_1.png" width="50%">
-&lt;p>$S = \lbrace s, a \rbrace$ とします．この s-t cut の容量は $\frac{1}{2} (\theta_{a}(0) + \theta_{a}(0) + \theta_{b}(1) + \theta_{b}(1) + \theta_{ab}(0, 1) + \theta_{ab}(0, 1))$ です．&lt;br>
-この値は $a = 0$，$b = 0$ としたときの $E(\bold x)$ の目的関数と一致します．&lt;/p>
-&lt;img src="images/general_sample_ab_2.png" width="50%">
-&lt;p>$S = \lbrace s, a, b, \bar{b} \rbrace$ とします．この場合，$a = 0$，$b = \emptyset$ とし，$b$ のラベルは未定となります．&lt;/p>
-&lt;img src="images/general_sample_ab_3.png" width="50%">
-&lt;h1 id="5-問題">5. 問題
-&lt;/h1>&lt;p>QPBO を使って競プロの問題を解いていきます．&lt;/p>
-&lt;h2 id="arc085-e---mul">&lt;a class="link" href="https://atcoder.jp/contests/arc085/tasks/arc085_c" target="_blank" rel="noopener"
->ARC085 E - MUL&lt;/a>
-&lt;/h2>&lt;blockquote>
-&lt;p>宝石が $N$ 個あり，それぞれ $1,2,\cdots,N$ と数が書かれています。&lt;br>
-あなたは，以下の操作を好きなだけ行うことが出来ます(一度も行わなくてもよいです)。&lt;/p>
-&lt;ul>
-&lt;li>正整数 $x$ を選ぶ。$x$ の倍数が書かれた宝石を全て叩き割る。&lt;/li>
-&lt;/ul>
-&lt;p>そして，$i$ が書かれていた宝石が割られずに残っていた場合，$a_i$ 円貰います。 ただし，この $a_i$ は負の場合もあり，その場合はお金を払わなくてはいけません。&lt;br>
-うまく操作を行った時，あなたは最大で何円お金を貰えるでしょうか？&lt;/p>&lt;/blockquote>
-&lt;p>まず変数を定義します．&lt;br>
-宝石 $i$ が残っているかどうかを $x_i$ で表します．宝石が割る場合 $1$ を，残す場合は $0$ をとります．&lt;/p>
-&lt;p>次に関数を定義します．&lt;br>
-QPBO は目的関数値の最小化を目指すのでコストがいくらかかるかで表します．&lt;br>
-宝石 $i$ が残っている場合 $a_i$ 円貰えます．これは $-a_i$ 円のコストを払うということなので，次のように定義できます．&lt;/p>
-&lt;ul>
-&lt;li>$\theta_{i}(0) = -a_i$&lt;/li>
-&lt;li>$\theta_{i}(1) = 0$&lt;/li>
-&lt;/ul>
-&lt;p>また，宝石 $i$ を割るにもかかわらず $i$ で割り切れる値が書かれた宝石 $j$ を残すことは許されないので，この場合は無限のコストがかかるとします．よって，次のように定義できます．&lt;/p>
-&lt;ul>
-&lt;li>$\theta_{ij}(0, 0) = 0$&lt;/li>
-&lt;li>$\theta_{ij}(0, 1) = 0$&lt;/li>
-&lt;li>$\theta_{ij}(1, 0) = \infty$&lt;/li>
-&lt;li>$\theta_{ij}(1, 1) = 0$&lt;/li>
-&lt;/ul>
-&lt;p>この関数は $\theta_{ij}(0, 1) + \theta_{ij}(1, 0) \ge \theta_{ij}(0, 0) + \theta_{ij}(1, 1)$ を満たしているので劣モジュラ関数です．&lt;br>
-あとは，すべての $i$ と $i$ で割り切れる $j$ について上記関数を定義すれば問題を解くことができます．&lt;/p>
-&lt;p>&lt;a class="link" href="https://atcoder.jp/contests/arc085/submissions/61474030" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="abc193-f---zebraness">&lt;a class="link" href="https://atcoder.jp/contests/abc193/tasks/abc193_f" target="_blank" rel="noopener"
->ABC193 F - Zebraness&lt;/a>
-&lt;/h2>&lt;blockquote>
-&lt;p>縦 $N$ マス、横 $N$ マスのマス目があります。上から $i$ 行目、左から $j$ 列目のマスをマス $(i,j)$ と表すことにします。 マス $(i,j)$ の色の情報が文字 $c_{i,j}$ により与えられます。&lt;br>
-$B$ はマスが黒で塗られていることを、 $W$ はマスが白で塗られていることを、 $?$ はマスにまだ色が塗られていないことを表します。&lt;br>
-高橋くんは、まだ色が塗られていないマスをそれぞれ黒または白で塗り、白黒のマス目を作ります。マス目のしまうま度を、辺で接する黒マスと白マスの組の個数と定義します。高橋くんが達成できるしまうま度の最大値を求めてください。&lt;/p>&lt;/blockquote>
-&lt;p>まず変数を定義します．&lt;br>
+$$&lt;p&gt;具体例として，変数が $a$ と $b$ の 2 つだけの場合を考えます．&lt;br&gt;
+各変数の値に対応する $E(\bold x) = \theta_a(a) + \theta_b(b) + \theta_{ab}(a, b)$ の値は以下のようになります．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;a&lt;/th&gt;
+&lt;th&gt;b&lt;/th&gt;
+&lt;th&gt;$E(\bold x)$&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(0) + \theta_{b}(0) + \theta_{ab}(0, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(0) + \theta_{b}(1) + \theta_{ab}(0, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(1) + \theta_{b}(0) + \theta_{ab}(1, 0)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;$\theta_{a}(1) + \theta_{b}(1) + \theta_{ab}(1, 1)$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;対応するグラフは以下のようになります．表記が煩雑になるので図では $\frac{1}{2}$ を除外しています．このグラフの s-t cut の例をいくつか見ていきます．&lt;/p&gt;
+&lt;img src="images/general_sample_ab.png" width="50%"&gt;
+&lt;p&gt;$S = \lbrace s, a, b \rbrace$ とします．この s-t cut の容量は $\frac{1}{2} (\theta_{a}(0) + \theta_{a}(0) + \theta_{b}(0) + \theta_{b}(0) + \theta_{ab}(0, 0) + \theta_{ab}(0, 0))$ です．&lt;br&gt;
+この値は $a = 0$，$b = 0$ としたときの $E(\bold x)$ の目的関数と一致します．&lt;/p&gt;
+&lt;img src="images/general_sample_ab_1.png" width="50%"&gt;
+&lt;p&gt;$S = \lbrace s, a \rbrace$ とします．この s-t cut の容量は $\frac{1}{2} (\theta_{a}(0) + \theta_{a}(0) + \theta_{b}(1) + \theta_{b}(1) + \theta_{ab}(0, 1) + \theta_{ab}(0, 1))$ です．&lt;br&gt;
+この値は $a = 0$，$b = 0$ としたときの $E(\bold x)$ の目的関数と一致します．&lt;/p&gt;
+&lt;img src="images/general_sample_ab_2.png" width="50%"&gt;
+&lt;p&gt;$S = \lbrace s, a, b, \bar{b} \rbrace$ とします．この場合，$a = 0$，$b = \emptyset$ とし，$b$ のラベルは未定となります．&lt;/p&gt;
+&lt;img src="images/general_sample_ab_3.png" width="50%"&gt;
+&lt;h1 id="5-問題"&gt;5. 問題
+&lt;/h1&gt;&lt;p&gt;QPBO を使って競プロの問題を解いていきます．&lt;/p&gt;
+&lt;h2 id="arc085-e---mul"&gt;&lt;a class="link" href="https://atcoder.jp/contests/arc085/tasks/arc085_c" target="_blank" rel="noopener"
+&gt;ARC085 E - MUL&lt;/a&gt;
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;宝石が $N$ 個あり，それぞれ $1,2,\cdots,N$ と数が書かれています。&lt;br&gt;
+あなたは，以下の操作を好きなだけ行うことが出来ます(一度も行わなくてもよいです)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正整数 $x$ を選ぶ。$x$ の倍数が書かれた宝石を全て叩き割る。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;そして，$i$ が書かれていた宝石が割られずに残っていた場合，$a_i$ 円貰います。 ただし，この $a_i$ は負の場合もあり，その場合はお金を払わなくてはいけません。&lt;br&gt;
+うまく操作を行った時，あなたは最大で何円お金を貰えるでしょうか？&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;まず変数を定義します．&lt;br&gt;
+宝石 $i$ が残っているかどうかを $x_i$ で表します．宝石が割る場合 $1$ を，残す場合は $0$ をとります．&lt;/p&gt;
+&lt;p&gt;次に関数を定義します．&lt;br&gt;
+QPBO は目的関数値の最小化を目指すのでコストがいくらかかるかで表します．&lt;br&gt;
+宝石 $i$ が残っている場合 $a_i$ 円貰えます．これは $-a_i$ 円のコストを払うということなので，次のように定義できます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\theta_{i}(0) = -a_i$&lt;/li&gt;
+&lt;li&gt;$\theta_{i}(1) = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;また，宝石 $i$ を割るにもかかわらず $i$ で割り切れる値が書かれた宝石 $j$ を残すことは許されないので，この場合は無限のコストがかかるとします．よって，次のように定義できます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\theta_{ij}(0, 0) = 0$&lt;/li&gt;
+&lt;li&gt;$\theta_{ij}(0, 1) = 0$&lt;/li&gt;
+&lt;li&gt;$\theta_{ij}(1, 0) = \infty$&lt;/li&gt;
+&lt;li&gt;$\theta_{ij}(1, 1) = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;この関数は $\theta_{ij}(0, 1) + \theta_{ij}(1, 0) \ge \theta_{ij}(0, 0) + \theta_{ij}(1, 1)$ を満たしているので劣モジュラ関数です．&lt;br&gt;
+あとは，すべての $i$ と $i$ で割り切れる $j$ について上記関数を定義すれば問題を解くことができます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://atcoder.jp/contests/arc085/submissions/61474030" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="abc193-f---zebraness"&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc193/tasks/abc193_f" target="_blank" rel="noopener"
+&gt;ABC193 F - Zebraness&lt;/a&gt;
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;縦 $N$ マス、横 $N$ マスのマス目があります。上から $i$ 行目、左から $j$ 列目のマスをマス $(i,j)$ と表すことにします。 マス $(i,j)$ の色の情報が文字 $c_{i,j}$ により与えられます。&lt;br&gt;
+$B$ はマスが黒で塗られていることを、 $W$ はマスが白で塗られていることを、 $?$ はマスにまだ色が塗られていないことを表します。&lt;br&gt;
+高橋くんは、まだ色が塗られていないマスをそれぞれ黒または白で塗り、白黒のマス目を作ります。マス目のしまうま度を、辺で接する黒マスと白マスの組の個数と定義します。高橋くんが達成できるしまうま度の最大値を求めてください。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;まず変数を定義します．&lt;br&gt;
 マスを $(i, j)$ で表すとすると関数が見にくいので $p = i \times N + j$ で表します．
-マス $p$ の色を変数 $x_{p}$ で表します．白の場合 $0$ をとり，黒の場合 $1$ をとります．&lt;/p>
-&lt;p>次に関数を定義します．&lt;br>
-与えられている色の変更はできないので白から黒や黒から白に変更すると無限のコストがかかるとします．次のように定義できます．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>マス $p$ の色が黒の場合&lt;/p>
-&lt;ul>
-&lt;li>$\theta_{p}(0) = \infty$&lt;/li>
-&lt;li>$\theta_{p}(1) = 0$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>マス $p$ の色が白の場合&lt;/p>
-&lt;ul>
-&lt;li>$\theta_{p}(0) = 0$&lt;/li>
-&lt;li>$\theta_{p}(1) = \infty$&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>マス $p$ と辺で接するマス $q$ が異なる色だと -1 のコストがかかります．&lt;/p>
-&lt;ul>
-&lt;li>$\theta_{pq}(0, 0) = 0$&lt;/li>
-&lt;li>$\theta_{pq}(0, 1) = -1$&lt;/li>
-&lt;li>$\theta_{pq}(1, 0) = -1$&lt;/li>
-&lt;li>$\theta_{pq}(1, 1) = 0$&lt;/li>
-&lt;/ul>
-&lt;p>これは劣モジュラ関数ではないのですが，変数フリップすることで劣モジュラ関数にすることができます．
-QPBO 法では変数フリップを考慮しなくていいのでそのまま定義することができます．&lt;/p>
-&lt;p>&lt;a class="link" href="https://atcoder.jp/contests/abc193/submissions/61474153" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="その他の問題">その他の問題
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://yukicoder.me/problems/no/2713" target="_blank" rel="noopener"
->No.2713 Just Solitaire&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://yukicoder.me/submissions/1034571" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2903" target="_blank" rel="noopener"
->AOJ - Board&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10082476#1" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;a class="link" href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/UOA/UAPC/3058" target="_blank" rel="noopener"
->AOJ - Ghost&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/3058/review/10082488/MitI7/C&amp;#43;&amp;#43;23" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;a class="link" href="https://atcoder.jp/contests/typical90/tasks/typical90_an" target="_blank" rel="noopener"
->競プロ典型 90 問 040 - Get More Money（★7）&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://atcoder.jp/contests/typical90/submissions/61474485" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;a class="link" href="https://atcoder.jp/contests/abc259/tasks/abc259_g" target="_blank" rel="noopener"
->ABC259 G - Grid Card Game&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://atcoder.jp/contests/abc259/submissions/61474556" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h1 id="参考">参考
-&lt;/h1>&lt;ul>
-&lt;li>&lt;a class="link" href="https://ieeexplore.ieee.org/document/4204169" target="_blank" rel="noopener"
->Minimizing non-submodular functions with graph cuts – a review&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://www.kspub.co.jp/book/detail/1529090.html" target="_blank" rel="noopener"
->劣モジュラ最適化と機械学習&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Graph_cut_optimization" target="_blank" rel="noopener"
->Graph cut optimization&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Quadratic_pseudo-Boolean_optimization" target="_blank" rel="noopener"
->Quadratic pseudo-Boolean optimization&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>たぶんです．できない例があったら教えてください&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2">
-&lt;p>この数値例は&lt;a class="link" href="https://ja.wikipedia.org/wiki/%E6%9C%80%E5%A4%A7%E3%83%95%E3%83%AD%E3%83%BC%E6%9C%80%E5%B0%8F%E3%82%AB%E3%83%83%E3%83%88%E5%AE%9A%E7%90%86#/media/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:Max_flow.svg" target="_blank" rel="noopener"
->最大フロー最小カット定理&lt;/a>から引用しています&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:3">
-&lt;p>標準形は一意に定まるとは限りません&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:4">
-&lt;p>単純な関数の場合は劣モジュラ関数を(ほぼ)標準化したものでした．厳密には $min \lbrace \theta_{p;0}, \theta_{p;1} \rbrace = 0$ を満たしていませんが．&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:5">
-&lt;p>Minimizing non-submodular functions with graph cuts – a review&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:6">
-&lt;p>実装では容量に $\frac{1}{2}$ をかけるのではなく，最後に目的関数値に $\frac{1}{2}$ を掛ければいいです&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>最短路問題の最適性条件と reduced arc length</title><link>https://miti-7.github.io/post/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E9%81%A9%E6%80%A7%E6%9D%A1%E4%BB%B6%E3%81%A8-reduced-arc-length/</link><pubDate>Tue, 17 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E9%81%A9%E6%80%A7%E6%9D%A1%E4%BB%B6%E3%81%A8-reduced-arc-length/</guid><description>&lt;h2 id="最短路問題">最短路問題
-&lt;/h2>&lt;p>有向グラフが与えられたとき，始点 s から各頂点への最短路を求める問題を単一始点最短路問題といいます．以下では，頂点数を $n$，辺数を $m$，各辺 (u, v) のコストを $c_{uv}$ で表します．また，グラフは強連結を仮定します．&lt;/p>
-&lt;h2 id="最短路問題の最適性条件">最短路問題の最適性条件
-&lt;/h2>&lt;p>頂点集合を $N$，辺集合を $A$，辺 (u, v) のコストを $c_{uv}$ とします．始点 s から各頂点 v への有向パスの距離の上界を $d(v)$ で表し，これを距離ラベルと呼びます．特に，$d(s) = 0$ です．各頂点 $v \in N$ について，$d(v)$ が始点 s から頂点 v の最短路の長さであるための必要十分条件は以下が成り立つことです．&lt;/p>
+マス $p$ の色を変数 $x_{p}$ で表します．白の場合 $0$ をとり，黒の場合 $1$ をとります．&lt;/p&gt;
+&lt;p&gt;次に関数を定義します．&lt;br&gt;
+与えられている色の変更はできないので白から黒や黒から白に変更すると無限のコストがかかるとします．次のように定義できます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;マス $p$ の色が黒の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\theta_{p}(0) = \infty$&lt;/li&gt;
+&lt;li&gt;$\theta_{p}(1) = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;マス $p$ の色が白の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\theta_{p}(0) = 0$&lt;/li&gt;
+&lt;li&gt;$\theta_{p}(1) = \infty$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;マス $p$ と辺で接するマス $q$ が異なる色だと -1 のコストがかかります．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\theta_{pq}(0, 0) = 0$&lt;/li&gt;
+&lt;li&gt;$\theta_{pq}(0, 1) = -1$&lt;/li&gt;
+&lt;li&gt;$\theta_{pq}(1, 0) = -1$&lt;/li&gt;
+&lt;li&gt;$\theta_{pq}(1, 1) = 0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これは劣モジュラ関数ではないのですが，変数フリップすることで劣モジュラ関数にすることができます．
+QPBO 法では変数フリップを考慮しなくていいのでそのまま定義することができます．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc193/submissions/61474153" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="その他の問題"&gt;その他の問題
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://yukicoder.me/problems/no/2713" target="_blank" rel="noopener"
+&gt;No.2713 Just Solitaire&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://yukicoder.me/submissions/1034571" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2903" target="_blank" rel="noopener"
+&gt;AOJ - Board&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10082476#1" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/UOA/UAPC/3058" target="_blank" rel="noopener"
+&gt;AOJ - Ghost&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/3058/review/10082488/MitI7/C&amp;#43;&amp;#43;23" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://atcoder.jp/contests/typical90/tasks/typical90_an" target="_blank" rel="noopener"
+&gt;競プロ典型 90 問 040 - Get More Money（★7）&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://atcoder.jp/contests/typical90/submissions/61474485" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc259/tasks/abc259_g" target="_blank" rel="noopener"
+&gt;ABC259 G - Grid Card Game&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc259/submissions/61474556" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="参考"&gt;参考
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://ieeexplore.ieee.org/document/4204169" target="_blank" rel="noopener"
+&gt;Minimizing non-submodular functions with graph cuts – a review&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.kspub.co.jp/book/detail/1529090.html" target="_blank" rel="noopener"
+&gt;劣モジュラ最適化と機械学習&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Graph_cut_optimization" target="_blank" rel="noopener"
+&gt;Graph cut optimization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Quadratic_pseudo-Boolean_optimization" target="_blank" rel="noopener"
+&gt;Quadratic pseudo-Boolean optimization&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;たぶんです．できない例があったら教えてください&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;この数値例は&lt;a class="link" href="https://ja.wikipedia.org/wiki/%E6%9C%80%E5%A4%A7%E3%83%95%E3%83%AD%E3%83%BC%E6%9C%80%E5%B0%8F%E3%82%AB%E3%83%83%E3%83%88%E5%AE%9A%E7%90%86#/media/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:Max_flow.svg" target="_blank" rel="noopener"
+&gt;最大フロー最小カット定理&lt;/a&gt;から引用しています&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;標準形は一意に定まるとは限りません&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;単純な関数の場合は劣モジュラ関数を(ほぼ)標準化したものでした．厳密には $min \lbrace \theta_{p;0}, \theta_{p;1} \rbrace = 0$ を満たしていませんが．&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:5"&gt;
+&lt;p&gt;Minimizing non-submodular functions with graph cuts – a review&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:6"&gt;
+&lt;p&gt;実装では容量に $\frac{1}{2}$ をかけるのではなく，最後に目的関数値に $\frac{1}{2}$ を掛ければいいです&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>最短路問題の最適性条件と reduced arc length</title><link>https://miti-7.github.io/post/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E9%81%A9%E6%80%A7%E6%9D%A1%E4%BB%B6%E3%81%A8-reduced-arc-length/</link><pubDate>Tue, 17 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%95%8F%E9%A1%8C%E3%81%AE%E6%9C%80%E9%81%A9%E6%80%A7%E6%9D%A1%E4%BB%B6%E3%81%A8-reduced-arc-length/</guid><description>&lt;h2 id="最短路問題"&gt;最短路問題
+&lt;/h2&gt;&lt;p&gt;有向グラフが与えられたとき，始点 s から各頂点への最短路を求める問題を単一始点最短路問題といいます．以下では，頂点数を $n$，辺数を $m$，各辺 (u, v) のコストを $c_{uv}$ で表します．また，グラフは強連結を仮定します．&lt;/p&gt;
+&lt;h2 id="最短路問題の最適性条件"&gt;最短路問題の最適性条件
+&lt;/h2&gt;&lt;p&gt;頂点集合を $N$，辺集合を $A$，辺 (u, v) のコストを $c_{uv}$ とします．始点 s から各頂点 v への有向パスの距離の上界を $d(v)$ で表し，これを距離ラベルと呼びます．特に，$d(s) = 0$ です．各頂点 $v \in N$ について，$d(v)$ が始点 s から頂点 v の最短路の長さであるための必要十分条件は以下が成り立つことです．&lt;/p&gt;
 $$
 \begin{equation}
 d(v) \le d(u) + c_{uv} \quad \forall (u, v) \in A
 \end{equation}
-$$&lt;p>不等式 (1) は，各辺 $(u, v) \in A$ について，頂点 v への距離は頂点 u への距離 + $c_{uv}$ 以下であることを表しています．&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;p>まず，必要条件であることを示します．&lt;br>
-対偶をとり，$d(v) \gt d(u) + c_{uv}$ ならば，距離ラベルが最短路の長さではないことを示します．&lt;br>
-$d(v) \gt d(u) + c_{uv}$ であるような辺があれば，頂点 u を経由することで頂点 v への距離を改善することができます．&lt;br>
-したがって，距離ラベル $d$ は最短路の長さではありません．&lt;/p>
-&lt;p>次に，十分条件であることを示します．&lt;br>
-頂点 s から頂点 v への任意の有向パスが $s = i_1 \rightarrow i_2 \rightarrow &amp;hellip; \rightarrow i_{k-1} \rightarrow i_k = v$ であったとします．&lt;br>
-不等式 (1) から以下の式がそれぞれ成り立ちます．&lt;/p>
+$$&lt;p&gt;不等式 (1) は，各辺 $(u, v) \in A$ について，頂点 v への距離は頂点 u への距離 + $c_{uv}$ 以下であることを表しています．&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;p&gt;まず，必要条件であることを示します．&lt;br&gt;
+対偶をとり，$d(v) \gt d(u) + c_{uv}$ ならば，距離ラベルが最短路の長さではないことを示します．&lt;br&gt;
+$d(v) \gt d(u) + c_{uv}$ であるような辺があれば，頂点 u を経由することで頂点 v への距離を改善することができます．&lt;br&gt;
+したがって，距離ラベル $d$ は最短路の長さではありません．&lt;/p&gt;
+&lt;p&gt;次に，十分条件であることを示します．&lt;br&gt;
+頂点 s から頂点 v への任意の有向パスが $s = i_1 \rightarrow i_2 \rightarrow ... \rightarrow i_{k-1} \rightarrow i_k = v$ であったとします．&lt;br&gt;
+不等式 (1) から以下の式がそれぞれ成り立ちます．&lt;/p&gt;
 $$
 \begin{aligned}
 d(v) =\; &amp; d(i_k) &amp;&amp; \le\; d(i_{k - 1}) &amp;&amp; +\; c_{i_{k - 1}i_{k}}, \\
@@ -832,179 +832,179 @@ d(v) =\; &amp; d(i_k) &amp;&amp; \le\; d(i_{k - 1}) &amp;&amp; +\; c_{i_{k - 1}i
 &amp; \vdots \\
 &amp; d(i_{2}) &amp;&amp; \le\; d(i_{1}) &amp;&amp; +\; c_{i_{1}i_{2}} = c_{i_{1}i_{2}}.
 \end{aligned}
-$$&lt;p>式をそれぞれ代入すると&lt;/p>
+$$&lt;p&gt;式をそれぞれ代入すると&lt;/p&gt;
 $$
 d(v) = d(i_{k}) \le c_{i_{k-1}i_{k}} + c_{i_{k-2}i_{k-1}} + \dots + c_{i_{1}i_{2}} = \sum_{(u, v) \in P} c_{uv}
-$$&lt;p>となり，$d(v)$ は，始点 s から頂点 v への任意の有向パスのコストの合計の下界になります．
-$d(v)$ は始点 s から頂点 v への任意の有向パスの下界かつ上界なので，距離ラベル $d(v)$ は最短路の長さです．&lt;/p>
-&lt;p>以上のことから，「各頂点 $v \in N$ について距離ラベル $d(v)$ が最短路の長さである」の必要十分条件は，「各辺 $(u, v) \in A$ について $d(v) \le d(u) + c_{uv}$ を満たす」であることがわかりました．&lt;/p>
-&lt;/details>
-&lt;h2 id="reduced-arc-length-の性質">reduced arc length の性質
-&lt;/h2>&lt;p>ある距離ラベル $d$ に対し，$c_{uv}^{d} = c_{uv} + d(u) - d(v)$ を reduced arc length と呼びます．reduced arc length には次の性質があります．&lt;/p>
-&lt;ol>
-&lt;li>任意の閉路 $W$ について，$\sum_{(u, v) \in W} c_{uv}^{d} = \sum_{(u, v) \in W} c_{uv}$&lt;/li>
-&lt;li>頂点 k から頂点 l への任意の有向パス $P$ について，$\sum_{(u, v) \in P} c_{uv}^{d} = \sum_{(u, v) \in P} c_{uv} + d(k) - d(l)$&lt;/li>
-&lt;li>距離ラベル $d$ が最適ならば，すべての辺 (u, v) について $c_{uv}^{d} \ge 0$ が成り立つ&lt;/li>
-&lt;/ol>
-&lt;details>&lt;summary>性質 1 の証明&lt;/summary>
+$$&lt;p&gt;となり，$d(v)$ は，始点 s から頂点 v への任意の有向パスのコストの合計の下界になります．
+$d(v)$ は始点 s から頂点 v への任意の有向パスの下界かつ上界なので，距離ラベル $d(v)$ は最短路の長さです．&lt;/p&gt;
+&lt;p&gt;以上のことから，「各頂点 $v \in N$ について距離ラベル $d(v)$ が最短路の長さである」の必要十分条件は，「各辺 $(u, v) \in A$ について $d(v) \le d(u) + c_{uv}$ を満たす」であることがわかりました．&lt;/p&gt;
+&lt;/details&gt;
+&lt;h2 id="reduced-arc-length-の性質"&gt;reduced arc length の性質
+&lt;/h2&gt;&lt;p&gt;ある距離ラベル $d$ に対し，$c_{uv}^{d} = c_{uv} + d(u) - d(v)$ を reduced arc length と呼びます．reduced arc length には次の性質があります．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;任意の閉路 $W$ について，$\sum_{(u, v) \in W} c_{uv}^{d} = \sum_{(u, v) \in W} c_{uv}$&lt;/li&gt;
+&lt;li&gt;頂点 k から頂点 l への任意の有向パス $P$ について，$\sum_{(u, v) \in P} c_{uv}^{d} = \sum_{(u, v) \in P} c_{uv} + d(k) - d(l)$&lt;/li&gt;
+&lt;li&gt;距離ラベル $d$ が最適ならば，すべての辺 (u, v) について $c_{uv}^{d} \ge 0$ が成り立つ&lt;/li&gt;
+&lt;/ol&gt;
+&lt;details&gt;&lt;summary&gt;性質 1 の証明&lt;/summary&gt;
 $$
 \begin{aligned}
 \sum_{(u, v) \in W} c_{uv}^{d} &amp;= \sum_{(u, v) \in W} (c_{uv} + d(u) - d(v)) \\
 &amp;= \sum_{(u, v) \in W} c_{uv} + \sum_{(u, v) \in W} (d(u) - d(v)) \\
 &amp;= \sum_{(u, v) \in W} c_{uv} \\
 \end{aligned}
-$$&lt;p>任意の有向閉路 $W$ において，頂点 u は $+d(u)$としてちょうど 1 回，$-d(u)$ としてちょうど 1 回出現するため，$\sum_{(u, v) \in W} (d(u) - d(v)) = 0$ が成り立ちます．&lt;/p>
-&lt;/details>
-&lt;details>&lt;summary>性質 2 の証明&lt;/summary>
+$$&lt;p&gt;任意の有向閉路 $W$ において，頂点 u は $+d(u)$としてちょうど 1 回，$-d(u)$ としてちょうど 1 回出現するため，$\sum_{(u, v) \in W} (d(u) - d(v)) = 0$ が成り立ちます．&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;&lt;summary&gt;性質 2 の証明&lt;/summary&gt;
 $$
 \begin{aligned}
 \sum_{(u, v) \in P} c_{uv}^{d} &amp;= \sum_{(u, v) \in P} (c_{uv} + d(u) - d(v)) \\
 &amp;= \sum_{(u, v) \in P} c_{uv} + \sum_{(u, v) \in P} (d(u) - d(v)) \\
 &amp;= \sum_{(u, v) \in P} c_{uv} + d(k) - d(l) \\
 \end{aligned}
-$$&lt;p>頂点 k と頂点 l 以外の頂点は，$+d(u)$ としてちょうど 1 回，$-d(u)$ としてちょうど 1 回出現するため互いに打ち消し合います．&lt;br>
-頂点 k は $+d(k)$ として，頂点 $l$ は $-d(l)$ としてちょうど 1 回出現します．&lt;/p>
-&lt;/details>
-&lt;details>&lt;summary>性質 3 の証明&lt;/summary>
+$$&lt;p&gt;頂点 k と頂点 l 以外の頂点は，$+d(u)$ としてちょうど 1 回，$-d(u)$ としてちょうど 1 回出現するため互いに打ち消し合います．&lt;br&gt;
+頂点 k は $+d(k)$ として，頂点 $l$ は $-d(l)$ としてちょうど 1 回出現します．&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;&lt;summary&gt;性質 3 の証明&lt;/summary&gt;
 最適性条件から直ちに言えます
-&lt;/details>
-&lt;p>次節からは，reduced arc length の性質を使ったアルゴリズムと問題を見ていきます．&lt;/p>
-&lt;h2 id="johnsons-algorithm">Johnson&amp;rsquo;s algorithm
-&lt;/h2>&lt;p>任意の 2 頂点の組 (u, v) に対して頂点 u から頂点 v の最短路を求める問題を全点対最短路問題と呼びます．&lt;br>
-Johnson&amp;rsquo;s algorithm は全点対最短路問題を解くアルゴリズムです．&lt;/p>
-&lt;p>頂点数が $n$ のとき，単一始点最短路問題を n 回解くことによって全点対最短路を求めることができます．&lt;br>
-ただし，グラフにコストが負の辺があると，単一始点最路問題を解くのに Dijkstra 法を使うことができません．そこで，グラフのコストを reduced arc length に変換したグラフ上で最短路を求めることにします．reduced arc length の性質 3 から，最適距離ラベル $d$ に対する reduced arc length のコストはすべて 0 以上であるため Dijkstra 法を使うことができます．&lt;br>
-変換したグラフ上で最短距離を求めたあと，性質 2 を使って元のグラフの距離に変換します．&lt;br>
-最適距離ラベルは Bellman–Ford 法を使い求めることができます．負閉路が見つかった場合はアルゴリズムを終了します．&lt;/p>
-&lt;p>Dijkstra 法に二分ヒープを使うとき，Bellman–Ford 法に $O(nm)$，Dijkstra 法に $O((n + m) \log n)$ かかるため，計算量は全体として $O(nm + n ((n + m) \log n))$ となります．&lt;/p>
-&lt;p>例として，&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_1_C&amp;amp;lang=ja" target="_blank" rel="noopener"
->AOJ - All Pairs Shortest Path&lt;/a> を解きます．&lt;br>
-与えられるグラフは強連結ではないため，人工頂点 s を追加し，s から他のすべての頂点に重さ 0 の辺を張ります．この s を始点として Bellman-Ford 法を使うことで最適距離ラベルを求めることができます．&lt;br>
-実装では人工頂点を追加するのではなく， Bellman-Ford の初期解をすべて 0 とすることで対応しています．&lt;br>
+&lt;/details&gt;
+&lt;p&gt;次節からは，reduced arc length の性質を使ったアルゴリズムと問題を見ていきます．&lt;/p&gt;
+&lt;h2 id="johnsons-algorithm"&gt;Johnson&amp;rsquo;s algorithm
+&lt;/h2&gt;&lt;p&gt;任意の 2 頂点の組 (u, v) に対して頂点 u から頂点 v の最短路を求める問題を全点対最短路問題と呼びます．&lt;br&gt;
+Johnson&amp;rsquo;s algorithm は全点対最短路問題を解くアルゴリズムです．&lt;/p&gt;
+&lt;p&gt;頂点数が $n$ のとき，単一始点最短路問題を n 回解くことによって全点対最短路を求めることができます．&lt;br&gt;
+ただし，グラフにコストが負の辺があると，単一始点最路問題を解くのに Dijkstra 法を使うことができません．そこで，グラフのコストを reduced arc length に変換したグラフ上で最短路を求めることにします．reduced arc length の性質 3 から，最適距離ラベル $d$ に対する reduced arc length のコストはすべて 0 以上であるため Dijkstra 法を使うことができます．&lt;br&gt;
+変換したグラフ上で最短距離を求めたあと，性質 2 を使って元のグラフの距離に変換します．&lt;br&gt;
+最適距離ラベルは Bellman–Ford 法を使い求めることができます．負閉路が見つかった場合はアルゴリズムを終了します．&lt;/p&gt;
+&lt;p&gt;Dijkstra 法に二分ヒープを使うとき，Bellman–Ford 法に $O(nm)$，Dijkstra 法に $O((n + m) \log n)$ かかるため，計算量は全体として $O(nm + n ((n + m) \log n))$ となります．&lt;/p&gt;
+&lt;p&gt;例として，&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_1_C&amp;amp;lang=ja" target="_blank" rel="noopener"
+&gt;AOJ - All Pairs Shortest Path&lt;/a&gt; を解きます．&lt;br&gt;
+与えられるグラフは強連結ではないため，人工頂点 s を追加し，s から他のすべての頂点に重さ 0 の辺を張ります．この s を始点として Bellman-Ford 法を使うことで最適距離ラベルを求めることができます．&lt;br&gt;
+実装では人工頂点を追加するのではなく， Bellman-Ford の初期解をすべて 0 とすることで対応しています．&lt;br&gt;
 &lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9647270#1" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="abc237-e---skiing">&lt;a class="link" href="https://atcoder.jp/contests/abc237/tasks/abc237_e" target="_blank" rel="noopener"
->ABC237 E - Skiing&lt;/a>
-&lt;/h2>&lt;p>問題概要&lt;br>
-$N$ 頂点，$M$ 辺の強連結の有向グラフと各頂点 u の高さ $H(u)$ が与えられる．$H(u) \ge H(v)$ としたとき，頂点 u から頂点 v にはコスト $H(v) - H(u)$ の辺が，頂点 v から頂点 u にはコスト $2(H(u) - H(v))$ の辺が張られている．頂点 1 から各頂点への最短距離の中で最も小さいものを求めよ．&lt;/p>
-&lt;p>負辺のあるグラフの最短路問題なので Bellman–Ford 法を使えば答えが求まりますが，Bellman–Ford 法の計算量は $O(nm)$ なので TLE になってしまいます．
-そこで，グラフのコストを reduced arc length に変換したグラフ上で最短路を求めることにします．&lt;/p>
-&lt;p>まず，不等式 (1) を満たすような距離ラベルを考えます．&lt;br>
-ある距離ラベル $d$ に対して，$H(u) \ge H(v)$ のとき，$c_{uv}^{d}$ と $c_{vu}^{d}$ は以下のように表せます．&lt;/p>
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="abc237-e---skiing"&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc237/tasks/abc237_e" target="_blank" rel="noopener"
+&gt;ABC237 E - Skiing&lt;/a&gt;
+&lt;/h2&gt;&lt;p&gt;問題概要&lt;br&gt;
+$N$ 頂点，$M$ 辺の強連結の有向グラフと各頂点 u の高さ $H(u)$ が与えられる．$H(u) \ge H(v)$ としたとき，頂点 u から頂点 v にはコスト $H(v) - H(u)$ の辺が，頂点 v から頂点 u にはコスト $2(H(u) - H(v))$ の辺が張られている．頂点 1 から各頂点への最短距離の中で最も小さいものを求めよ．&lt;/p&gt;
+&lt;p&gt;負辺のあるグラフの最短路問題なので Bellman–Ford 法を使えば答えが求まりますが，Bellman–Ford 法の計算量は $O(nm)$ なので TLE になってしまいます．
+そこで，グラフのコストを reduced arc length に変換したグラフ上で最短路を求めることにします．&lt;/p&gt;
+&lt;p&gt;まず，不等式 (1) を満たすような距離ラベルを考えます．&lt;br&gt;
+ある距離ラベル $d$ に対して，$H(u) \ge H(v)$ のとき，$c_{uv}^{d}$ と $c_{vu}^{d}$ は以下のように表せます．&lt;/p&gt;
 $$
 \begin{aligned}
 c_{uv}^{d} &amp;= c_{uv} + d(u) - d(v) = H(v) - H(u) + d(u) - d(v) \\
 c_{vu}^{d} &amp;= c_{vu} + d(v) - d(u) = 2(H(u)- H(v)) + d(v) - d(u) \\
 \end{aligned}
-$$&lt;p>u と v についてまとめて式を整理します．&lt;/p>
+$$&lt;p&gt;u と v についてまとめて式を整理します．&lt;/p&gt;
 $$
 \begin{aligned}
 c_{uv}^{d} &amp;= (H(v) - d(v)) - (H(u) - d(u)) \\
 c_{vu}^{d} &amp;= (2H(u) - d(u)) - (2H(v) - d(v)) \\
 \end{aligned}
-$$&lt;p>$c_{uv}^{d} \ge 0$ かつ $c_{vu}^{d} \ge 0$ にしたいので，各頂点 u について $d(u) = H(u)$ とすると以下のようになります．&lt;/p>
+$$&lt;p&gt;$c_{uv}^{d} \ge 0$ かつ $c_{vu}^{d} \ge 0$ にしたいので，各頂点 u について $d(u) = H(u)$ とすると以下のようになります．&lt;/p&gt;
 $$
 \begin{aligned}
 c_{uv}^{d} &amp;= (H(v) - H(v)) - (H(u) - H(u)) = 0 \\
 c_{vu}^{d} &amp;= (2H(u) - H(u)) - (2H(v) - H(v)) = H(u) - H(v)\\
 \end{aligned}
-$$&lt;p>以上のことから，次のように問題を言い換えることができます．&lt;br>
-$N$ 頂点，$M$ 辺の強連結の有向グラフと各頂点 u の高さ $H(u)$ が与えられる．$H(u) \ge H(v)$ のとき，頂点 u から頂点 v にはコスト 0 の辺が，頂点 v から頂点 u にはコスト $H(u) - H(v)$ の辺が張られている．頂点 1 から各頂点への最短距離の中で最も小さいものを求めよ．&lt;/p>
-&lt;p>すべての辺のコストは 0 以上なので Dijkstra 法で求めることができます．&lt;br>
-求まる値は変換したグラフ上での値なので，$distance[u] - H[0] + H[u]$ として元のグラフ上での値に戻します．&lt;/p>
-&lt;p>&lt;a class="link" href="https://atcoder.jp/contests/abc237/submissions/57838602" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
->Network Flows: Pearson New International Edition&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Johnson%27s_algorithm" target="_blank" rel="noopener"
->Johnson&amp;rsquo;s algorithm&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://atcoder.jp/contests/abc237/editorial/3339" target="_blank" rel="noopener"
->E - Skiing 解説&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
-&lt;/h2>&lt;p>Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p>
-&lt;ul>
-&lt;li>点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li>
-&lt;li>どの図形のどの部分も辺をたどると地面につながる&lt;/li>
-&lt;li>2 人のプレーヤーは交互に図形から 1 つの辺を選んで取り除く．選んだ辺を取り除くことで地面とつながらなくなってしまう部分は辺と同時に取り除かれる&lt;/li>
-&lt;li>最後の辺をとったプレーヤーの勝ち&lt;/li>
-&lt;/ul>
-&lt;p>Green Hackenbush は有限型不偏ゲームなので各図形のグランディ数を求めることができます．今回は木と呼ばれる図形のグランディ数を求めていきます．&lt;br>
-節 2 と 節 3 では Green Hackenbush で一般に適用できる性質を確認します．節 4 と 節 5 ではこの性質を利用し具体的な図形のグランディ数を求める方法を示します．&lt;br>
-最後に節 6 で Green Hackenbush の木のグランディ数を求める問題を紹介します．&lt;/p>
-&lt;h2 id="2-地面の点の移動">2. 地面の点の移動
-&lt;/h2>&lt;p>地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．&lt;/p>
-&lt;img src="images/地面の点の移動.png" width="50%">
-&lt;h2 id="3-コロン原理colon-principle">3. コロン原理(Colon Principle)
-&lt;/h2>&lt;p>コロン原理&lt;br>
-図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．&lt;/p>
-&lt;img src="images/コロン原理.png" width="50%">
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;p>$g(H \cup_a G) = g(K \cup_a G)$ ということは，$g(H \cup_a G) \ xor \ g(K \cup_a G) = 0$ なので，$H \cup_a G と K \cup_a G$ の直和ゲームは後手必勝と言い換えることができます．よって，「$g(H) = g(K)$ を満たすならば後手必勝」を示します．
-また，$H \cup_a G$ と $K \cup_a G$ は対称なので，$H \cup_a G$ から辺を取り除く場合のみ考えます．&lt;/p>
-&lt;p>先手の手は，「1. $G$ から辺を取り除く」，「2. $H$ から辺を取り除く」の 2 通りです．先手の各手について後手の必勝手を考えます．
-グランディ数の定義より，グランディ数 g の局面からはグランディ数 g 未満の局面に遷移できることを利用します．&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>先手が $H \cup_a G$ の $G$ から辺を取り除く場合&lt;/p>
-&lt;ul>
-&lt;li>後手は $K \cup_a G$ の $G$ から同じ辺を取り除けばいい&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>先手が $H ∪_a G$ の $H$ から辺を取り除き，$H^\prime $ にした場合&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$g(H^\prime) &amp;lt; g(H)$ の場合&lt;/p>
-&lt;ul>
-&lt;li>仮定より $g(H) = g(K)$ なので，$K$ から辺を取り除いて移行できる $K^\prime$ で，$g(K^\prime) = g(H^\prime)$ となるものがある．後手は $K → K^\prime$ となる辺を取り除けばいい．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$g(H^\prime) &amp;gt; g(H)$ の場合&lt;/p>
-&lt;ul>
-&lt;li>$H^\prime$ から辺を取り除いて移行できる $H^{\prime \prime}$ で， $g(H^{\prime \prime}) = g(H) = g(K)$ となるものがある．後手は $H^\prime → H^{\prime \prime}$ となる辺を取り除けばいい．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ol>
-&lt;/details>
-&lt;p>コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;/p>
-&lt;img src="images/コロン原理の例.png" width="50%">
-&lt;h2 id="4-棒のグランディ数">4. 棒のグランディ数
-&lt;/h2>&lt;p>まず，1 つの棒のみからなるゲームのグランディ数について考えます．&lt;br>
-長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．&lt;/p>
-&lt;img src="images/棒のグランディ数.png" width="50%">
-&lt;p>次に，複数の棒からなるゲームのグランディ数を考えます．&lt;br>
-各棒は独立したゲームの局面とみなすことができるので，複数の棒からなるゲームのグランディ数は各棒のグランディ数の xor で求めることができます．&lt;br>
-例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \ xor \ 1 \ xor \ 2 = 2$ となります．&lt;/p>
-&lt;img src="images/複数の棒のグランディ数.png" width="50%">
-&lt;p>最後に，地面のある一点から複数の棒が伸びる図形のグランディ数を考えます．&lt;br>
-地面の点は自由に移動することができるため，地面のある一点から複数の棒が伸びる図形は，複数の棒からなるゲームに帰着することができます．&lt;br>
-よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．&lt;/p>
-&lt;img src="images/地上の点から複数の棒.png" width="75%">
-&lt;h2 id="5-木のグランディ数">5. 木のグランディ数
-&lt;/h2>&lt;p>コロン原理を順次適用していくことによって，木のグランディ数を求めることができます．&lt;br>
-地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．&lt;/p>
-&lt;img src="images/コロン原理_木.png" width="50%">
-&lt;p>以下に例を示します．&lt;br>
-点 a からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
-点 b からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
-点 c からは，長さ 2 の棒と長さ 3 の棒と長さ 1 の棒が伸びています．よって，長さ 2 xor 3 xor 1 = 0 の棒に置き換えることができます．&lt;br>
-以上のことからこの木のグランディ数は 0 と求めることができました．&lt;/p>
-&lt;img src="images/木のグランディ数の例.png" width="75%">
-&lt;h2 id="6-agc017-d---game-on-tree">6. AGC017 D - Game on Tree
-&lt;/h2>&lt;p>Green Hackenbush の木のグランディ数を求める問題として，&lt;a class="link" href="https://atcoder.jp/contests/agc017/tasks/agc017_d" target="_blank" rel="noopener"
->D - Game on Tree&lt;/a> があります．&lt;br>
-ある頂点のグランディ数は，「自分の子のグランディ数 + 1」 の xor を使って求めことができるので，根から深さ優先探索をすることで木のグランディ数を求めることができます．&lt;br>
+$$&lt;p&gt;以上のことから，次のように問題を言い換えることができます．&lt;br&gt;
+$N$ 頂点，$M$ 辺の強連結の有向グラフと各頂点 u の高さ $H(u)$ が与えられる．$H(u) \ge H(v)$ のとき，頂点 u から頂点 v にはコスト 0 の辺が，頂点 v から頂点 u にはコスト $H(u) - H(v)$ の辺が張られている．頂点 1 から各頂点への最短距離の中で最も小さいものを求めよ．&lt;/p&gt;
+&lt;p&gt;すべての辺のコストは 0 以上なので Dijkstra 法で求めることができます．&lt;br&gt;
+求まる値は変換したグラフ上での値なので，$distance[u] - H[0] + H[u]$ として元のグラフ上での値に戻します．&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc237/submissions/57838602" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.amazon.co.jp/dp/1292042702" target="_blank" rel="noopener"
+&gt;Network Flows: Pearson New International Edition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Johnson%27s_algorithm" target="_blank" rel="noopener"
+&gt;Johnson&amp;rsquo;s algorithm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://atcoder.jp/contests/abc237/editorial/3339" target="_blank" rel="noopener"
+&gt;E - Skiing 解説&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" /&gt;&lt;h2 id="1-はじめに"&gt;1. はじめに
+&lt;/h2&gt;&lt;p&gt;Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li&gt;
+&lt;li&gt;どの図形のどの部分も辺をたどると地面につながる&lt;/li&gt;
+&lt;li&gt;2 人のプレーヤーは交互に図形から 1 つの辺を選んで取り除く．選んだ辺を取り除くことで地面とつながらなくなってしまう部分は辺と同時に取り除かれる&lt;/li&gt;
+&lt;li&gt;最後の辺をとったプレーヤーの勝ち&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Green Hackenbush は有限型不偏ゲームなので各図形のグランディ数を求めることができます．今回は木と呼ばれる図形のグランディ数を求めていきます．&lt;br&gt;
+節 2 と 節 3 では Green Hackenbush で一般に適用できる性質を確認します．節 4 と 節 5 ではこの性質を利用し具体的な図形のグランディ数を求める方法を示します．&lt;br&gt;
+最後に節 6 で Green Hackenbush の木のグランディ数を求める問題を紹介します．&lt;/p&gt;
+&lt;h2 id="2-地面の点の移動"&gt;2. 地面の点の移動
+&lt;/h2&gt;&lt;p&gt;地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．&lt;/p&gt;
+&lt;img src="images/地面の点の移動.png" width="50%"&gt;
+&lt;h2 id="3-コロン原理colon-principle"&gt;3. コロン原理(Colon Principle)
+&lt;/h2&gt;&lt;p&gt;コロン原理&lt;br&gt;
+図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．&lt;/p&gt;
+&lt;img src="images/コロン原理.png" width="50%"&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;p&gt;$g(H \cup_a G) = g(K \cup_a G)$ ということは，$g(H \cup_a G) \\ xor \\ g(K \cup_a G) = 0$ なので，$H \cup_a G と K \cup_a G$ の直和ゲームは後手必勝と言い換えることができます．よって，「$g(H) = g(K)$ を満たすならば後手必勝」を示します．
+また，$H \cup_a G$ と $K \cup_a G$ は対称なので，$H \cup_a G$ から辺を取り除く場合のみ考えます．&lt;/p&gt;
+&lt;p&gt;先手の手は，「1. $G$ から辺を取り除く」，「2. $H$ から辺を取り除く」の 2 通りです．先手の各手について後手の必勝手を考えます．
+グランディ数の定義より，グランディ数 g の局面からはグランディ数 g 未満の局面に遷移できることを利用します．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;先手が $H \cup_a G$ の $G$ から辺を取り除く場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;後手は $K \cup_a G$ の $G$ から同じ辺を取り除けばいい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;先手が $H ∪_a G$ の $H$ から辺を取り除き，$H^\prime $ にした場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$g(H^\prime) &lt; g(H)$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;仮定より $g(H) = g(K)$ なので，$K$ から辺を取り除いて移行できる $K^\prime$ で，$g(K^\prime) = g(H^\prime)$ となるものがある．後手は $K → K^\prime$ となる辺を取り除けばいい．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$g(H^\prime) &gt; g(H)$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H^\prime$ から辺を取り除いて移行できる $H^{\prime \prime}$ で， $g(H^{\prime \prime}) = g(H) = g(K)$ となるものがある．後手は $H^\prime → H^{\prime \prime}$ となる辺を取り除けばいい．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/details&gt;
+&lt;p&gt;コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;/p&gt;
+&lt;img src="images/コロン原理の例.png" width="50%"&gt;
+&lt;h2 id="4-棒のグランディ数"&gt;4. 棒のグランディ数
+&lt;/h2&gt;&lt;p&gt;まず，1 つの棒のみからなるゲームのグランディ数について考えます．&lt;br&gt;
+長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．&lt;/p&gt;
+&lt;img src="images/棒のグランディ数.png" width="50%"&gt;
+&lt;p&gt;次に，複数の棒からなるゲームのグランディ数を考えます．&lt;br&gt;
+各棒は独立したゲームの局面とみなすことができるので，複数の棒からなるゲームのグランディ数は各棒のグランディ数の xor で求めることができます．&lt;br&gt;
+例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \\ xor \\ 1 \\ xor \\ 2 = 2$ となります．&lt;/p&gt;
+&lt;img src="images/複数の棒のグランディ数.png" width="50%"&gt;
+&lt;p&gt;最後に，地面のある一点から複数の棒が伸びる図形のグランディ数を考えます．&lt;br&gt;
+地面の点は自由に移動することができるため，地面のある一点から複数の棒が伸びる図形は，複数の棒からなるゲームに帰着することができます．&lt;br&gt;
+よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．&lt;/p&gt;
+&lt;img src="images/地上の点から複数の棒.png" width="75%"&gt;
+&lt;h2 id="5-木のグランディ数"&gt;5. 木のグランディ数
+&lt;/h2&gt;&lt;p&gt;コロン原理を順次適用していくことによって，木のグランディ数を求めることができます．&lt;br&gt;
+地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．&lt;/p&gt;
+&lt;img src="images/コロン原理_木.png" width="50%"&gt;
+&lt;p&gt;以下に例を示します．&lt;br&gt;
+点 a からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br&gt;
+点 b からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br&gt;
+点 c からは，長さ 2 の棒と長さ 3 の棒と長さ 1 の棒が伸びています．よって，長さ 2 xor 3 xor 1 = 0 の棒に置き換えることができます．&lt;br&gt;
+以上のことからこの木のグランディ数は 0 と求めることができました．&lt;/p&gt;
+&lt;img src="images/木のグランディ数の例.png" width="75%"&gt;
+&lt;h2 id="6-agc017-d---game-on-tree"&gt;6. AGC017 D - Game on Tree
+&lt;/h2&gt;&lt;p&gt;Green Hackenbush の木のグランディ数を求める問題として，&lt;a class="link" href="https://atcoder.jp/contests/agc017/tasks/agc017_d" target="_blank" rel="noopener"
+&gt;D - Game on Tree&lt;/a&gt; があります．&lt;br&gt;
+ある頂点のグランディ数は，「自分の子のグランディ数 + 1」 の xor を使って求めことができるので，根から深さ優先探索をすることで木のグランディ数を求めることができます．&lt;br&gt;
 &lt;a class="link" href="https://atcoder.jp/contests/agc017/submissions/56666314" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.sugakushobo.co.jp/903342_76_mae.html" target="_blank" rel="noopener"
->石取りゲームの数学&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Hackenbush" target="_blank" rel="noopener"
->Hackenbush&lt;/a>&lt;/li>
-&lt;/ul></description></item></channel></rss>
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.sugakushobo.co.jp/903342_76_mae.html" target="_blank" rel="noopener"
+&gt;石取りゲームの数学&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Hackenbush" target="_blank" rel="noopener"
+&gt;Hackenbush&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

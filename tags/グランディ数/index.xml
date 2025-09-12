@@ -1,86 +1,86 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グランディ数 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><description>Recent content in グランディ数 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" />&lt;h2 id="1-はじめに">1. はじめに
-&lt;/h2>&lt;p>Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p>
-&lt;ul>
-&lt;li>点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li>
-&lt;li>どの図形のどの部分も辺をたどると地面につながる&lt;/li>
-&lt;li>2 人のプレーヤーは交互に図形から 1 つの辺を選んで取り除く．選んだ辺を取り除くことで地面とつながらなくなってしまう部分は辺と同時に取り除かれる&lt;/li>
-&lt;li>最後の辺をとったプレーヤーの勝ち&lt;/li>
-&lt;/ul>
-&lt;p>Green Hackenbush は有限型不偏ゲームなので各図形のグランディ数を求めることができます．今回は木と呼ばれる図形のグランディ数を求めていきます．&lt;br>
-節 2 と 節 3 では Green Hackenbush で一般に適用できる性質を確認します．節 4 と 節 5 ではこの性質を利用し具体的な図形のグランディ数を求める方法を示します．&lt;br>
-最後に節 6 で Green Hackenbush の木のグランディ数を求める問題を紹介します．&lt;/p>
-&lt;h2 id="2-地面の点の移動">2. 地面の点の移動
-&lt;/h2>&lt;p>地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．&lt;/p>
-&lt;img src="images/地面の点の移動.png" width="50%">
-&lt;h2 id="3-コロン原理colon-principle">3. コロン原理(Colon Principle)
-&lt;/h2>&lt;p>コロン原理&lt;br>
-図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．&lt;/p>
-&lt;img src="images/コロン原理.png" width="50%">
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;p>$g(H \cup_a G) = g(K \cup_a G)$ ということは，$g(H \cup_a G) \ xor \ g(K \cup_a G) = 0$ なので，$H \cup_a G と K \cup_a G$ の直和ゲームは後手必勝と言い換えることができます．よって，「$g(H) = g(K)$ を満たすならば後手必勝」を示します．
-また，$H \cup_a G$ と $K \cup_a G$ は対称なので，$H \cup_a G$ から辺を取り除く場合のみ考えます．&lt;/p>
-&lt;p>先手の手は，「1. $G$ から辺を取り除く」，「2. $H$ から辺を取り除く」の 2 通りです．先手の各手について後手の必勝手を考えます．
-グランディ数の定義より，グランディ数 g の局面からはグランディ数 g 未満の局面に遷移できることを利用します．&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>先手が $H \cup_a G$ の $G$ から辺を取り除く場合&lt;/p>
-&lt;ul>
-&lt;li>後手は $K \cup_a G$ の $G$ から同じ辺を取り除けばいい&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>先手が $H ∪_a G$ の $H$ から辺を取り除き，$H^\prime $ にした場合&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$g(H^\prime) &amp;lt; g(H)$ の場合&lt;/p>
-&lt;ul>
-&lt;li>仮定より $g(H) = g(K)$ なので，$K$ から辺を取り除いて移行できる $K^\prime$ で，$g(K^\prime) = g(H^\prime)$ となるものがある．後手は $K → K^\prime$ となる辺を取り除けばいい．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$g(H^\prime) &amp;gt; g(H)$ の場合&lt;/p>
-&lt;ul>
-&lt;li>$H^\prime$ から辺を取り除いて移行できる $H^{\prime \prime}$ で， $g(H^{\prime \prime}) = g(H) = g(K)$ となるものがある．後手は $H^\prime → H^{\prime \prime}$ となる辺を取り除けばいい．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ol>
-&lt;/details>
-&lt;p>コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;/p>
-&lt;img src="images/コロン原理の例.png" width="50%">
-&lt;h2 id="4-棒のグランディ数">4. 棒のグランディ数
-&lt;/h2>&lt;p>まず，1 つの棒のみからなるゲームのグランディ数について考えます．&lt;br>
-長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．&lt;/p>
-&lt;img src="images/棒のグランディ数.png" width="50%">
-&lt;p>次に，複数の棒からなるゲームのグランディ数を考えます．&lt;br>
-各棒は独立したゲームの局面とみなすことができるので，複数の棒からなるゲームのグランディ数は各棒のグランディ数の xor で求めることができます．&lt;br>
-例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \ xor \ 1 \ xor \ 2 = 2$ となります．&lt;/p>
-&lt;img src="images/複数の棒のグランディ数.png" width="50%">
-&lt;p>最後に，地面のある一点から複数の棒が伸びる図形のグランディ数を考えます．&lt;br>
-地面の点は自由に移動することができるため，地面のある一点から複数の棒が伸びる図形は，複数の棒からなるゲームに帰着することができます．&lt;br>
-よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．&lt;/p>
-&lt;img src="images/地上の点から複数の棒.png" width="75%">
-&lt;h2 id="5-木のグランディ数">5. 木のグランディ数
-&lt;/h2>&lt;p>コロン原理を順次適用していくことによって，木のグランディ数を求めることができます．&lt;br>
-地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．&lt;/p>
-&lt;img src="images/コロン原理_木.png" width="50%">
-&lt;p>以下に例を示します．&lt;br>
-点 a からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
-点 b からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br>
-点 c からは，長さ 2 の棒と長さ 3 の棒と長さ 1 の棒が伸びています．よって，長さ 2 xor 3 xor 1 = 0 の棒に置き換えることができます．&lt;br>
-以上のことからこの木のグランディ数は 0 と求めることができました．&lt;/p>
-&lt;img src="images/木のグランディ数の例.png" width="75%">
-&lt;h2 id="6-agc017-d---game-on-tree">6. AGC017 D - Game on Tree
-&lt;/h2>&lt;p>Green Hackenbush の木のグランディ数を求める問題として，&lt;a class="link" href="https://atcoder.jp/contests/agc017/tasks/agc017_d" target="_blank" rel="noopener"
->D - Game on Tree&lt;/a> があります．&lt;br>
-ある頂点のグランディ数は，「自分の子のグランディ数 + 1」 の xor を使って求めことができるので，根から深さ優先探索をすることで木のグランディ数を求めることができます．&lt;br>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グランディ数 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><description>Recent content in グランディ数 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 10 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>Green Hackenbush の木のグランディ数</title><link>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</link><pubDate>Tue, 10 Sep 2024 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/</guid><description>&lt;img src="https://miti-7.github.io/post/green-hackenbush-%E3%81%AE%E6%9C%A8%E3%81%AE%E3%82%B0%E3%83%A9%E3%83%B3%E3%83%87%E3%82%A3%E6%95%B0/images/%E3%82%B3%E3%83%AD%E3%83%B3%E5%8E%9F%E7%90%86%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Green Hackenbush の木のグランディ数" /&gt;&lt;h2 id="1-はじめに"&gt;1. はじめに
+&lt;/h2&gt;&lt;p&gt;Green Hackenbush は以下のルールをもつ有限型不偏ゲームです．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;点線で表された地面，点，点と点を結ぶ有限個の辺からなる図形がある&lt;/li&gt;
+&lt;li&gt;どの図形のどの部分も辺をたどると地面につながる&lt;/li&gt;
+&lt;li&gt;2 人のプレーヤーは交互に図形から 1 つの辺を選んで取り除く．選んだ辺を取り除くことで地面とつながらなくなってしまう部分は辺と同時に取り除かれる&lt;/li&gt;
+&lt;li&gt;最後の辺をとったプレーヤーの勝ち&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Green Hackenbush は有限型不偏ゲームなので各図形のグランディ数を求めることができます．今回は木と呼ばれる図形のグランディ数を求めていきます．&lt;br&gt;
+節 2 と 節 3 では Green Hackenbush で一般に適用できる性質を確認します．節 4 と 節 5 ではこの性質を利用し具体的な図形のグランディ数を求める方法を示します．&lt;br&gt;
+最後に節 6 で Green Hackenbush の木のグランディ数を求める問題を紹介します．&lt;/p&gt;
+&lt;h2 id="2-地面の点の移動"&gt;2. 地面の点の移動
+&lt;/h2&gt;&lt;p&gt;地面上にある点を移動してもゲームのグランディ数は変わらないので，自由に移動させることができます．&lt;/p&gt;
+&lt;img src="images/地面の点の移動.png" width="50%"&gt;
+&lt;h2 id="3-コロン原理colon-principle"&gt;3. コロン原理(Colon Principle)
+&lt;/h2&gt;&lt;p&gt;コロン原理&lt;br&gt;
+図形 A のグランディ数を $g(A)$ とする．地面についている図形 $G$ と宙に浮いている図形 $H$ が 1 つの点 $a$ のみを共有してできる図形を $H \cup_a G$ と表す．このとき，宙に浮いている図形 $H$，$K$ が $g(H) = g(K)$ を満たすならば，$g(H \cup_a G) = g(K \cup_a G)$ となる．&lt;/p&gt;
+&lt;img src="images/コロン原理.png" width="50%"&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;p&gt;$g(H \cup_a G) = g(K \cup_a G)$ ということは，$g(H \cup_a G) \\ xor \\ g(K \cup_a G) = 0$ なので，$H \cup_a G と K \cup_a G$ の直和ゲームは後手必勝と言い換えることができます．よって，「$g(H) = g(K)$ を満たすならば後手必勝」を示します．
+また，$H \cup_a G$ と $K \cup_a G$ は対称なので，$H \cup_a G$ から辺を取り除く場合のみ考えます．&lt;/p&gt;
+&lt;p&gt;先手の手は，「1. $G$ から辺を取り除く」，「2. $H$ から辺を取り除く」の 2 通りです．先手の各手について後手の必勝手を考えます．
+グランディ数の定義より，グランディ数 g の局面からはグランディ数 g 未満の局面に遷移できることを利用します．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;先手が $H \cup_a G$ の $G$ から辺を取り除く場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;後手は $K \cup_a G$ の $G$ から同じ辺を取り除けばいい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;先手が $H ∪_a G$ の $H$ から辺を取り除き，$H^\prime $ にした場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$g(H^\prime) &lt; g(H)$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;仮定より $g(H) = g(K)$ なので，$K$ から辺を取り除いて移行できる $K^\prime$ で，$g(K^\prime) = g(H^\prime)$ となるものがある．後手は $K → K^\prime$ となる辺を取り除けばいい．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$g(H^\prime) &gt; g(H)$ の場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H^\prime$ から辺を取り除いて移行できる $H^{\prime \prime}$ で， $g(H^{\prime \prime}) = g(H) = g(K)$ となるものがある．後手は $H^\prime → H^{\prime \prime}$ となる辺を取り除けばいい．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/details&gt;
+&lt;p&gt;コロン原理を使うことで，ある 1 つの点のみを共有している宙に浮いている図形は，同じグランディ数を持つより単純な図形に置き換えることができます．&lt;/p&gt;
+&lt;img src="images/コロン原理の例.png" width="50%"&gt;
+&lt;h2 id="4-棒のグランディ数"&gt;4. 棒のグランディ数
+&lt;/h2&gt;&lt;p&gt;まず，1 つの棒のみからなるゲームのグランディ数について考えます．&lt;br&gt;
+長さ m の棒からは，長さ m 未満の棒に遷移できるため，長さ m の棒のグランディ数は m となります．&lt;/p&gt;
+&lt;img src="images/棒のグランディ数.png" width="50%"&gt;
+&lt;p&gt;次に，複数の棒からなるゲームのグランディ数を考えます．&lt;br&gt;
+各棒は独立したゲームの局面とみなすことができるので，複数の棒からなるゲームのグランディ数は各棒のグランディ数の xor で求めることができます．&lt;br&gt;
+例えば，長さ 1, 1, 2 の棒からなるゲームのグランディ数は $1 \\ xor \\ 1 \\ xor \\ 2 = 2$ となります．&lt;/p&gt;
+&lt;img src="images/複数の棒のグランディ数.png" width="50%"&gt;
+&lt;p&gt;最後に，地面のある一点から複数の棒が伸びる図形のグランディ数を考えます．&lt;br&gt;
+地面の点は自由に移動することができるため，地面のある一点から複数の棒が伸びる図形は，複数の棒からなるゲームに帰着することができます．&lt;br&gt;
+よって，地面のある一点から複数の棒が伸びる図形のグランディ数は，各棒の長さの xor で求めることができます．&lt;/p&gt;
+&lt;img src="images/地上の点から複数の棒.png" width="75%"&gt;
+&lt;h2 id="5-木のグランディ数"&gt;5. 木のグランディ数
+&lt;/h2&gt;&lt;p&gt;コロン原理を順次適用していくことによって，木のグランディ数を求めることができます．&lt;br&gt;
+地面のある一点から複数の棒が伸びている図形のグランディ数は，各棒の長さの xor で求めることができました．コロン原理により，ある一点から複数の棒が伸びているような木の点は，各棒の長さの xor をとった値の長さの棒に変換することができます．この操作を繰り返すことで木のグランディ数を求めることができます．&lt;/p&gt;
+&lt;img src="images/コロン原理_木.png" width="50%"&gt;
+&lt;p&gt;以下に例を示します．&lt;br&gt;
+点 a からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br&gt;
+点 b からは，長さ 1 の棒と長さ 3 の棒が伸びています．よって，長さ 1 xor 3 = 2 の棒に置き換えることができます．&lt;br&gt;
+点 c からは，長さ 2 の棒と長さ 3 の棒と長さ 1 の棒が伸びています．よって，長さ 2 xor 3 xor 1 = 0 の棒に置き換えることができます．&lt;br&gt;
+以上のことからこの木のグランディ数は 0 と求めることができました．&lt;/p&gt;
+&lt;img src="images/木のグランディ数の例.png" width="75%"&gt;
+&lt;h2 id="6-agc017-d---game-on-tree"&gt;6. AGC017 D - Game on Tree
+&lt;/h2&gt;&lt;p&gt;Green Hackenbush の木のグランディ数を求める問題として，&lt;a class="link" href="https://atcoder.jp/contests/agc017/tasks/agc017_d" target="_blank" rel="noopener"
+&gt;D - Game on Tree&lt;/a&gt; があります．&lt;br&gt;
+ある頂点のグランディ数は，「自分の子のグランディ数 + 1」 の xor を使って求めことができるので，根から深さ優先探索をすることで木のグランディ数を求めることができます．&lt;br&gt;
 &lt;a class="link" href="https://atcoder.jp/contests/agc017/submissions/56666314" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/p>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://www.sugakushobo.co.jp/903342_76_mae.html" target="_blank" rel="noopener"
->石取りゲームの数学&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Hackenbush" target="_blank" rel="noopener"
->Hackenbush&lt;/a>&lt;/li>
-&lt;/ul></description></item></channel></rss>
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.sugakushobo.co.jp/903342_76_mae.html" target="_blank" rel="noopener"
+&gt;石取りゲームの数学&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Hackenbush" target="_blank" rel="noopener"
+&gt;Hackenbush&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

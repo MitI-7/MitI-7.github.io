@@ -1,572 +1,572 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グラフ on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/</link><description>Recent content in グラフ on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" />&lt;h2 id="optimum-branchings-の-tarjan-の実装">Optimum Branchings の Tarjan の実装
-&lt;/h2>&lt;p>&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
->Optimum Branchings と Edmonds のアルゴリズム&lt;/a>の続きです．&lt;br>
-Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p>
-&lt;p>Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．&lt;/p>
-&lt;p>これに対し，Tarjan の実装はおおむね以下のような流れになります．&lt;br>
-まだ処理されていない頂点について，その頂点に入る最大の重みを持つ辺を採用します．この辺は最適 branching の構築に必要な構造（森）に記録していきます．もし採用した辺によって閉路が形成された場合，閉路を $1$ つの超頂点に縮約します．その際，閉路の外から閉路に入る辺の重みを修正します．最終的な最適 branching は森から $O(|V|)$ で構築することができます．&lt;br>
-Tarjan の実装は，縮約のたびにグラフを再構築することを避け，閉路の展開処理を主アルゴリズムから切り離したことで，計算量を改善しているといえます．&lt;/p>
-&lt;p>Tarjan の実装では，「閉路の検出」，「超頂点の管理」，「各頂点に入る辺の管理」が必要です．
-これらを効率的に行うために，Union Find と 遅延伝播マージ可能ヒープを使います．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>閉路の検出&lt;/p>
-&lt;ul>
-&lt;li>アルゴリズムでは各頂点についてその頂点に入る重み最大の辺を採用していきます．頂点を Union Find で管理し，辺が採用されるたびにその端点をマージしていきます．各頂点は最大でも 1 本の入力辺しかもたないため，採用された辺 $(u, v)$ の $u$ と $v$ が同じ集合なら閉路が形成されたことになります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>超頂点の管理&lt;/p>
-&lt;ul>
-&lt;li>閉路が超頂点に縮約されたとき，各頂点がどの超頂点に所属しているかを管理する必要があります．これは，Union Find で管理することができます．ただし，この Union Find は閉路の検出用の Union Find とは別でもつ必要があります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>各頂点に入る辺の管理&lt;/p>
-&lt;ul>
-&lt;li>各頂点に入る辺を管理するデータ構造には，以下の $4$ つの操作が必要です．
-&lt;ol>
-&lt;li>要素の追加&lt;/li>
-&lt;li>最大要素の抽出&lt;/li>
-&lt;li>$2$ つの集合のマージ&lt;/li>
-&lt;li>集合内の全要素の重みの定数変更&lt;/li>
-&lt;/ol>
-&lt;/li>
-&lt;li>これらの操作がすべて対数時間で実行できる場合，Tarjan の実装は $O(|E| \log |V|)$ で動作します．&lt;br>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グラフ on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/</link><description>Recent content in グラフ on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" /&gt;&lt;h2 id="optimum-branchings-の-tarjan-の実装"&gt;Optimum Branchings の Tarjan の実装
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
+&gt;Optimum Branchings と Edmonds のアルゴリズム&lt;/a&gt;の続きです．&lt;br&gt;
+Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p&gt;
+&lt;p&gt;Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．&lt;/p&gt;
+&lt;p&gt;これに対し，Tarjan の実装はおおむね以下のような流れになります．&lt;br&gt;
+まだ処理されていない頂点について，その頂点に入る最大の重みを持つ辺を採用します．この辺は最適 branching の構築に必要な構造（森）に記録していきます．もし採用した辺によって閉路が形成された場合，閉路を $1$ つの超頂点に縮約します．その際，閉路の外から閉路に入る辺の重みを修正します．最終的な最適 branching は森から $O(|V|)$ で構築することができます．&lt;br&gt;
+Tarjan の実装は，縮約のたびにグラフを再構築することを避け，閉路の展開処理を主アルゴリズムから切り離したことで，計算量を改善しているといえます．&lt;/p&gt;
+&lt;p&gt;Tarjan の実装では，「閉路の検出」，「超頂点の管理」，「各頂点に入る辺の管理」が必要です．
+これらを効率的に行うために，Union Find と 遅延伝播マージ可能ヒープを使います．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;閉路の検出&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アルゴリズムでは各頂点についてその頂点に入る重み最大の辺を採用していきます．頂点を Union Find で管理し，辺が採用されるたびにその端点をマージしていきます．各頂点は最大でも 1 本の入力辺しかもたないため，採用された辺 $(u, v)$ の $u$ と $v$ が同じ集合なら閉路が形成されたことになります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点の管理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;閉路が超頂点に縮約されたとき，各頂点がどの超頂点に所属しているかを管理する必要があります．これは，Union Find で管理することができます．ただし，この Union Find は閉路の検出用の Union Find とは別でもつ必要があります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;各頂点に入る辺の管理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;各頂点に入る辺を管理するデータ構造には，以下の $4$ つの操作が必要です．
+&lt;ol&gt;
+&lt;li&gt;要素の追加&lt;/li&gt;
+&lt;li&gt;最大要素の抽出&lt;/li&gt;
+&lt;li&gt;$2$ つの集合のマージ&lt;/li&gt;
+&lt;li&gt;集合内の全要素の重みの定数変更&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;これらの操作がすべて対数時間で実行できる場合，Tarjan の実装は $O(|E| \log |V|)$ で動作します．&lt;br&gt;
 &lt;a class="link" href="https://en.wikipedia.org/wiki/Skew_heap" target="_blank" rel="noopener"
->Skew Heap&lt;/a> は操作 1, 2, 3 を償却 $O(\log |N|)$ で実行できます．これに遅延伝播機能をつけることで操作 4 を定数時間で実行できます．&lt;/li>
-&lt;li>密グラフの場合は，隣接行列を使うことで操作 2, 3, 4 を $O(|V|)$ で実行できます．この場合 Tarjan の実装は $O(|V|^2)$ で動作します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="tarjan-の実装">Tarjan の実装
-&lt;/h2>&lt;p>アルゴリズムは，森 $F$ を構築する Algorithm BRANCH と，森 $F$ から branching を構築する Algorithm LEAF の $2$ つからなります．&lt;br>
-森 $F$ は採用された $G$ の辺を頂点とし，縮約過程を親子関係として記録するデータ構造です．&lt;/p>
-&lt;h3 id="algorithm-branch">Algorithm BRANCH
-&lt;/h3>&lt;p>このアルゴリズムは，森 $F$ を構築します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>変数&lt;/p>
-&lt;ul>
-&lt;li>S: 強連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ強連結成分となる．&lt;/li>
-&lt;li>W: 弱連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ弱連結成分となる．&lt;/li>
-&lt;li>$min[v]$: 超頂点 $v$ 内で最終的に根に選ばれる頂点&lt;/li>
-&lt;li>$roots$: 入辺のない強連結成分の集合&lt;/li>
-&lt;li>$rset$: 正の重みを持つ入辺がない（超）頂点の集合&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>$roots$ に要素がある間，以下の処理を繰り返す&lt;/p>
-&lt;ul>
-&lt;li>$roots$ から任意の（超）頂点 $r$ を取り出す&lt;/li>
-&lt;li>$r$ に入る重みが $0$ より大きい辺がなければ，$r$ を $rset$ に格納する&lt;/li>
-&lt;li>そうでなければ，$r$ に入る重み最大の辺 $(u, v)$ を選ぶ&lt;/li>
-&lt;li>$(u, v)$ を表す頂点を $F$ に追加する
-&lt;ul>
-&lt;li>$r$ が超頂点なら，$F$ の $r$ が属する閉路の各頂点を $(u, v)$ の子とする&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$u$ と $v$ が異なる弱連結成分に属していれば，$S$ の $2$ つの弱連結成分を結合する&lt;/li>
-&lt;li>そうでなければ閉路が発生する
-&lt;ul>
-&lt;li>$C$ を $(u, v)$ を含む閉路とする&lt;/li>
-&lt;li>$W$ で $C$ に含まれるすべての強連結成分を $1$ つの超頂点 $r^{\prime}$ に縮約する&lt;/li>
-&lt;li>$C$ に含まれる最小重みの辺の行き先を $m$ とし，$min[r^{\prime}] = m$ とする&lt;/li>
-&lt;li>$r^{\prime}$ に外部から入る辺の重みを更新する&lt;/li>
-&lt;li>$r^{\prime}$ を $roots$ に追加する&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="algorithm-leaf">Algorithm LEAF
-&lt;/h3>&lt;p>Algorithm LEAF は $F$ から最適 branching $B$ を構築します．&lt;br>
-$R = \lbrace min(i) | i \in rset \rbrace$，$N$ を $F$ の根の集合とします．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$R$ が空でないなら，$R$ から $v$ を 1 つ取り出す&lt;br>
-$R$ が空の場合は，$N$ から任意の根 $(u,v)$ を選び $B$ に追加し，$v$ を処理対象とする&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$F$ の $v$ に入る辺を表す頂点から根までのパス $P$ を特定する&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$F$ からパス $P$ 上のすべての頂点およびそれらから出る全ての辺を削除する&lt;br>
-この削除操作により，$N$ も更新される&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>この一連の処理を $R$ と $N$ がともに空になるまで繰り返すと，最適 branching $B$ が構築されます．&lt;/p>
-&lt;h2 id="アルゴリズムの実行例">アルゴリズムの実行例
-&lt;/h2>&lt;p>下のグラフの branching を求めます．&lt;br>
-&lt;img src="images/実行例_0.png" width="25%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase1">phase1
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $0$ に入る重み最大の辺 $(2, 0)$ を選びます．森 $F$ に $2 \rightarrow 0$ を表す頂点を追加します．&lt;/li>
-&lt;li>同様に，頂点 $1$，$2$ に入る重み最大の辺 $(0, 1), (1, 2)$ を $F$に追加します&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>．
+&gt;Skew Heap&lt;/a&gt; は操作 1, 2, 3 を償却 $O(\log |N|)$ で実行できます．これに遅延伝播機能をつけることで操作 4 を定数時間で実行できます．&lt;/li&gt;
+&lt;li&gt;密グラフの場合は，隣接行列を使うことで操作 2, 3, 4 を $O(|V|)$ で実行できます．この場合 Tarjan の実装は $O(|V|^2)$ で動作します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="tarjan-の実装"&gt;Tarjan の実装
+&lt;/h2&gt;&lt;p&gt;アルゴリズムは，森 $F$ を構築する Algorithm BRANCH と，森 $F$ から branching を構築する Algorithm LEAF の $2$ つからなります．&lt;br&gt;
+森 $F$ は採用された $G$ の辺を頂点とし，縮約過程を親子関係として記録するデータ構造です．&lt;/p&gt;
+&lt;h3 id="algorithm-branch"&gt;Algorithm BRANCH
+&lt;/h3&gt;&lt;p&gt;このアルゴリズムは，森 $F$ を構築します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;変数&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;S: 強連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ強連結成分となる．&lt;/li&gt;
+&lt;li&gt;W: 弱連結成分を管理．はじめ，各頂点がそれぞれ自分だけを要素としてもつ弱連結成分となる．&lt;/li&gt;
+&lt;li&gt;$min[v]$: 超頂点 $v$ 内で最終的に根に選ばれる頂点&lt;/li&gt;
+&lt;li&gt;$roots$: 入辺のない強連結成分の集合&lt;/li&gt;
+&lt;li&gt;$rset$: 正の重みを持つ入辺がない（超）頂点の集合&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$roots$ に要素がある間，以下の処理を繰り返す&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$roots$ から任意の（超）頂点 $r$ を取り出す&lt;/li&gt;
+&lt;li&gt;$r$ に入る重みが $0$ より大きい辺がなければ，$r$ を $rset$ に格納する&lt;/li&gt;
+&lt;li&gt;そうでなければ，$r$ に入る重み最大の辺 $(u, v)$ を選ぶ&lt;/li&gt;
+&lt;li&gt;$(u, v)$ を表す頂点を $F$ に追加する
+&lt;ul&gt;
+&lt;li&gt;$r$ が超頂点なら，$F$ の $r$ が属する閉路の各頂点を $(u, v)$ の子とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$u$ と $v$ が異なる弱連結成分に属していれば，$S$ の $2$ つの弱連結成分を結合する&lt;/li&gt;
+&lt;li&gt;そうでなければ閉路が発生する
+&lt;ul&gt;
+&lt;li&gt;$C$ を $(u, v)$ を含む閉路とする&lt;/li&gt;
+&lt;li&gt;$W$ で $C$ に含まれるすべての強連結成分を $1$ つの超頂点 $r^{\prime}$ に縮約する&lt;/li&gt;
+&lt;li&gt;$C$ に含まれる最小重みの辺の行き先を $m$ とし，$min[r^{\prime}] = m$ とする&lt;/li&gt;
+&lt;li&gt;$r^{\prime}$ に外部から入る辺の重みを更新する&lt;/li&gt;
+&lt;li&gt;$r^{\prime}$ を $roots$ に追加する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="algorithm-leaf"&gt;Algorithm LEAF
+&lt;/h3&gt;&lt;p&gt;Algorithm LEAF は $F$ から最適 branching $B$ を構築します．&lt;br&gt;
+$R = \lbrace min(i) | i \in rset \rbrace$，$N$ を $F$ の根の集合とします．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$R$ が空でないなら，$R$ から $v$ を 1 つ取り出す&lt;br&gt;
+$R$ が空の場合は，$N$ から任意の根 $(u,v)$ を選び $B$ に追加し，$v$ を処理対象とする&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$F$ の $v$ に入る辺を表す頂点から根までのパス $P$ を特定する&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$F$ からパス $P$ 上のすべての頂点およびそれらから出る全ての辺を削除する&lt;br&gt;
+この削除操作により，$N$ も更新される&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;この一連の処理を $R$ と $N$ がともに空になるまで繰り返すと，最適 branching $B$ が構築されます．&lt;/p&gt;
+&lt;h2 id="アルゴリズムの実行例"&gt;アルゴリズムの実行例
+&lt;/h2&gt;&lt;p&gt;下のグラフの branching を求めます．&lt;br&gt;
+&lt;img src="images/実行例_0.png" width="25%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase1"&gt;phase1
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $0$ に入る重み最大の辺 $(2, 0)$ を選びます．森 $F$ に $2 \rightarrow 0$ を表す頂点を追加します．&lt;/li&gt;
+&lt;li&gt;同様に，頂点 $1$，$2$ に入る重み最大の辺 $(0, 1), (1, 2)$ を $F$に追加します&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．
 閉路 $0 \rightarrow 1 \rightarrow 2 \rightarrow 0$ が見つかったので，これを超頂点 $A$ に縮約します．
-$(3, 1)$ の重みを $4 - 4 + 3 = 3$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading">&lt;img src="images/実行例_1.png" width="25%"> &lt;img src="images/実行例_1_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase2">phase2
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $A$ に入る重み最大の辺 $(3, A)$ を選びます．$F$ に $3 \rightarrow A$ を追加します．&lt;br>
-$(3, A)$ は超頂点 $A$ に入る辺なので，$3 \rightarrow A$ が親となるように $2 \rightarrow 0$，$0 \rightarrow 1$，$1 \rightarrow 2$ に辺をはります．&lt;/li>
-&lt;li>頂点 $3$ に入る重み最大の辺 $(A, 3)$ を選び，$F$ に追加します．&lt;br>
-閉路 $A \rightarrow 3 \rightarrow A$ が見つかったので，これを超頂点 $B$ に縮約します．&lt;br>
-$(4, A)$ の重みを $1 - 3 + 3 = 1$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-1">&lt;img src="images/実行例_2.png" width="25%"> &lt;img src="images/実行例_2_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase3">phase3
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $B$ に入る重み最大の辺 $(4, B)$ を選びます．$F$ に $4 \rightarrow B$ を追加します．&lt;br>
-$(4, B)$ は超頂点 $B$ に入る辺なので，$4 \rightarrow B$ から $3 \rightarrow A$，$A \rightarrow 3$ に辺をはります．&lt;/li>
-&lt;li>頂点 $4$，$5$ に入る重み最大の辺 $(5, 4)$，$(B, 5)$ を選び，$F$ に追加します．&lt;br>
-閉路 $B \rightarrow 5 \rightarrow 4 \rightarrow B$ が見つかったので，これを超頂点 $C$ に縮約します．&lt;br>
-$(6, 4)$ の重みを $4 - 4 + 1 = 1$ に変更します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-2">&lt;img src="images/実行例_3.png" width="25%"> &lt;img src="images/実行例_3_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase4">phase4
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $C$ に入る重み最大の辺 $(6, C)$ を選びます．$F$ に $6 \rightarrow C$ を追加します．&lt;br>
-$(6, C)$ は超頂点 $C$ に入る辺なので，$6 \rightarrow C$ から $4 \rightarrow B$，$5 \rightarrow 4$，$B \rightarrow 5$ に辺をはります．&lt;/li>
-&lt;li>頂点 $6$ に入る重み最大の辺 $(C, 6)$ を選び，$F$ に追加します．&lt;br>
-閉路 $C \rightarrow 6 \rightarrow C$ が見つかったので，これを超頂点 $D$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-3">&lt;img src="images/実行例_4.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase5">phase5
-&lt;/h3>&lt;ul>
-&lt;li>頂点 $D$ に入る辺はないので，Algorithm BRANCH は終了します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-4">&lt;img src="images/実行例_5.png" width="25%"> &lt;img src="images/実行例_4_f.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase6">phase6
-&lt;/h3>&lt;ul>
-&lt;li>森 $F$ が求められたので，最適 branching $B$ を構築していきます．&lt;/li>
-&lt;li>$R = \lbrace 5 \rbrace$ から $5$ を取り出します．&lt;/li>
-&lt;li>$5$ に入る辺である $B \rightarrow 5$ から根までのパス $P$ を求め，これを削除します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="">&lt;img src="images/実行例_6.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase7">phase7
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $C \rightarrow 6$ を取り出し，$B$ の辺として採用します．$C \rightarrow 6$ は実際には，$5 \rightarrow 6$ なので，$B$ では $(5, 6)$ を採用しています．&lt;br>
-$6$ に入る辺は森にないので，パス $P$ の削除は行われません．&lt;/li>
-&lt;li>森の根である $5 \rightarrow 4$ も同様に処理をします．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-5">&lt;img src="images/実行例_7.png" width="25%"> &lt;img src="images/実行例_7_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase8">phase8
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $4 \rightarrow B$ を取り出し，$B$ の辺として採用します．$4 \rightarrow B$ は実際には，$4 \rightarrow 2$ なので，$B$ では $4 \rightarrow 2$ を採用しています．&lt;br>
-根から $2$ に入る辺である $1 \rightarrow 2$ までのパスを求め削除します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-6">&lt;img src="images/実行例_8.png" width="25%"> &lt;img src="images/実行例_8_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h3 id="phase9">phase9
-&lt;/h3>&lt;ul>
-&lt;li>森の根である $A \rightarrow 3$，$2 \rightarrow 0$，$0 \rightarrow 1$ を処理します．&lt;/li>
-&lt;li>森のすべての要素を処理したのでアルゴリズムを終了します．&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-7">&lt;img src="images/実行例_9.png" width="25%"> &lt;img src="images/実行例_9_g.png" width="25%">
-&lt;/h2>&lt;hr>
-&lt;h2 id="問題">問題
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/problem/directedmst" target="_blank" rel="noopener"
->Directed MST&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.yosupo.jp/submission/296045" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230070103" target="_blank" rel="noopener"
->Finding optimum branchings&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230090403" target="_blank" rel="noopener"
->A note on finding optimum branchings&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://cw.fel.cvut.cz/old/_media/courses/a4m33pal/cviceni/algorithm-description.pdf" target="_blank" rel="noopener"
->Optimum Branchings and Spanning Aborescences&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://arxiv.org/abs/2208.02590" target="_blank" rel="noopener"
->Efficiently Computing Directed Minimum Spanning Trees&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>$(3, 1)$ も $1$ に入る重み最大の辺ですが，ここでは $(0, 1)$ を選んだとします．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" />&lt;h2 id="optimum-branchings">Optimum Branchings
-&lt;/h2>&lt;p>有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br>
-$G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p>
-&lt;ul>
-&lt;li>閉路を含まない&lt;/li>
-&lt;li>同じ頂点に入る辺は高々 $1$ 本&lt;/li>
-&lt;/ul>
-&lt;p>すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>．&lt;br>
-この問題は，最小全域木問題の有向辺バージョンである最小全域有向木問題と等価の問題で，互いに線形時間で変換することができます．&lt;br>
-下の図は有向グラフと対応する 最適 branching の例です．$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;/p>
-&lt;img src="images/branchingの例.png" width="50%">
-&lt;p>以下ではいくつかの定義，補題，定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．&lt;br>
-このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br>
-また，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法と説明します．&lt;br>
+$(3, 1)$ の重みを $4 - 4 + 3 = 3$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading"&gt;&lt;img src="images/実行例_1.png" width="25%"&gt; &lt;img src="images/実行例_1_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase2"&gt;phase2
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $A$ に入る重み最大の辺 $(3, A)$ を選びます．$F$ に $3 \rightarrow A$ を追加します．&lt;br&gt;
+$(3, A)$ は超頂点 $A$ に入る辺なので，$3 \rightarrow A$ が親となるように $2 \rightarrow 0$，$0 \rightarrow 1$，$1 \rightarrow 2$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $3$ に入る重み最大の辺 $(A, 3)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $A \rightarrow 3 \rightarrow A$ が見つかったので，これを超頂点 $B$ に縮約します．&lt;br&gt;
+$(4, A)$ の重みを $1 - 3 + 3 = 1$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-1"&gt;&lt;img src="images/実行例_2.png" width="25%"&gt; &lt;img src="images/実行例_2_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase3"&gt;phase3
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $B$ に入る重み最大の辺 $(4, B)$ を選びます．$F$ に $4 \rightarrow B$ を追加します．&lt;br&gt;
+$(4, B)$ は超頂点 $B$ に入る辺なので，$4 \rightarrow B$ から $3 \rightarrow A$，$A \rightarrow 3$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $4$，$5$ に入る重み最大の辺 $(5, 4)$，$(B, 5)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $B \rightarrow 5 \rightarrow 4 \rightarrow B$ が見つかったので，これを超頂点 $C$ に縮約します．&lt;br&gt;
+$(6, 4)$ の重みを $4 - 4 + 1 = 1$ に変更します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-2"&gt;&lt;img src="images/実行例_3.png" width="25%"&gt; &lt;img src="images/実行例_3_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase4"&gt;phase4
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $C$ に入る重み最大の辺 $(6, C)$ を選びます．$F$ に $6 \rightarrow C$ を追加します．&lt;br&gt;
+$(6, C)$ は超頂点 $C$ に入る辺なので，$6 \rightarrow C$ から $4 \rightarrow B$，$5 \rightarrow 4$，$B \rightarrow 5$ に辺をはります．&lt;/li&gt;
+&lt;li&gt;頂点 $6$ に入る重み最大の辺 $(C, 6)$ を選び，$F$ に追加します．&lt;br&gt;
+閉路 $C \rightarrow 6 \rightarrow C$ が見つかったので，これを超頂点 $D$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-3"&gt;&lt;img src="images/実行例_4.png" width="25%"&gt; &lt;img src="images/実行例_4_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase5"&gt;phase5
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;頂点 $D$ に入る辺はないので，Algorithm BRANCH は終了します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-4"&gt;&lt;img src="images/実行例_5.png" width="25%"&gt; &lt;img src="images/実行例_4_f.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase6"&gt;phase6
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森 $F$ が求められたので，最適 branching $B$ を構築していきます．&lt;/li&gt;
+&lt;li&gt;$R = \lbrace 5 \rbrace$ から $5$ を取り出します．&lt;/li&gt;
+&lt;li&gt;$5$ に入る辺である $B \rightarrow 5$ から根までのパス $P$ を求め，これを削除します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=""&gt;&lt;img src="images/実行例_6.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase7"&gt;phase7
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $C \rightarrow 6$ を取り出し，$B$ の辺として採用します．$C \rightarrow 6$ は実際には，$5 \rightarrow 6$ なので，$B$ では $(5, 6)$ を採用しています．&lt;br&gt;
+$6$ に入る辺は森にないので，パス $P$ の削除は行われません．&lt;/li&gt;
+&lt;li&gt;森の根である $5 \rightarrow 4$ も同様に処理をします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-5"&gt;&lt;img src="images/実行例_7.png" width="25%"&gt; &lt;img src="images/実行例_7_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase8"&gt;phase8
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $4 \rightarrow B$ を取り出し，$B$ の辺として採用します．$4 \rightarrow B$ は実際には，$4 \rightarrow 2$ なので，$B$ では $4 \rightarrow 2$ を採用しています．&lt;br&gt;
+根から $2$ に入る辺である $1 \rightarrow 2$ までのパスを求め削除します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-6"&gt;&lt;img src="images/実行例_8.png" width="25%"&gt; &lt;img src="images/実行例_8_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id="phase9"&gt;phase9
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;森の根である $A \rightarrow 3$，$2 \rightarrow 0$，$0 \rightarrow 1$ を処理します．&lt;/li&gt;
+&lt;li&gt;森のすべての要素を処理したのでアルゴリズムを終了します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="heading-7"&gt;&lt;img src="images/実行例_9.png" width="25%"&gt; &lt;img src="images/実行例_9_g.png" width="25%"&gt;
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h2 id="問題"&gt;問題
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.yosupo.jp/problem/directedmst" target="_blank" rel="noopener"
+&gt;Directed MST&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.yosupo.jp/submission/296045" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230070103" target="_blank" rel="noopener"
+&gt;Finding optimum branchings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://onlinelibrary.wiley.com/doi/10.1002/net.3230090403" target="_blank" rel="noopener"
+&gt;A note on finding optimum branchings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://cw.fel.cvut.cz/old/_media/courses/a4m33pal/cviceni/algorithm-description.pdf" target="_blank" rel="noopener"
+&gt;Optimum Branchings and Spanning Aborescences&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://arxiv.org/abs/2208.02590" target="_blank" rel="noopener"
+&gt;Efficiently Computing Directed Minimum Spanning Trees&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;$(3, 1)$ も $1$ に入る重み最大の辺ですが，ここでは $(0, 1)$ を選んだとします．&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Optimum Branchings と Edmonds のアルゴリズム</title><link>https://miti-7.github.io/post/optimum-branchings-edmonds/</link><pubDate>Fri, 20 Jun 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-edmonds/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-edmonds/images/branching%E3%81%AE%E4%BE%8B.png" alt="Featured image of post Optimum Branchings と Edmonds のアルゴリズム" /&gt;&lt;h2 id="optimum-branchings"&gt;Optimum Branchings
+&lt;/h2&gt;&lt;p&gt;有向グラフ $G = (V, E)$ が与えられます．各辺には重みが与えられ，辺 $e$ の重みと辺集合の重みをそれぞれ $w(e)$, $w(E)$ で表します．&lt;br&gt;
+$G$ の部分グラフ $G^{\prime} = (V, E^{\prime})$ のうち以下の 2 条件を満たすものを branching とよびます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;閉路を含まない&lt;/li&gt;
+&lt;li&gt;同じ頂点に入る辺は高々 $1$ 本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;すべての branching の中で $w(E^{\prime})$ が最大のものを 最適 branching（optimum branching）とよびます&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+この問題は，最小全域木問題の有向辺バージョンである最小全域有向木問題と等価の問題で，互いに線形時間で変換することができます．&lt;br&gt;
+下の図は有向グラフと対応する 最適 branching の例です．$G^{\prime}$ の各コンポーネントは有向木なので，$G^{\prime}$は有向森になります．&lt;/p&gt;
+&lt;img src="images/branchingの例.png" width="50%"&gt;
+&lt;p&gt;以下ではいくつかの定義，補題，定理を確認したのち，最適 branching を求める Edmonds のアルゴリズムを説明します．&lt;br&gt;
+このアルゴリズムの計算量は $O(|E||V|)$ です．他にも $O(|E| \log |V|)$ の Tarjan の実装や $O(|E| + |V| \log |V|)$ の Gabow のアルゴリズムなどがあります．&lt;br&gt;
+また，最小重み有向木問題などのバリエーションを最適 Branching に帰着する方法と説明します．&lt;br&gt;
 最後に実装例として&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
->AOJ - 最小全域有向木&lt;/a>の提出コードへのリンクをはっておきます．&lt;/p>
-&lt;h2 id="定義">定義
-&lt;/h2>&lt;h3 id="critical">critical
-&lt;/h3>&lt;p>辺 $e = (u, v)$ が以下の 2 条件を満たすとき critical という．&lt;/p>
-&lt;ul>
-&lt;li>$w(e) \gt 0$&lt;/li>
-&lt;li>$v$ に接続するすべての辺 $e^{\prime}$ に対して，$w(e) \ge w(e^{\prime})$&lt;/li>
-&lt;/ul>
-&lt;p>$G$ の全域部分グラフ $H$ が以下の条件を満たすとき critical subgraph という．特にそれ以上辺を追加できない critical subgraph を maximal critical subgraph という．&lt;/p>
-&lt;ul>
-&lt;li>$H$ のすべての辺は critical&lt;/li>
-&lt;li>$H$ の各頂点の入次数は高々 $1$&lt;/li>
-&lt;/ul>
-&lt;p>下の図は maximal critical subgraph の例です．critical な辺を赤線で示しています．&lt;/p>
-&lt;img src="images/maximal_critical_subgraph.png" width="25%">
-&lt;h3 id="eligible">eligible
-&lt;/h3>&lt;p>辺 $e$ が入る頂点を $head(e)$ と表す．$G = (V, E)$ の branching $B$ に対して，$(B \backslash \lbrace (u, v) \in B : v = head(e) \rbrace) \cup \lbrace e \rbrace$ も branching になるとき，$e$ を eligible という．&lt;/p>
-&lt;h2 id="補題-1">補題 1
-&lt;/h2>&lt;p>maximal critical subgraph $H$ は以下の性質を持ちます．&lt;/p>
-&lt;ol>
-&lt;li>各コンポーネントは高々 1 つの閉路をもち，閉路は互いに素&lt;/li>
-&lt;li>$H$ に閉路がなければ最適 branching&lt;/li>
-&lt;/ol>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;ol>
-&lt;li>
-&lt;p>頂点 $v$ が $2$ つの有向閉路上にあるとします．このとき，次数が少なくとも $2$ 以上の頂点が存在します．これは critical subgraph の条件に反します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$H$ に閉路がなければ $H$は branching です．任意の branching $B$ のすべての頂点 $v$ について以下が成り立ちます．&lt;br>
-$w(B \cap \lbrace e | head(e) = v \rbrace) \le w(H \cap \lbrace e | head(e) = v \rbrace)$&lt;br>
-これらをすべての頂点について足し合わせると $w(B) \le w(H)$ となり，$H$ が最適となります．&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="補題-2">補題 2
-&lt;/h2>&lt;p>辺 $e = (u, v) \in E \backslash B$ が eligible なことと，$B$ 上に $v$ から $u$ への有向パスがないことは同値&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;ul>
-&lt;li>
-&lt;p>「辺 $e = (u, v) \in E \backslash B$ が eligible」なら「$B$ 上に $v$ から $u$ への有向パスがない」&lt;br>
-対偶として，$v$ から $u$ への有向パスがあるなら，$e$ は eligible ではないことを示します．&lt;br>
-$v$ から $u$ への有向パスがあるため，$(u, v)$ を追加すると閉路が発生します．&lt;br>
-これは eligible の定義に反するため，$e$ は eligible ではありません．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>「$B$ 上に $v$ から $u$ への有向パスがない」なら「辺 $e = (u, v) \in E \backslash B$ が eligible」&lt;br>
-$e$ を $B$ に追加したとき，$(x, head(e)) \in B$ の辺を削除すれば $v$ へ入る辺は高々 $1$ 本です．&lt;br>
-また，$B$ には $v \rightarrow u$ パスがないので，$e$ を追加しても閉路は発生しません．&lt;br>
-よって，$e$ は eligible です．&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="補題-3">補題 3
-&lt;/h2>&lt;p>$B$ を $G = (V, E)$ の branching，$C$ を $G$ の有向サイクルとする．$C \backslash B$ に eligible な辺がなければ， $|C \backslash B| = 1$ となる&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;p>$C \backslash B$ に eligible な辺がないとき，$|C \backslash B|$ は 1 以外にならないことを示します．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>$|C \backslash B| = 0$ にならない&lt;br>
-$B$ は branching なので起こりません&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$|C \backslash B| = 2$ にならない&lt;br>
-$C \backslash B = \lbrace (s_1, t_1), (s_2, t_2) \rbrace$ と仮定します．&lt;br>
-どちらの辺も eligible でないので，$B$ に $t_1$ から $s_1$ への有向パスと $t_2$ から $s_2$ への有向パスが存在します．&lt;br>
-$C$ は閉路なので，$t_2$ から $s_1$ への有向パスと $t_1$ から $s_2$ への有向パスは $C$ 上に存在します．&lt;br>
-よって，$B$ には，$t_2 \rightarrow \cdots \rightarrow \cdots s_1 \rightarrow t_1 \rightarrow \cdots \rightarrow s_2 \rightarrow t_2$ のようなパスができます．&lt;br>
-これは，$B$ の中に閉路があるということになり，$B$ が branching という仮定に矛盾します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>$|C \backslash B| = k \gt 2$ にならない&lt;br>
-$|C \backslash B| = 2$ に帰着します．&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/details>
-&lt;h2 id="定理-1">定理 1
-&lt;/h2>&lt;p>$G$ の maximal critical subgraph $H$ に対し，以下の最適 branching $B$ が存在する．&lt;/p>
-&lt;ul>
-&lt;li>$H$ に含まれるすべての有向閉路 $C_i$ について，$| C_i \backslash B| = 1$．&lt;/li>
-&lt;/ul>
-&lt;p>つまり，$H$ の各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;br>
-下の図は $G$ に対する maximul critical subgraph $H$ と最適 branching です．&lt;br>
-$H$ の閉路から $(0, 1)$ と $(3, 5)$ を取り除いた最適 branching が存在することがわかります．&lt;/p>
-&lt;img src="images/theorem1_0.png" width="50%">
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>最適 branching のうち，$H$ の辺を最も多く含んでいるものを $B$ と仮定します．&lt;br>
-補題 2 により，$C \backslash B$ に eligible な辺がなければ，$|C \backslash B| = 1$ となるので，各 $C_i \backslash B$ のすべての辺が eligible でないことを示します．&lt;br>
-$e \in H \backslash B$ が eligible であると矛盾が起きることを示します．&lt;br>
-$e$ は eligible なので，新しい branching $B^{\prime} = \lbrace B \backslash \lbrace e^{\prime} \rbrace \rbrace \cup \lbrace e \rbrace$ を作ることができます．ここで $e^{\prime}$ は，$head(e)$ に入る $B$ 上の辺です．&lt;br>
-このとき，$e \in H$ であり，$e^{\prime} \notin H$ であるため，$B^{\prime}$ は $B$ より多くの $H$ の辺を含みます．&lt;br>
-また，$e$ は critical なので，$B^{\prime}$ は最適 branching です．&lt;br>
-よって，$B$ より$H$ の辺を多く含む最適 branching $B^{\prime}$ ができることとなり，これは仮定に矛盾します．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="定理-2">定理 2
-&lt;/h2>&lt;p>定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}_i$ は $C_i$ で最も重みの小さい辺である．&lt;/p>
-&lt;ol>
-&lt;li>各有向閉路 $C_i$ で $|C_i \backslash B| = 1$&lt;/li>
-&lt;li>もし有向閉路 $C_i$ へ外部から入る辺が $B$ に存在しないなら，$C_i \backslash B = \lbrace e^{0}_i \rbrace$ である．&lt;/li>
-&lt;/ol>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>1.を満たす最適 branching の中で，$\lbrace e^{0}_0, e^{1}_0, \cdots, e^{0}_k \rbrace$ が含まれる数がもっとも多いものを $B$ とします．&lt;br>
-$B$ には $C_i$ に外部から入る辺が存在しないにも関わらず，$C_i$ に $e^{0}_i$ が含まれていると仮定します．&lt;br>
-$C_i \backslash B = \lbrace e \rbrace$ とします．&lt;br>
-$B^{\prime} = (B \backslash \lbrace e^{0}_i \rbrace) \cup \lbrace e \rbrace$ とします．&lt;br>
+&gt;AOJ - 最小全域有向木&lt;/a&gt;の提出コードへのリンクをはっておきます．&lt;/p&gt;
+&lt;h2 id="定義"&gt;定義
+&lt;/h2&gt;&lt;h3 id="critical"&gt;critical
+&lt;/h3&gt;&lt;p&gt;辺 $e = (u, v)$ が以下の 2 条件を満たすとき critical という．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$w(e) \gt 0$&lt;/li&gt;
+&lt;li&gt;$v$ に接続するすべての辺 $e^{\prime}$ に対して，$w(e) \ge w(e^{\prime})$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$G$ の全域部分グラフ $H$ が以下の条件を満たすとき critical subgraph という．特にそれ以上辺を追加できない critical subgraph を maximal critical subgraph という．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H$ のすべての辺は critical&lt;/li&gt;
+&lt;li&gt;$H$ の各頂点の入次数は高々 $1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下の図は maximal critical subgraph の例です．critical な辺を赤線で示しています．&lt;/p&gt;
+&lt;img src="images/maximal_critical_subgraph.png" width="25%"&gt;
+&lt;h3 id="eligible"&gt;eligible
+&lt;/h3&gt;&lt;p&gt;辺 $e$ が入る頂点を $head(e)$ と表す．$G = (V, E)$ の branching $B$ に対して，$(B \backslash \lbrace (u, v) \in B : v = head(e) \rbrace) \cup \lbrace e \rbrace$ も branching になるとき，$e$ を eligible という．&lt;/p&gt;
+&lt;h2 id="補題-1"&gt;補題 1
+&lt;/h2&gt;&lt;p&gt;maximal critical subgraph $H$ は以下の性質を持ちます．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;各コンポーネントは高々 1 つの閉路をもち，閉路は互いに素&lt;/li&gt;
+&lt;li&gt;$H$ に閉路がなければ最適 branching&lt;/li&gt;
+&lt;/ol&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;頂点 $v$ が $2$ つの有向閉路上にあるとします．このとき，次数が少なくとも $2$ 以上の頂点が存在します．これは critical subgraph の条件に反します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$H$ に閉路がなければ $H$は branching です．任意の branching $B$ のすべての頂点 $v$ について以下が成り立ちます．&lt;br&gt;
+$w(B \cap \lbrace e | head(e) = v \rbrace) \le w(H \cap \lbrace e | head(e) = v \rbrace)$&lt;br&gt;
+これらをすべての頂点について足し合わせると $w(B) \le w(H)$ となり，$H$ が最適となります．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="補題-2"&gt;補題 2
+&lt;/h2&gt;&lt;p&gt;辺 $e = (u, v) \in E \backslash B$ が eligible なことと，$B$ 上に $v$ から $u$ への有向パスがないことは同値&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;「辺 $e = (u, v) \in E \backslash B$ が eligible」なら「$B$ 上に $v$ から $u$ への有向パスがない」&lt;br&gt;
+対偶として，$v$ から $u$ への有向パスがあるなら，$e$ は eligible ではないことを示します．&lt;br&gt;
+$v$ から $u$ への有向パスがあるため，$(u, v)$ を追加すると閉路が発生します．&lt;br&gt;
+これは eligible の定義に反するため，$e$ は eligible ではありません．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;「$B$ 上に $v$ から $u$ への有向パスがない」なら「辺 $e = (u, v) \in E \backslash B$ が eligible」&lt;br&gt;
+$e$ を $B$ に追加したとき，$(x, head(e)) \in B$ の辺を削除すれば $v$ へ入る辺は高々 $1$ 本です．&lt;br&gt;
+また，$B$ には $v \rightarrow u$ パスがないので，$e$ を追加しても閉路は発生しません．&lt;br&gt;
+よって，$e$ は eligible です．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="補題-3"&gt;補題 3
+&lt;/h2&gt;&lt;p&gt;$B$ を $G = (V, E)$ の branching，$C$ を $G$ の有向サイクルとする．$C \backslash B$ に eligible な辺がなければ， $|C \backslash B| = 1$ となる&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;p&gt;$C \backslash B$ に eligible な辺がないとき，$|C \backslash B|$ は 1 以外にならないことを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = 0$ にならない&lt;br&gt;
+$B$ は branching なので起こりません&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = 2$ にならない&lt;br&gt;
+$C \backslash B = \lbrace (s_1, t_1), (s_2, t_2) \rbrace$ と仮定します．&lt;br&gt;
+どちらの辺も eligible でないので，$B$ に $t_1$ から $s_1$ への有向パスと $t_2$ から $s_2$ への有向パスが存在します．&lt;br&gt;
+$C$ は閉路なので，$t_2$ から $s_1$ への有向パスと $t_1$ から $s_2$ への有向パスは $C$ 上に存在します．&lt;br&gt;
+よって，$B$ には，$t_2 \rightarrow \cdots \rightarrow \cdots s_1 \rightarrow t_1 \rightarrow \cdots \rightarrow s_2 \rightarrow t_2$ のようなパスができます．&lt;br&gt;
+これは，$B$ の中に閉路があるということになり，$B$ が branching という仮定に矛盾します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$|C \backslash B| = k \gt 2$ にならない&lt;br&gt;
+$|C \backslash B| = 2$ に帰着します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;h2 id="定理-1"&gt;定理 1
+&lt;/h2&gt;&lt;p&gt;$G$ の maximal critical subgraph $H$ に対し，以下の最適 branching $B$ が存在する．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$H$ に含まれるすべての有向閉路 $C_i$ について，$| C_i \backslash B| = 1$．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;つまり，$H$ の各有向閉路からちょうど $1$ 本だけ辺が取り除かれているような最適 branching が存在するということです．&lt;br&gt;
+下の図は $G$ に対する maximul critical subgraph $H$ と最適 branching です．&lt;br&gt;
+$H$ の閉路から $(0, 1)$ と $(3, 5)$ を取り除いた最適 branching が存在することがわかります．&lt;/p&gt;
+&lt;img src="images/theorem1_0.png" width="50%"&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;最適 branching のうち，$H$ の辺を最も多く含んでいるものを $B$ と仮定します．&lt;br&gt;
+補題 2 により，$C \backslash B$ に eligible な辺がなければ，$|C \backslash B| = 1$ となるので，各 $C_i \backslash B$ のすべての辺が eligible でないことを示します．&lt;br&gt;
+$e \in H \backslash B$ が eligible であると矛盾が起きることを示します．&lt;br&gt;
+$e$ は eligible なので，新しい branching $B^{\prime} = \lbrace B \backslash \lbrace e^{\prime} \rbrace \rbrace \cup \lbrace e \rbrace$ を作ることができます．ここで $e^{\prime}$ は，$head(e)$ に入る $B$ 上の辺です．&lt;br&gt;
+このとき，$e \in H$ であり，$e^{\prime} \notin H$ であるため，$B^{\prime}$ は $B$ より多くの $H$ の辺を含みます．&lt;br&gt;
+また，$e$ は critical なので，$B^{\prime}$ は最適 branching です．&lt;br&gt;
+よって，$B$ より$H$ の辺を多く含む最適 branching $B^{\prime}$ ができることとなり，これは仮定に矛盾します．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="定理-2"&gt;定理 2
+&lt;/h2&gt;&lt;p&gt;定理 1 を満たすような最適 branching $B$ に，以下の条件を満たす解が存在する．ここで $e^{0}_i$ は $C_i$ で最も重みの小さい辺である．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;各有向閉路 $C_i$ で $|C_i \backslash B| = 1$&lt;/li&gt;
+&lt;li&gt;もし有向閉路 $C_i$ へ外部から入る辺が $B$ に存在しないなら，$C_i \backslash B = \lbrace e^{0}_i \rbrace$ である．&lt;/li&gt;
+&lt;/ol&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;1.を満たす最適 branching の中で，$\lbrace e^{0}_0, e^{1}_0, \cdots, e^{0}_k \rbrace$ が含まれる数がもっとも多いものを $B$ とします．&lt;br&gt;
+$B$ には $C_i$ に外部から入る辺が存在しないにも関わらず，$C_i$ に $e^{0}_i$ が含まれていると仮定します．&lt;br&gt;
+$C_i \backslash B = \lbrace e \rbrace$ とします．&lt;br&gt;
+$B^{\prime} = (B \backslash \lbrace e^{0}_i \rbrace) \cup \lbrace e \rbrace$ とします．&lt;br&gt;
 この $B^{\prime}$ は $\lbrace e^{0}_i \rbrace$ を含む最適 branching です．
-これは仮定と矛盾します．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;h2 id="edmonds-のアルゴリズム">Edmonds のアルゴリズム
-&lt;/h2>&lt;p>グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>．&lt;/p>
-&lt;p>まず，maximal critical subgraph を求め，この辺集合を $H$ とします．&lt;br>
-補題 1 により $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p>
-&lt;p>$(V, H)$ が branching でない場合を考えます．&lt;br>
-この場合，$(V, H)$ には有向閉路が 1 つ以上存在します．&lt;br>
-定理 1 により，各閉路から 1 本辺を削除した辺集合を含む最適 branching $B^{\star}$ が存在することがわかります．今後はこの $B^{\star}$ を求めていきます．&lt;/p>
-&lt;p>$B^{\star}$ を求めるためには maximal critical graph の各閉路のどの辺を削除すればいいのかを考ます．&lt;br>
-もし，$B^{\star}$ に（閉路の）外部から閉路に入る辺 $(u, v)$ がある場合，$v$ の入次数が $2$ になるのを避けるために閉路内で $v$ に入る辺を削除することになります．反対に，外部から閉路に入る辺がない場合，定理 2 より閉路内で最小の辺を削除することになります．&lt;br>
-つまり，閉路のどの辺を削除するかは閉路外部の辺構造によって決めることができます．そこで，閉路内部の辺構造（つまり，どの辺を削除するのか）を決めるより先に外部の辺構造を決めてしまいます．&lt;br>
-そのために，閉路外部の重みを適切に調整した上で閉路を $1$ つの超頂点に縮約します．この手続きによって得られるグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$ とします．&lt;br>
-この $G^{\prime}$ の最適 branching に超頂点に入る辺があるかどうかによって，$H$ の閉路のどの辺を削除するかを決めることができます．&lt;/p>
-&lt;p>$G^{\prime}$ の辺の重み $w^{\prime}$ をどう設定するかを考えます．&lt;br>
-$G^{\prime}$ の最適 branching から構成した $G$ の branching も最適 branching であるという条件を満たす必要があります．&lt;br>
-このためには，任意の branching について，$w(B) = w^{\prime}(B^{\prime}) + const$ であることを示せればいいです．$B^{\prime}$ と $B$ の重みの差は定数なので，$B^{\prime}$ が最適なら $B$ も最適といえるためです．&lt;br>
+これは仮定と矛盾します．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;h2 id="edmonds-のアルゴリズム"&gt;Edmonds のアルゴリズム
+&lt;/h2&gt;&lt;p&gt;グラフ $G = (V, E)$ の最適 branching を求める方法を考えます．表記上の都合のため多重辺はないものとします&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;．&lt;/p&gt;
+&lt;p&gt;まず，maximal critical subgraph を求め，この辺集合を $H$ とします．&lt;br&gt;
+補題 1 により $(V, H)$ が branching なら $(V, H)$ は最適 branching です．&lt;/p&gt;
+&lt;p&gt;$(V, H)$ が branching でない場合を考えます．&lt;br&gt;
+この場合，$(V, H)$ には有向閉路が 1 つ以上存在します．&lt;br&gt;
+定理 1 により，各閉路から 1 本辺を削除した辺集合を含む最適 branching $B^{\star}$ が存在することがわかります．今後はこの $B^{\star}$ を求めていきます．&lt;/p&gt;
+&lt;p&gt;$B^{\star}$ を求めるためには maximal critical graph の各閉路のどの辺を削除すればいいのかを考ます．&lt;br&gt;
+もし，$B^{\star}$ に（閉路の）外部から閉路に入る辺 $(u, v)$ がある場合，$v$ の入次数が $2$ になるのを避けるために閉路内で $v$ に入る辺を削除することになります．反対に，外部から閉路に入る辺がない場合，定理 2 より閉路内で最小の辺を削除することになります．&lt;br&gt;
+つまり，閉路のどの辺を削除するかは閉路外部の辺構造によって決めることができます．そこで，閉路内部の辺構造（つまり，どの辺を削除するのか）を決めるより先に外部の辺構造を決めてしまいます．&lt;br&gt;
+そのために，閉路外部の重みを適切に調整した上で閉路を $1$ つの超頂点に縮約します．この手続きによって得られるグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$ とします．&lt;br&gt;
+この $G^{\prime}$ の最適 branching に超頂点に入る辺があるかどうかによって，$H$ の閉路のどの辺を削除するかを決めることができます．&lt;/p&gt;
+&lt;p&gt;$G^{\prime}$ の辺の重み $w^{\prime}$ をどう設定するかを考えます．&lt;br&gt;
+$G^{\prime}$ の最適 branching から構成した $G$ の branching も最適 branching であるという条件を満たす必要があります．&lt;br&gt;
+このためには，任意の branching について，$w(B) = w^{\prime}(B^{\prime}) + const$ であることを示せればいいです．$B^{\prime}$ と $B$ の重みの差は定数なので，$B^{\prime}$ が最適なら $B$ も最適といえるためです．&lt;br&gt;
 外部から閉路に入る辺を $e = (u, v)$，$v$ に入る閉路内唯一の辺を $\tilde e$，閉路の最小の重みを持つ辺を $e^{0}$ とします．
-この条件を満たすためには，閉路に入る辺 $e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0})$ と設定すればいいです．&lt;br>
-閉路に入る辺以外の重みは $w$ のままとします．&lt;/p>
-&lt;details>&lt;summary>証明&lt;/summary>
-&lt;hr>
-&lt;p>$w(B) = w^{\prime}(B^{\prime}) + const$ となることを示します．&lt;br>
-$B^{\prime}$ の超頂点を展開したときの重みの増加分を考えます．&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>超頂点に入る辺 $e$ がないとき&lt;/p>
-&lt;ul>
-&lt;li>$e^{0}_i$ 以外の辺を採用するので，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>超頂点に入る辺 $e$ があるとき&lt;/p>
-&lt;ul>
-&lt;li>$w(\tilde e)$ 以外の辺を採用するので，$w(C_i) - w(\tilde e)$ だけ増加します．&lt;br>
-ただし，$e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0}_i)$ と調整していたので，この調整を打ち消すと $w(C_i) - w(\tilde e) - (- w(\tilde e) + w(e^{0}_i)) = w(C_i) - w(e^{0}_i)$ となります．&lt;br>
-結局，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>よって，どちらも $w(C_i) - w(e_i^{0})$ だけ増加するので，すべての閉路についてこの和をとると $w(B) = w^{\prime}(B^{\prime}) + \sum_{i} w(C_i) - \sum_{i} w(e_i^{0})$ となります．&lt;br>
-$\sum_{i} w(C_i) - \sum_{i} w(e^{0}_i)$ の部分は branching のとり方に依存しないため定数とみなすことができ，$w(B) = w^{\prime}(B^{\prime}) + const$ となります．&lt;/p>
-&lt;hr>
-&lt;/details>
-&lt;p>このように重みを設定した $G^{\prime}$ に対し，最適 branching を求める手続きを再帰的に実行します．&lt;br>
-$G^{\prime}$ は元のグラフより厳密に頂点数が少なくなるため，この手続きは有限回で終了します．&lt;/p>
-&lt;p>$G$ の最適 branching $B$ は，この再帰呼び出しから返される $G^{\prime}$ の最適 branching $B^{\prime}$ に対して，閉路の $1$ 本を除いた残りすべての辺を加えることにより構築することができます．&lt;/p>
-&lt;p>最後に計算量について考えます．&lt;br>
-1 回の手続きで少なくとも 1 つの頂点が減ります．1 回の手続きには $O(|E|)$ かかるので，このアルゴリズムの計算量は $O(|E||V|)$ です．&lt;/p>
-&lt;h2 id="edmonds-のアルゴリズムまとめ">Edmonds のアルゴリズムまとめ
-&lt;/h2>&lt;ul>
-&lt;li>
-&lt;p>step 1: maximal critical subgraph の構築
-maximal critical subgraph を求めます．この辺の集合を $H$ とします．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 2: 閉路のチェック&lt;br>
-$(V, H)$ が branching を形成する場合，$(V, H)$ が最適 branching であるため，これを返します．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 3: 閉路の縮約&lt;br>
-$H$ が $1$ つ以上の閉路を含む場合，任意の閉路 $C$ を選び，$C$ を $1$ つの超頂点 $a$​ に縮約します．&lt;br>
-この操作によってできたグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$とします．ここで，$V^{\prime} = (V \backslash C) \cup a$ です．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 4: $G^{\prime}$ における辺の重みの変更&lt;/p>
-&lt;ul>
-&lt;li>$C$ に入る辺：
-&lt;ul>
-&lt;li>辺 $(u \notin C, v \in C)$ に対して、$G^{\prime}$ 内の新しい辺 $(u, a​)$ の重み $w^{\prime}(u, a)$ を $w(u, v) - w(\tilde e) + w(e^{0})$ とします．ここで，$w(\tilde e)$ は $C$ に存在する頂点 $v$ に入る辺の重み，$w(e^{0})$ は $C$ に存在する辺の最小の重みです．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$C$ から出る辺：
-&lt;ul>
-&lt;li>辺 $(u \in C, v \notin C)$ に対して、$G^{\prime}$ 内の新しい辺 $(a, v)$ の重み $w^{\prime}(a​, v)$ を $w(u, v)$ とします．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>$C$ に無関係な辺：
-&lt;ul>
-&lt;li>辺 $(u \notin C,v \notin C)$ に対して、$(u, v​)$ の重み $w^{\prime}(u, v​)$ を $w(u, v)$ とします．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>step 5: 再帰呼び出し&lt;br>
-$G^{\prime}$ の最適 branching を再帰的に見つけます．&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>step 6: 展開&lt;br>
-$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持つ場合&lt;/p>
-&lt;ul>
-&lt;li>超頂点を展開します．$a$ に入る辺が展開後 $(u, v)$ であったとします．$C$ に含まれる辺のうち $v$ に入る辺以外の $|C| - 1$ 本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li>
-&lt;/ul>
-&lt;p>$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持たない場合&lt;/p>
-&lt;ul>
-&lt;li>超頂点を展開します．$C$ に含まれる辺のうち，最小の重みの辺以外の $|C| - 1$本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="アルゴリズムの実行例">アルゴリズムの実行例
-&lt;/h2>&lt;p>下のグラフの branching を求めます．&lt;/p>
-&lt;img src="images/edmonds_0.png" width="25%">
-&lt;hr>
-&lt;h3 id="phase1">phase1
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．図では赤色の辺が対応します．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>$(2, 5), (5, 4), (4, 2)$ によって閉路が生じます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>閉路の縮約
-&lt;ul>
-&lt;li>閉路に属する頂点 $\lbrace 2, 4, 5 \rbrace$ を超頂点 $6$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>辺の重みの変更
-&lt;ul>
-&lt;li>超頂点に入る辺 $(0, 2)$ の重みを変更します．$2$ に入る閉路の辺の重みは $5$，閉路最小の重みは $4$ なので，$2 - 5 + 4 = 1$ となります．&lt;/li>
-&lt;li>超頂点に入る辺 $(3, 4)$ の重みを変更します．$4$ に入る閉路の辺の重みは $4$，閉路最小の重みは $4$ なので，$3 - 4 + 4 = 3$ となります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>再帰呼び出し
-&lt;ul>
-&lt;li>新しくできたグラフの最適 branching を求めます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_1.png" width="50%">
-&lt;hr>
-&lt;h3 id="phase2">phase2
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>$(1, 3), (3, 6), (6, 1)$ によって閉路が生じます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>閉路の縮約
-&lt;ul>
-&lt;li>閉路に属する頂点 $\lbrace 1, 3, 6 \rbrace$ を超頂点 $7$ に縮約します．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>辺の重みの変更
-&lt;ul>
-&lt;li>超頂点に入る辺 $(0, 6)$ の重みを変更します．$6$ に入る閉路の辺の重みは $3$，閉路最小の重みは $1$ なので，$1 - 3 + 1 = -1$ となります．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>再帰呼び出し
-&lt;ul>
-&lt;li>新しくできたグラフの最適 branching を求めます．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_2.png" width="50%">
-&lt;hr>
-&lt;h3 id="phase3">phase3
-&lt;/h3>&lt;ul>
-&lt;li>maximal critical subgraph を求めます．&lt;/li>
-&lt;li>閉路のチェック
-&lt;ul>
-&lt;li>閉路が存在しないため，これは最適 branching です．&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;img src="images/edmonds_3.png" width="25%">
-&lt;hr>
-&lt;h3 id="phase4">phase4
-&lt;/h3>&lt;p>ここからは閉路の展開をしていきます．&lt;br>
-現在は，$(7, 0)$ が branching の辺として選ばれています．&lt;br>
-branching として選ばれた辺は青色の辺で示していきます．&lt;br>
-&lt;img src="images/edmonds_4.png" width="25%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase5">phase5
-&lt;/h3>&lt;p>超頂点 $7$ を展開します．超頂点 $7$ は $(1, 3), (3, 6), (6, 1)$ からなる閉路でした．&lt;br>
+この条件を満たすためには，閉路に入る辺 $e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0})$ と設定すればいいです．&lt;br&gt;
+閉路に入る辺以外の重みは $w$ のままとします．&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;証明&lt;/summary&gt;
+&lt;hr&gt;
+&lt;p&gt;$w(B) = w^{\prime}(B^{\prime}) + const$ となることを示します．&lt;br&gt;
+$B^{\prime}$ の超頂点を展開したときの重みの増加分を考えます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点に入る辺 $e$ がないとき&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$e^{0}_i$ 以外の辺を採用するので，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;超頂点に入る辺 $e$ があるとき&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$w(\tilde e)$ 以外の辺を採用するので，$w(C_i) - w(\tilde e)$ だけ増加します．&lt;br&gt;
+ただし，$e$ の重みを $w^{\prime}(e) = w(e) - w(\tilde e) + w(e^{0}_i)$ と調整していたので，この調整を打ち消すと $w(C_i) - w(\tilde e) - (- w(\tilde e) + w(e^{0}_i)) = w(C_i) - w(e^{0}_i)$ となります．&lt;br&gt;
+結局，$w(C_i) - w(e^{0}_i)$ だけ増加します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;よって，どちらも $w(C_i) - w(e_i^{0})$ だけ増加するので，すべての閉路についてこの和をとると $w(B) = w^{\prime}(B^{\prime}) + \sum_{i} w(C_i) - \sum_{i} w(e_i^{0})$ となります．&lt;br&gt;
+$\sum_{i} w(C_i) - \sum_{i} w(e^{0}_i)$ の部分は branching のとり方に依存しないため定数とみなすことができ，$w(B) = w^{\prime}(B^{\prime}) + const$ となります．&lt;/p&gt;
+&lt;hr&gt;
+&lt;/details&gt;
+&lt;p&gt;このように重みを設定した $G^{\prime}$ に対し，最適 branching を求める手続きを再帰的に実行します．&lt;br&gt;
+$G^{\prime}$ は元のグラフより厳密に頂点数が少なくなるため，この手続きは有限回で終了します．&lt;/p&gt;
+&lt;p&gt;$G$ の最適 branching $B$ は，この再帰呼び出しから返される $G^{\prime}$ の最適 branching $B^{\prime}$ に対して，閉路の $1$ 本を除いた残りすべての辺を加えることにより構築することができます．&lt;/p&gt;
+&lt;p&gt;最後に計算量について考えます．&lt;br&gt;
+1 回の手続きで少なくとも 1 つの頂点が減ります．1 回の手続きには $O(|E|)$ かかるので，このアルゴリズムの計算量は $O(|E||V|)$ です．&lt;/p&gt;
+&lt;h2 id="edmonds-のアルゴリズムまとめ"&gt;Edmonds のアルゴリズムまとめ
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;step 1: maximal critical subgraph の構築
+maximal critical subgraph を求めます．この辺の集合を $H$ とします．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 2: 閉路のチェック&lt;br&gt;
+$(V, H)$ が branching を形成する場合，$(V, H)$ が最適 branching であるため，これを返します．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 3: 閉路の縮約&lt;br&gt;
+$H$ が $1$ つ以上の閉路を含む場合，任意の閉路 $C$ を選び，$C$ を $1$ つの超頂点 $a$​ に縮約します．&lt;br&gt;
+この操作によってできたグラフを $G^{\prime} = (V^{\prime}, E^{\prime})$とします．ここで，$V^{\prime} = (V \backslash C) \cup a$ です．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 4: $G^{\prime}$ における辺の重みの変更&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$C$ に入る辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \notin C, v \in C)$ に対して、$G^{\prime}$ 内の新しい辺 $(u, a​)$ の重み $w^{\prime}(u, a)$ を $w(u, v) - w(\tilde e) + w(e^{0})$ とします．ここで，$w(\tilde e)$ は $C$ に存在する頂点 $v$ に入る辺の重み，$w(e^{0})$ は $C$ に存在する辺の最小の重みです．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$C$ から出る辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \in C, v \notin C)$ に対して、$G^{\prime}$ 内の新しい辺 $(a, v)$ の重み $w^{\prime}(a​, v)$ を $w(u, v)$ とします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$C$ に無関係な辺：
+&lt;ul&gt;
+&lt;li&gt;辺 $(u \notin C,v \notin C)$ に対して、$(u, v​)$ の重み $w^{\prime}(u, v​)$ を $w(u, v)$ とします．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 5: 再帰呼び出し&lt;br&gt;
+$G^{\prime}$ の最適 branching を再帰的に見つけます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step 6: 展開&lt;br&gt;
+$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持つ場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;超頂点を展開します．$a$ に入る辺が展開後 $(u, v)$ であったとします．$C$ に含まれる辺のうち $v$ に入る辺以外の $|C| - 1$ 本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$G^{\prime}$ の最適 branching が，閉路の外から超頂点 $a$​ に入る辺を持たない場合&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;超頂点を展開します．$C$ に含まれる辺のうち，最小の重みの辺以外の $|C| - 1$本を採用します．このようにして選んだ辺集合は最適 branching であるため，これを返します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="アルゴリズムの実行例"&gt;アルゴリズムの実行例
+&lt;/h2&gt;&lt;p&gt;下のグラフの branching を求めます．&lt;/p&gt;
+&lt;img src="images/edmonds_0.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase1"&gt;phase1
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．図では赤色の辺が対応します．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;$(2, 5), (5, 4), (4, 2)$ によって閉路が生じます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉路の縮約
+&lt;ul&gt;
+&lt;li&gt;閉路に属する頂点 $\lbrace 2, 4, 5 \rbrace$ を超頂点 $6$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;辺の重みの変更
+&lt;ul&gt;
+&lt;li&gt;超頂点に入る辺 $(0, 2)$ の重みを変更します．$2$ に入る閉路の辺の重みは $5$，閉路最小の重みは $4$ なので，$2 - 5 + 4 = 1$ となります．&lt;/li&gt;
+&lt;li&gt;超頂点に入る辺 $(3, 4)$ の重みを変更します．$4$ に入る閉路の辺の重みは $4$，閉路最小の重みは $4$ なので，$3 - 4 + 4 = 3$ となります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;再帰呼び出し
+&lt;ul&gt;
+&lt;li&gt;新しくできたグラフの最適 branching を求めます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_1.png" width="50%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase2"&gt;phase2
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;$(1, 3), (3, 6), (6, 1)$ によって閉路が生じます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉路の縮約
+&lt;ul&gt;
+&lt;li&gt;閉路に属する頂点 $\lbrace 1, 3, 6 \rbrace$ を超頂点 $7$ に縮約します．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;辺の重みの変更
+&lt;ul&gt;
+&lt;li&gt;超頂点に入る辺 $(0, 6)$ の重みを変更します．$6$ に入る閉路の辺の重みは $3$，閉路最小の重みは $1$ なので，$1 - 3 + 1 = -1$ となります．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;再帰呼び出し
+&lt;ul&gt;
+&lt;li&gt;新しくできたグラフの最適 branching を求めます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_2.png" width="50%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase3"&gt;phase3
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;maximal critical subgraph を求めます．&lt;/li&gt;
+&lt;li&gt;閉路のチェック
+&lt;ul&gt;
+&lt;li&gt;閉路が存在しないため，これは最適 branching です．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/edmonds_3.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase4"&gt;phase4
+&lt;/h3&gt;&lt;p&gt;ここからは閉路の展開をしていきます．&lt;br&gt;
+現在は，$(7, 0)$ が branching の辺として選ばれています．&lt;br&gt;
+branching として選ばれた辺は青色の辺で示していきます．&lt;br&gt;
+&lt;img src="images/edmonds_4.png" width="25%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase5"&gt;phase5
+&lt;/h3&gt;&lt;p&gt;超頂点 $7$ を展開します．超頂点 $7$ は $(1, 3), (3, 6), (6, 1)$ からなる閉路でした．&lt;br&gt;
 この閉路に入る辺はないので，閉路のなかで最小の辺 $(6, 1)$ を除外し，$(1, 3), (3, 6)$ を採用します．
-&lt;img src="images/edmonds_5.png" width="50%">&lt;/p>
-&lt;hr>
-&lt;h3 id="phase6">phase6
-&lt;/h3>&lt;p>超頂点 $6$ を展開します．超頂点 $6$ は $(2, 5), (5, 4), (4, 2)$ からなる閉路でした．&lt;br>
-この閉路には $(3, 4)$ が入るので，閉路の中で $4$ に入る $(5, 4)$ を除外し，$(2, 5), (4, 2)$ を採用します．&lt;br>
-すべての閉路を展開をしたので，アルゴリズムを終了します．&lt;br>
-&lt;img src="images/edmonds_6.png" width="50%">&lt;/p>
-&lt;h2 id="問題のバリエーション">問題のバリエーション
-&lt;/h2>&lt;p>以下の問題は，optimal branching と等価の問題であり，最適 branching のアルゴリズムを使って解くことができます．&lt;/p>
-&lt;h3 id="最小重み有向木問題minimum-weight-arborescence-problem">最小重み有向木問題（Minimum Weight Arborescence Problem）
-&lt;/h3>&lt;p>$G = (V, E)$ の全域有向森ではなく，全域有向木を求める問題です．木の根は任意になります．&lt;br>
-$G$ に全域有向木が存在すると仮定します．&lt;br>
-$G = (V, E)$ に対し，$K = 1 + \sum_{e \in E} |w(e)|$ とします．&lt;br>
-$w^{\prime}(e) = K - w(e)$ と重みを変更した $G$ で最適 branching 問題を解きます．&lt;/p>
-&lt;p>木 $B$ の辺の数を $|B|$ と表します．$|B| \gt |B^{\prime}|$ である任意の $2$ つの有向木 $B$，$B^{\prime}$ に対して，$w^{\prime}(B) - w^{\prime}(B^{\prime}) = (|B| - |B^{\prime}|)K - (w(B) - w(B^{\prime})) \ge 0$ が成り立ちます．&lt;br>
-よって，$|B| \gt |B^{\prime}|$ ならば $w^{\prime}(B) \gt w^{\prime}(B^{\prime})$ であるため，最小重み有向木問題の解を求めることができます．&lt;/p>
-&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem">最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>
-&lt;/h3>&lt;p>最小重み有向木問題で，全域木の根 $r$ が指定されている問題です．&lt;br>
-$G$ に $r$ を根とする全域有向木が存在すると仮定します．&lt;br>
-超頂点 $s$ を用意し，$G^{\prime} = (V(G) \cup \lbrace s \rbrace, E \cup \lbrace (s, r) \rbrace)$，$w(s, r) = 0$ とします．&lt;br>
-$G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削除することで，最小重み根指定有向木問題の解を得ることができます．&lt;/p>
-&lt;h2 id="問題">問題
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
->AOJ - 最小全域有向木&lt;/a>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10616122#1" target="_blank" rel="noopener"
->提出コード&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="参考">参考
-&lt;/h2>&lt;ul>
-&lt;li>&lt;a class="link" href="https://en.wikipedia.org/wiki/Edmonds%27_algorithm" target="_blank" rel="noopener"
->Edmonds&amp;rsquo; algorithm&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://users-math.au.dk/jensen/teaching/2018GraphTheory2/notes.pdf" target="_blank" rel="noopener"
->Lecture notes: Graph Theory 2&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://faculty.fiu.edu/~ramsamuj/graphtheory/chap3.pdf" target="_blank" rel="noopener"
->GRAPH THEORY 3. Trees&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://www.taylorfrancis.com/books/mono/10.1201/b19163" target="_blank" rel="noopener"
->Handbook of Graph Theory, Combinatorial Optimization, and Algorithms&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
->組合せ最適化&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;div class="footnotes" role="doc-endnotes">
-&lt;hr>
-&lt;ol>
-&lt;li id="fn:1">
-&lt;p>&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
->組合せ最適化&lt;/a>では最大重み有向森問題（Maximum Weight Branching Problem）と表記されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:2">
-&lt;p>重みが最小の branching を求めたいときは重みの正負を反転します&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:3">
-&lt;p>辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li id="fn:4">
-&lt;p>最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;/div></description></item></channel></rss>
+&lt;img src="images/edmonds_5.png" width="50%"&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="phase6"&gt;phase6
+&lt;/h3&gt;&lt;p&gt;超頂点 $6$ を展開します．超頂点 $6$ は $(2, 5), (5, 4), (4, 2)$ からなる閉路でした．&lt;br&gt;
+この閉路には $(3, 4)$ が入るので，閉路の中で $4$ に入る $(5, 4)$ を除外し，$(2, 5), (4, 2)$ を採用します．&lt;br&gt;
+すべての閉路を展開をしたので，アルゴリズムを終了します．&lt;br&gt;
+&lt;img src="images/edmonds_6.png" width="50%"&gt;&lt;/p&gt;
+&lt;h2 id="問題のバリエーション"&gt;問題のバリエーション
+&lt;/h2&gt;&lt;p&gt;以下の問題は，optimal branching と等価の問題であり，最適 branching のアルゴリズムを使って解くことができます．&lt;/p&gt;
+&lt;h3 id="最小重み有向木問題minimum-weight-arborescence-problem"&gt;最小重み有向木問題（Minimum Weight Arborescence Problem）
+&lt;/h3&gt;&lt;p&gt;$G = (V, E)$ の全域有向森ではなく，全域有向木を求める問題です．木の根は任意になります．&lt;br&gt;
+$G$ に全域有向木が存在すると仮定します．&lt;br&gt;
+$G = (V, E)$ に対し，$K = 1 + \sum_{e \in E} |w(e)|$ とします．&lt;br&gt;
+$w^{\prime}(e) = K - w(e)$ と重みを変更した $G$ で最適 branching 問題を解きます．&lt;/p&gt;
+&lt;p&gt;木 $B$ の辺の数を $|B|$ と表します．$|B| \gt |B^{\prime}|$ である任意の $2$ つの有向木 $B$，$B^{\prime}$ に対して，$w^{\prime}(B) - w^{\prime}(B^{\prime}) = (|B| - |B^{\prime}|)K - (w(B) - w(B^{\prime})) \ge 0$ が成り立ちます．&lt;br&gt;
+よって，$|B| \gt |B^{\prime}|$ ならば $w^{\prime}(B) \gt w^{\prime}(B^{\prime})$ であるため，最小重み有向木問題の解を求めることができます．&lt;/p&gt;
+&lt;h3 id="最小重み根指定有向木問題minimum-weight-rooted-arborescence-problem"&gt;最小重み根指定有向木問題（Minimum Weight Rooted Arborescence Problem）&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;
+&lt;/h3&gt;&lt;p&gt;最小重み有向木問題で，全域木の根 $r$ が指定されている問題です．&lt;br&gt;
+$G$ に $r$ を根とする全域有向木が存在すると仮定します．&lt;br&gt;
+超頂点 $s$ を用意し，$G^{\prime} = (V(G) \cup \lbrace s \rbrace, E \cup \lbrace (s, r) \rbrace)$，$w(s, r) = 0$ とします．&lt;br&gt;
+$G^{\prime}$ に対し，最小重み有向木問題の解を求め，$s$ を削除することで，最小重み根指定有向木問題の解を得ることができます．&lt;/p&gt;
+&lt;h2 id="問題"&gt;問題
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_2_B" target="_blank" rel="noopener"
+&gt;AOJ - 最小全域有向木&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=10616122#1" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Edmonds%27_algorithm" target="_blank" rel="noopener"
+&gt;Edmonds&amp;rsquo; algorithm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://users-math.au.dk/jensen/teaching/2018GraphTheory2/notes.pdf" target="_blank" rel="noopener"
+&gt;Lecture notes: Graph Theory 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://faculty.fiu.edu/~ramsamuj/graphtheory/chap3.pdf" target="_blank" rel="noopener"
+&gt;GRAPH THEORY 3. Trees&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.taylorfrancis.com/books/mono/10.1201/b19163" target="_blank" rel="noopener"
+&gt;Handbook of Graph Theory, Combinatorial Optimization, and Algorithms&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
+&gt;組合せ最適化&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10121874.html" target="_blank" rel="noopener"
+&gt;組合せ最適化&lt;/a&gt;では最大重み有向森問題（Maximum Weight Branching Problem）と表記されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;重みが最小の branching を求めたいときは重みの正負を反転します&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;辺を $(u, v)$ と表記したときに，一意に定めるためです&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;最小全域有向木問題，最小有向木問題とも&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>
