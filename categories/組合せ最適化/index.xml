@@ -1,4 +1,279 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>組合せ最適化 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/</link><description>Recent content in 組合せ最適化 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 23 Dec 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>Gomory-Hu 木</title><link>https://miti-7.github.io/post/gomory-hu-tree/</link><pubDate>Tue, 23 Dec 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/gomory-hu-tree/</guid><description>&lt;img src="https://miti-7.github.io/post/gomory-hu-tree/images/t4.png" alt="Featured image of post Gomory-Hu 木" /&gt;&lt;h2 id="はじめに"&gt;はじめに
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>組合せ最適化 on Eating Your Own Cat Food</title><link>https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/</link><description>Recent content in 組合せ最適化 on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 23 Dec 2025 00:01:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/categories/%E7%B5%84%E5%90%88%E3%81%9B%E6%9C%80%E9%81%A9%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>フロー等価木と Gusfield のアルゴリズム</title><link>https://miti-7.github.io/post/flow-equivalent-tree-gusfield/</link><pubDate>Tue, 23 Dec 2025 00:01:00 +0900</pubDate><guid>https://miti-7.github.io/post/flow-equivalent-tree-gusfield/</guid><description>&lt;img src="https://miti-7.github.io/post/flow-equivalent-tree-gusfield/images/example.png" alt="Featured image of post フロー等価木と Gusfield のアルゴリズム" /&gt;&lt;h2 id="はじめに"&gt;はじめに
+&lt;/h2&gt;&lt;p&gt;この記事は&lt;a class="link" href="https://adventar.org/calendars/12007" target="_blank" rel="noopener"
+&gt;木 Advent Calendar 2025&lt;/a&gt; の 23 日目の記事です．&lt;br&gt;
+この記事では無向グラフのすべての頂点対の最大流の情報を持つ木であるフロー等価木を紹介します．&lt;br&gt;
+まず，フロー等価木の説明をします．次に，フロー等価木を構築するアルゴリズムの説明とその証明を行います．最後にフロー等価木を実装し，例として競プロの問題を解きます．&lt;/p&gt;
+&lt;p&gt;無向グラフや最小カットなどの用語については&lt;a class="link" href="https://miti-7.github.io/post/gomory-hu-tree/" target="_blank" rel="noopener"
+&gt;Gomory-Hu 木&lt;/a&gt;を参照してください．&lt;/p&gt;
+&lt;h2 id="フロー等価木"&gt;フロー等価木
+&lt;/h2&gt;&lt;p&gt;同じ頂点集合 $V$ をもつ $2$ つの重み付き無向グラフ $G(V, E)$ と $H(V, F)$ を考えます．ただし，$F \subset E$ とは限りません．&lt;br&gt;
+$G$ と $H$ の s - t 間の最大流の値をそれぞれ $f_{s, t; G}$，$f_{s, t; H}$ と表記します&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+任意の $2$ 頂点 $s, t \in V$ に対し $f_{s, t; H} = f_{s, t;G}$ が成り立つとき，$H$ は $G$ にフロー等価（flow equivalent）であるといいます．&lt;br&gt;
+特に，木 $T$ がグラフ $G$ にフロー等価であるとき，$T$ をフロー等価木（flow equivalent tree）とよびます．&lt;/p&gt;
+&lt;p&gt;フロー等価木と似た概念に Gomory-Hu 木があります&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+Gomory-Hu 木は，$G$ の任意の $2$ 頂点 $s, t \in V$ に対し，木の最小 s - t カット $S$ が $G$ の最小 s - t カットとなるような木です&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+Gomory-Hu 木は常にフロー等価木ですが，フロー等価木であっても Gomory-Hu 木でない場合があります．&lt;/p&gt;
+&lt;p&gt;下の図はグラフ $G$ とそれに対応するフロー等価木 $T$ です．
+各 s - t 間の最大流の値は $G$ と $T$ で一致します．&lt;br&gt;
+一方，$T$ の最小 1-3 カットは $\{1, 2, 4\}$ なのに対し，$G$ のカット $\{1, 2, 4\}$ の容量は $11$ となり，一致しない最小 s - t カットが存在することがわかります．&lt;/p&gt;
+&lt;div style="display: flex; gap: 20px;"&gt;
+&lt;div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;$s, t$&lt;/th&gt;
+&lt;th&gt;$G$ の s - t 間の最大流の値&lt;/th&gt;
+&lt;th&gt;$T$ の s - t 間の最大流の値&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;$1, 2$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$1, 3$&lt;/td&gt;
+&lt;td&gt;$9$&lt;/td&gt;
+&lt;td&gt;$9$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$1, 4$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$2, 3$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$2, 4$&lt;/td&gt;
+&lt;td&gt;$12$&lt;/td&gt;
+&lt;td&gt;$12$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;$3, 4$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;td&gt;$6$&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;img src="images/example.png" width="70%"&gt;
+&lt;h2 id="フロー等価木を構築するアルゴリズム"&gt;フロー等価木を構築するアルゴリズム
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;変数と関数&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$n$: $G$ の頂点の数&lt;/li&gt;
+&lt;li&gt;$p[i]$: 頂点 $i$ の親の頂点&lt;/li&gt;
+&lt;li&gt;$fl[i]$: 辺 $(i, p[i])$ の重み&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step1: 初期化&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;各頂点 $s$ について $p[s] \coloneqq 1$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;step2: $2$ から $n$ の頂点 $s$ について以下を行う&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$t \coloneqq p[s]$&lt;/li&gt;
+&lt;li&gt;$G$ 上で最小 s - t カット $X$ を求める．$s \in X$ とする&lt;/li&gt;
+&lt;li&gt;$fl[s] \coloneqq f_{s, t; G}$&lt;/li&gt;
+&lt;li&gt;$s + 1$ から $n$ の頂点 $i$ について以下を行う
+&lt;ul&gt;
+&lt;li&gt;$i \in X$ かつ $p[i] = t$ なら $p[i] \coloneqq s$ とする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="準備"&gt;準備
+&lt;/h2&gt;&lt;p&gt;アルゴリズムがフロー等価木を構築する証明をする前にいくつかの補題を導入します．&lt;/p&gt;
+&lt;h3 id="補題-1"&gt;補題 1
+&lt;/h3&gt;&lt;p&gt;$(X, Y)$ を $x \in X, y \in Y$ であるような最小 x - y カットとする．$u, v \in X$ であるような任意の最小 u - v カットを $(U, V)$ とする．$y \in U$ のとき，$(U^{\prime}, V^{\prime}) = (U \cup Y, V \cap X)$ は最小 u - v カットとなり，$y \in V$ のとき，$(U^{\prime}, V^{\prime}) = (U \cap X, V \cup Y)$ は最小 u - v カットとなる．&lt;/p&gt;
+&lt;h3 id="系-1"&gt;系 1
+&lt;/h3&gt;&lt;p&gt;$(X, Y), (U, V), (U^{\prime}, V^{\prime})$ を補題 1 と同様にとる．最小 u - v カット $(U^{\prime}, V^{\prime})$ は $(X, Y)$ と交差せず，$X$ を $(U, V)$ と同様に分割する&lt;/p&gt;
+&lt;h3 id="補題-2"&gt;補題 2
+&lt;/h3&gt;&lt;p&gt;長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$f_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} f_{v_i, v_{i + 1}}$ が成り立つ&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/gomory-hu-tree/#%E8%A3%9C%E9%A1%8C-1" target="_blank" rel="noopener"
+&gt;Gomory-Hu 木の補題 1&lt;/a&gt;を参照してください．&lt;/p&gt;
+&lt;h3 id="系-2"&gt;系 2
+&lt;/h3&gt;&lt;p&gt;$G$ の $3$ つの頂点 $i, j, k$ について，$f_{i, j}, f_{i, k}, f_{j, k}$ のうち少なくとも $2$ つは最小値である&lt;/p&gt;
+&lt;p&gt;系 2 を示します．&lt;br&gt;
+補題 2 により，$i, j, k$ に対して，$f_{i, k} \ge \min(f_{i, j}, f_{j, k})$ が成立します．&lt;br&gt;
+$f_{i, j}, f_{i,k}, f_{j,k}$ のうち，$1$ つだけが最小値であると仮定し，矛盾を導きます．&lt;br&gt;
+$f_{i, k}$ が唯一の最小値だとします．すると，$f_{i, k} \lt \min(f_{i, j}, f_{j, k})$ となり，矛盾します．&lt;br&gt;
+$f_{i, j}, f_{j, k}$ についても同様に示せるため，系 2 が示せました．&lt;/p&gt;
+&lt;h3 id="補題-3"&gt;補題 3
+&lt;/h3&gt;&lt;p&gt;アルゴリズムによって構築される最終的な $T$ で，ある頂点 $i$ からある頂点 $j$ へ向かう有向パス $P_{i, j}$ があるとする．さらに，$j$ に入る有向辺 $(k, j)$ があって，$k$ は $P_{i, j}$ 上の $j$ 以外のどの頂点よりも頂点番号が小さいとする．このとき以下が成立する．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アルゴリズムが最小 k - j カット $C$ を計算したとき，（構築途中の）$T$ 上で $i$ は $j$ の隣接頂点だった&lt;/li&gt;
+&lt;li&gt;「最小カット $C$ において $i$ が $k$ 側にいる」と「最終的な $T$ で $k$ がパス $P_{i, j}$ 上にいる」は同値&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="アルゴリズムの証明"&gt;アルゴリズムの証明
+&lt;/h2&gt;&lt;p&gt;アルゴリズムが最終的に構築した木を $T$ とします．&lt;br&gt;
+アルゴリズムは木の各辺 $(x, y)$ の重みを $f_{x, y}$ としているので，木の辺 $(x, y)$ となるような頂点 $x, y$ について $G$ の x - y 間の最大流の値と $T$ の x - y 間の最大流の値は一致します．&lt;br&gt;
+任意の頂点対 $(x, y)$ についても，$G$ 上の最大流の値 $f_{x, y}$ と $T$ 上の x - y パスの辺のうち重みが最小の辺の重みが一致することを示します．&lt;br&gt;
+これは，x - y パスを $P_{x,y}$，x - y パスの辺の重みの集合を $P[x, y]$ と表記することにすると，$f_{x, y} = \min(P[x, y])$ を示すと言い換えることができます．&lt;br&gt;
+$f_{x, y} \ge \min(P[x, y])$ と $f_{x, y} \le \min(P[x, y])$ をそれぞれ示します．&lt;/p&gt;
+&lt;h3 id=""&gt;$f_{x, y} \ge \min(P[x, y])$
+&lt;/h3&gt;&lt;p&gt;$T$ の x - y パスの頂点列 $x = v_1, v_2, \cdots, v_k = y$ を考えます．&lt;br&gt;
+補題 2 から $f_{x, y} \ge \min \limits_{1 \le i \le k - 1} f_{v_i, v_{i+1}}$ が成り立ちます．&lt;br&gt;
+アルゴリズムは木の各辺 $(v_i, v_{i + 1})$ の重みを $f_{v_i, v_{i + 1}}$ としているので，$\min \limits_{1 \le i \le k - 1} f_{v_i, v_{i+1}} = \min(P[x, y])$ となります．&lt;br&gt;
+よって，$f_{x, y} \ge \min(P[x, y])$ が示せました．&lt;/p&gt;
+&lt;h3 id=""&gt;$f_{x, y} \le \min(P[x, y])$
+&lt;/h3&gt;&lt;p&gt;背理法で示します．&lt;br&gt;
+$f_{x, y} \gt \min(P[x, y])$ となるような頂点対 $(x, y)$ があると仮定して矛盾を導きます．&lt;br&gt;
+まず，この不等式を満たす頂点対の中から「$T$ 上の x - y パスの辺数が最も短い」パスを $1$ つ選び $P$ とします．この仮定とさきほど証明した「$f_{x, y} \ge \min(P[x, y])$」から，$P$ より短いパス $P_{a,b}$ については $f_{a, b} = \min(P[a, b])$ が成り立つことに注意します．&lt;/p&gt;
+&lt;p&gt;アルゴリズムで作られる辺 $(s, t)$ を $s$ から $t$ への有向辺とみなします．すると，すべての辺は番号の大きい頂点から小さい頂点へ向くので，$T$ は有向木になります．&lt;br&gt;
+このとき，パス $P$ が直線のときと V 字のときのそれぞれの場合について矛盾が生じることを示します．&lt;/p&gt;
+&lt;h4 id="case1-パス--が直線のとき"&gt;Case1: パス $P$ が直線のとき
+&lt;/h4&gt;&lt;p&gt;パス $P$ が $x \rightarrow \cdots \rightarrow v \rightarrow y$ のように，すべて同じ向きの有向パスになっている場合を考えます．&lt;/p&gt;
+&lt;img src="images/case1.png" width="20%"&gt;
+&lt;p&gt;まず，$\min(P[x, y]) = f_{x, v} = f_{v, y}$ を示します．&lt;br&gt;
+パス $P$ は $P_{x, y} = P_{x, v} + (v, y)$ という形であるため，パス上の最小重みは
+&lt;/p&gt;
+$$\min(P[x, y]) = \min(\min(P[x, v]), f_{v, y})$$&lt;p&gt;
+と表わせます．&lt;br&gt;
+また，$P_{x, v}$ は $P$ より短いため $\min(P[x, v]) = f_{x, v}$ といえ，これを代入することにより
+&lt;/p&gt;
+$$\min(P[x, y]) = \min(f_{x, v}, f_{v, y})$$&lt;p&gt;
+を得ます．&lt;br&gt;
+$3$ つの頂点 $x, v, y$ を考えたとき，系 2 より $f_{x, v}, f_{v, y}, f_{x, y}$ のうち少なくとも最小値が 2 つあるといえますが，背理法の仮定により $f_{x, y} \gt \min(P[x, y])$ であるため，$f_{x, y}$ が最小値であることはありえません．&lt;br&gt;
+よって，$\min(P[x, y]) = f_{x, v} = f_{v, y}$ が示せました．&lt;/p&gt;
+&lt;p&gt;$T$ の辺 $(v, y)$ を作ったとき，アルゴリズムは最小 v - y カットを計算しています．&lt;br&gt;
+ここで補題 3 を $i = x, j = y, k = v$ と対応させると，このカットは x - y カットでもあるため
+&lt;/p&gt;
+$$f_{x, y} \le f_{v, y} = \min(P[x, y])$$&lt;p&gt;
+となります．&lt;br&gt;
+これは，$f_{x, y} \gt \min(P[x, y])$ というような頂点対 $(x, y)$ があるという仮定と矛盾します．&lt;/p&gt;
+&lt;h4 id="case2-パス--が-v-字のとき"&gt;Case2: パス $P$ が V 字のとき
+&lt;/h4&gt;&lt;p&gt;パス $P$ が $x \rightarrow \cdots \rightarrow x_1 \rightarrow z \leftarrow y_1 \leftarrow \cdots y$ のように，$z$ で折り返す形になっている場合を考えます．頂点番号について $x_1 \lt y_1$ を仮定し，$y_1$ - $z$ カットを計算する前に $x_1$ - z カットが計算されたとします．&lt;/p&gt;
+&lt;img src="images/case2-1.png" width="20%"&gt;
+&lt;p&gt;まず，$m = \min(P[x, y])$ としたとき，$f_{x, z} = f_{y, z} = m$ となることを示します．&lt;br&gt;
+$P$ が最短という仮定から，$f_{x,z} = \min(P[x, z])$，$f_{y,z} = \min(P[y, z])$ を得ます．&lt;br&gt;
+$P[x, y]$ の最小重み $m$ は 2 つの部分パスの最小値の最小なので以下が成り立ちます．&lt;/p&gt;
+$$
+\begin{alignedat}{2}
+m &amp;= \min(P[x, y]) \\
+&amp;= \min(\min(P[x, z]), \min(P[y, z])) \\
+&amp;= \min(f_{x, z}, f_{y, z}) \\
+\end{alignedat}
+$$&lt;p&gt;系 2 によると $f_{x,z}, f_{x, y}, f_{z, y}$ のうち，少なくとも $2$ つが最小値です．&lt;br&gt;
+いま，背理法の仮定により頂点対 $(x, y)$ は $f_{x, y} \gt \min(P[x, y]) = m$ です．&lt;br&gt;
+よって，$f_{x, z} = f_{y, z} = m$ が示せました．&lt;/p&gt;
+&lt;p&gt;x - z パスの中で，重みが $m$ かつ $z$ に最も近い辺を $(u, v)$ とし，$v$ が $z$ 側の頂点とします．&lt;/p&gt;
+&lt;img src="images/case2-2.png" width="20%"&gt;
+&lt;p&gt;アルゴリズムがグラフ $G$ 上で最小 $x_1$ - z カット $(X_1, Z)$ と最小 u - v カット $(U, V)$ を作ったときを考えます．&lt;br&gt;
+補題 3 によって以下がいえます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 $x_1$ - z カットでは，$x, u, v \in X_1$，$y, z \in Z$ となる&lt;/li&gt;
+&lt;li&gt;最小 u - v カットでは，$x, y, u \in U$，$v \in V$ となる．$z$ が $U$ と $V$ のどちらに入るかは定まらない&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ここで，補題 1 を使い最小 $x_1$ - z カットに交差しない u - v カット $C^{\star}$ を作ります．&lt;br&gt;
+このとき，$z \in U$ の場合には，$C^{\star} = (U \cup Z, V \cap X_1)$ ととります．&lt;br&gt;
+$z \in V$ の場合には，$C^{\star} = (U \cap X_1, V \cup Z)$ ととります．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$z \in U$ のとき，$C^{\star}$ は $v$ と $z$ を分割します&lt;br&gt;
+この場合，$C^{\star}$ は容量 $m$ で $v$ と $z$ を分けるカットであるため，$f_{v, z} \le m = \min(P[x, y])$ となります．&lt;br&gt;
+$P_{v, z}$ は $P$ より短いため $f_{v, z} = \min(P[v, z])$ となります．&lt;br&gt;
+これは，$m$ 以下の重みをもつ辺が $z$ よりに存在することになり矛盾します．&lt;/li&gt;
+&lt;li&gt;$z \in V$ のとき，$C^{\star}$ は $x$ と $y$ を分割します&lt;br&gt;
+この場合，$C^{\star}$ は容量 $m$ で $x$ と $y$ を分けるカットであるため，$f_{x, y} \le m = \min(P[x, y])$ となります．これは背理法の仮定に矛盾します．&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="問題"&gt;問題
+&lt;/h2&gt;&lt;p&gt;例として&lt;a class="link" href="https://atcoder.jp/contests/pakencamp-2024-day1/tasks/pakencamp_2024_day1_r" target="_blank" rel="noopener"
+&gt;パ研合宿 2024 第 1 日「SpeedRun」R - Maximum Water Flow&lt;/a&gt;を解きます．&lt;/p&gt;
+&lt;p&gt;問題概要&lt;br&gt;
+$N$ 頂点 $M$ 辺の容量付き無向連結グラフが与えられる．任意の異なる頂点 $i, j$ について，最大流の値を $f(i, j)$ とする．&lt;br&gt;
+$(1, 2, \cdots, N)$ の順列 $P = (P_1, P_2, \cdots, P_N)$ のうち，すべての $1$ 以上 $N$ 以下の整数について $P_i \ne i$ を満たすものについて $\sum_{i = 1}^{N} f(i, P_i)$ の最大値を求めよ．&lt;/p&gt;
+&lt;p&gt;解法&lt;br&gt;
+$\text{cost}[i][j]$ を $i$ から $j$ への最大流の値とします．$N \le 100$ なので $N \times N$ 行の行列 cost を作ることができます．&lt;br&gt;
+今回はフロー等価木の木構造は不要なので，cost 行列を直接構築します．cost 行列がつくれればハンガリアン法を使うことで割当の最大値が求まります．&lt;br&gt;
+コードの主要な部分を解説します．記事や問題概要は one-based だったのに対し，コードは zero-based であることに注意してください．&lt;br&gt;
+$5$ 行目で，s - t 間の最大流をもとめ，$6$ 行目で s - t 最小カットを求めています．&lt;br&gt;
+$13$ 行目は $s$ とその親 $t$ の最大流の値をそのまま表に書くだけです．&lt;br&gt;
+$14 - 18$ 行目では $s$ と $i \lt s$ となる頂点の最大流の値を設定します．&lt;br&gt;
+頂点番号が $s$ 以下の頂点はすでに木の位置が決まっているため，s - i パスの最小重みとすることができます．&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;cost&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;vector&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt; &lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="k"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="k"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dinic&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;solve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="k"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;cut&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dinic&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;minimum_cut&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;cut&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;parent&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;min&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt; &lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cost&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;dinic&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;clear&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;a class="link" href="https://atcoder.jp/contests/pakencamp-2024-day1/submissions/71715567" target="_blank" rel="noopener"
+&gt;提出コード&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://dl.acm.org/doi/abs/10.1137/0219009" target="_blank" rel="noopener"
+&gt;Very simple methods for all pairs network flow analysis&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.asakura.co.jp/detail.php?book_code=11780" target="_blank" rel="noopener"
+&gt;基礎数理講座 5 グラフ理論&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.maruzen-publishing.co.jp/book/b10122539.html" target="_blank" rel="noopener"
+&gt;ネットワークフローアルゴリズム&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;文脈からグラフが明らかなときは，$f_{s, t}$ と表記します&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Gomory-Hu 木は cut equivalent tree ともよばれます&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;詳しくは&lt;a class="link" href="https://miti-7.github.io/post/gomory-hu-tree/#gomory-hu-%e6%9c%a8" target="_blank" rel="noopener"
+&gt;Gomory-Hu 木&lt;/a&gt;を参照してください&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Gomory-Hu 木</title><link>https://miti-7.github.io/post/gomory-hu-tree/</link><pubDate>Tue, 23 Dec 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/gomory-hu-tree/</guid><description>&lt;img src="https://miti-7.github.io/post/gomory-hu-tree/images/t4.png" alt="Featured image of post Gomory-Hu 木" /&gt;&lt;h2 id="はじめに"&gt;はじめに
 &lt;/h2&gt;&lt;p&gt;この記事は&lt;a class="link" href="https://qiita.com/advent-calendar/2025/mathematical-optimization" target="_blank" rel="noopener"
 &gt;数理最適化 Advent Calendar 2025&lt;/a&gt; の 23 日目の記事です．&lt;br&gt;
 この記事では Gomory-Hu 木を紹介します．Gomory-Hu 木とは無向グラフのすべての頂点対の最小カットの情報を持つ木のことです．&lt;br&gt;
