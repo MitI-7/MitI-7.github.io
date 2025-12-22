@@ -1,4 +1,382 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グラフ on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/</link><description>Recent content in グラフ on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Fri, 04 Jul 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/index.xml" rel="self" type="application/rss+xml"/><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" /&gt;&lt;h2 id="optimum-branchings-の-tarjan-の実装"&gt;Optimum Branchings の Tarjan の実装
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>グラフ on Eating Your Own Cat Food</title><link>https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/</link><description>Recent content in グラフ on Eating Your Own Cat Food</description><generator>Hugo -- gohugo.io</generator><language>ja</language><lastBuildDate>Tue, 23 Dec 2025 00:00:00 +0900</lastBuildDate><atom:link href="https://miti-7.github.io/tags/%E3%82%B0%E3%83%A9%E3%83%95/index.xml" rel="self" type="application/rss+xml"/><item><title>Gomory-Hu 木</title><link>https://miti-7.github.io/post/gomory-hu-tree/</link><pubDate>Tue, 23 Dec 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/gomory-hu-tree/</guid><description>&lt;img src="https://miti-7.github.io/post/gomory-hu-tree/images/t4.png" alt="Featured image of post Gomory-Hu 木" /&gt;&lt;h2 id="はじめに"&gt;はじめに
+&lt;/h2&gt;&lt;p&gt;この記事は&lt;a class="link" href="https://qiita.com/advent-calendar/2025/mathematical-optimization" target="_blank" rel="noopener"
+&gt;数理最適化 Advent Calendar 2025&lt;/a&gt; の 23 日目の記事です．&lt;br&gt;
+この記事では Gomory-Hu 木を紹介します．Gomory-Hu 木とは無向グラフのすべての頂点対の最小カットの情報を持つ木のことです．&lt;br&gt;
+まず，無向グラフの s - t カットを紹介し，カット関数が対称劣モジュラ関数であることを示します．次に，Gomory-Hu 木の定義といくつかの補題を示します．最後に Gomory-Hu 木を構築するアルゴリズムの説明とその証明を行います．&lt;br&gt;
+実装は今回紹介するアルゴリズムより Gusfield によって提案されたアルゴリズムの方が簡単です．こちらについては別の記事で扱います．&lt;/p&gt;
+&lt;h2 id="無向グラフの-s---t-カット"&gt;無向グラフの s - t カット
+&lt;/h2&gt;&lt;p&gt;頂点集合 $V$ と無向辺 $E$ からなる無向グラフ $G = (V, E)$ が与えられます．辺 $(u, v)$ には容量 $c_{uv} \ge 0$ が定まっているものとします．&lt;br&gt;
+$\emptyset \subsetneq S \subsetneq V$ を満たす頂点集合 $S$ をカットと呼びます．
+辺の一方の端点のみが $S$ に属する辺集合 $\delta(S)$ に対して，これらの辺の容量の総和をカットの容量と呼び，次で定義されます．&lt;/p&gt;
+$$
+\begin{aligned}
+c(S) = \sum_{(u, v) \in \delta(S)} c_{uv}
+\end{aligned}
+$$&lt;p&gt;今回は無向グラフを扱っているため $c(S) = c(V \setminus S)$ となります．&lt;br&gt;
+特に，$2$ つの異なる頂点 $s$ と $t$ について $|S \cap \{s, t\}| = 1$ となるカット $S$ を s - t カットと呼びます．&lt;br&gt;
+すべての s - t カットのうち，カットの容量が最小のものを最小 s - t カットと呼び，その容量を $\lambda_{s,t}$ で表します．&lt;/p&gt;
+&lt;p&gt;下のグラフを例に，$s$ に $1$，$t$ に $6$ を選んだときの s - t カットをいくつか見ていきます．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample1.png" width="35%"&gt;
+&lt;hr&gt;
+&lt;p&gt;$S = \lbrace 1, 2, 3 \rbrace$ は s - t カットのうちの 1 つです．
+$S$ に属する頂点を赤，$V \setminus S$ に属する頂点を青で示します．&lt;br&gt;
+辺の一方の端点のみが $S$ に属する辺は $(2, 4)$ と $(3, 5)$ です．よって，このカットの容量は $4 + 6 = 10$ となります．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample2.png" width="35%"&gt;
+&lt;hr&gt;
+&lt;p&gt;$S = \lbrace 1, 3, 4 \rbrace$ も s - t カットです．&lt;br&gt;
+このカットの容量は $2 + 2 + 6 + 4 + 7 + 9 = 30$ となります．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample3.png" width="35%"&gt;
+&lt;hr&gt;
+&lt;p&gt;$S = \lbrace 1 \rbrace$ も s - t カットです．&lt;br&gt;
+このカットの容量は $2 + 5 = 7$ となります．&lt;br&gt;
+$s$ に $1$，$t$ に $6$ を選んだときこれより容量の小さい s - t カットは存在しないためこのカットは最小 s - t カットです．&lt;/p&gt;
+&lt;img src="images/s-t-cut_sample4.png" width="35%"&gt;
+&lt;h2 id="カット関数の劣モジュラ性"&gt;カット関数の劣モジュラ性
+&lt;/h2&gt;&lt;p&gt;関数 $f: 2^V \rightarrow \mathbb R$ は，任意の $A, B \subseteq V$ で以下の不等式が成立するとき劣モジュラであると呼ばれます．
+&lt;/p&gt;
+$$f(A) + f(B) \ge f(A \cap B) + f(A \cup B)$$&lt;p&gt;また，関数 $f$ は任意の $S \subseteq V$ について $f(S) = f(V \setminus S)$ が成り立つとき対称であると呼ばれます．&lt;br&gt;
+対称で劣モジュラな関数は対称劣モジュラ関数と呼ばれます．&lt;/p&gt;
+&lt;p&gt;無向グラフのカット関数 $c(S)$ が対称劣モジュラ関数であることを示します．&lt;br&gt;
+頂点集合 $V$ を $V_1 = A \setminus B, V_2 = B \setminus A, V_3 = A \cap B, V_4 = V \setminus (A \cup B)$ の $4$ つに分割します．&lt;/p&gt;
+&lt;img src="images/submodular.png" width="35%"&gt;
+&lt;p&gt;辺の $2$ つの端点がそれぞれ $V_a, V_b$ に属する辺集合の容量の和を $C_{a, b}$ とします．今回は無向辺を扱っているため $C_{a, b} = C_{b, a}$ となります．&lt;br&gt;
+このとき，以下の式が成り立ちます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$c(A) = C_{3,4} + C_{3, 2} + C_{1, 4} + C_{1, 2}$&lt;/li&gt;
+&lt;li&gt;$c(B) = C_{3, 4} + C_{3, 1} + C_{2, 4} + C_{2, 1}$&lt;/li&gt;
+&lt;li&gt;$c(A \cup B) = C_{3, 4} + C_{1, 4} + C_{2, 4}$&lt;/li&gt;
+&lt;li&gt;$c(A \cap B) = C_{3, 1} + C_{3, 2} + C_{3, 4}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらを整理すると&lt;/p&gt;
+$$c(A) + c(B) - c(A \cup B) - c(A \cap B) = C_{1, 2} + C_{2, 1} = 2C_{1, 2}\ge 0$$&lt;p&gt;となり，関数 $c(S)$ は劣モジュラ関数であることがわかります．&lt;br&gt;
+また，関数 $c(S)$ は $c(S) = c(V \setminus S)$ が成り立つため対称です．&lt;br&gt;
+以上により，無向グラフのカット関数が対称劣モジュラ関数であることが示せました．&lt;/p&gt;
+&lt;h2 id="gomory-hu-木"&gt;Gomory-Hu 木
+&lt;/h2&gt;&lt;p&gt;Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;木から辺 $(u, v)$ を取り除いたときにできるどちらか一方の連結成分を $C_{uv}$ とする．&lt;br&gt;
+無向グラフ $G(V, E)$ の Gomory-Hu 木 $T(V, F)$ は，木のすべての辺 $(u, v) \in F$ について，$C_{uv}$ が $G$ の最小 u - v カットとなるような木である．つまり，$c(C_{uv}) = \lambda_{u, v}$ となる&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;/li&gt;
+&lt;li&gt;各辺 $(u, v) \in F$ の重みを $w(u, v)$ とすると，$w(u, v) = c(C_{uv}) = \lambda_{u, v}$ が成り立つ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Gomory-Hu 木の定義では，木の辺となるような頂点対のみが $G$ の最小カットと一致することを要求しています．&lt;br&gt;
+この定義は任意の頂点対に拡張することができ，結果として Gomory-Hu 木は次の性質を持つといえます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$V$ 上の全域木 $T(V, F)$ である（ただし，$F \subseteq E$ とは限らない）&lt;/li&gt;
+&lt;li&gt;任意の異なる $2$ 点 $s, t \in V$ について，$T$ 上の最小 s - t カットは $G$ 上の最小 s - t カットとなり，その容量は一致する．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下の図を例に Gomory-Hu 木の性質を確認します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;グラフの頂点 $1$と頂点 $6$ の最小カットは $\{1\}$でその容量は $7$ です．一方，木の頂点 $1$と頂点 $6$ の最小カットは $\{1\}$ でその容量は $7$ です．&lt;/li&gt;
+&lt;li&gt;グラフの頂点 $3$ と頂点 $5$ の最小カットは $\{1, 3\}$ でその容量は $10$ です．一方，木の頂点 $3$ と頂点 $5$ の最小カットは $\{1, 3\}$ でその容量は $10$ です．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;このように，任意の異なる 2 点 $s$，$t$ について，木の最小 s - t カットはグラフの最小 s - t カットになり，その容量は一致します．&lt;br&gt;
+木の最小 s - t カットは，頂点 $s$ から頂点 $t$ へのパスのうち最も重みの小さい辺 $e$ を削除したときの一方の連結成分となり，カットの容量は辺 $e$ の重みとなるため簡単に求めることができます．&lt;/p&gt;
+&lt;img src="images/gomory-hu_sample1.png" width="70%"&gt;
+&lt;p&gt;Gomory-Hu 木は $n - 1$ 回の最大流問題を解くことで求めることができます．&lt;br&gt;
+Gomory-Hu のアルゴリズムを紹介する前に，準備としていくつかの補題を導入し，Gomory-Hu 木の性質が定義から導けることを示します．&lt;/p&gt;
+&lt;h3 id="補題-1"&gt;補題 1
+&lt;/h3&gt;&lt;p&gt;長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$\lambda_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が成り立つ&lt;/p&gt;
+&lt;p&gt;補題 1 を示します．&lt;br&gt;
+$U$ を最小 $v_1$ - $v_k$ カットとし，$v_1 \in U$，$v_k \notin U$ とします．&lt;br&gt;
+このとき，頂点列のどこかに $v_i \in U$，$v_{i + 1} \notin U$ であるような $i$ が存在します．&lt;br&gt;
+これは次のように解釈することができます．&lt;br&gt;
+$U$ に属する頂点を $\circ$，属さない頂点を $\times$，不明な頂点を $?$ とします．&lt;br&gt;
+このとき，頂点列の所属は $(\circ, ?, ?, \cdots, ?, \times)$ と表せますが，$?$ がどのように決められようとどこかに $\circ, \times$ というペアが現れます．これは，$v_i \in U$，$v_{i + 1} \notin U$ であるような $i$ が存在しているということです．&lt;/p&gt;
+&lt;p&gt;よって，$U$ は $v_i$ - $v_{i+1}$ カットでもあります．ただし，$U$ は最小 $v_i$ - $v_{i+1}$ カットとは限らないため，$\lambda_{v_i, v_{i + 1}} \le c(U) = \lambda_{v_1, v_k}$ となります．&lt;br&gt;
+以上により，$\lambda_{v_1, v_k} \ge \min_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が示せました．&lt;/p&gt;
+&lt;h3 id="補題-2"&gt;補題 2
+&lt;/h3&gt;&lt;p&gt;$s, t \in V$ を異なる 2 点とし，最小 s - t カットを $A$ とする．任意の異なる 2 点 $u, v \notin A$ について，$A \subseteq B$ か $A \cap B = \emptyset$ となるような最小 u - v カット $B$ が存在する．&lt;/p&gt;
+&lt;img src="images/lemma2.png" width="45%"&gt;
+&lt;p&gt;この補題は，すでに存在する最小 s - t カット $A$ と交差しないように最小 u - v カット $B$ をとることができることを意味します．図は $A \subseteq B$ の場合を表しています．&lt;/p&gt;
+&lt;p&gt;補題 2 を示します．&lt;br&gt;
+$A$ と $B$ をそれぞれ最小 s - t カットと最小 u - v カットとします．$A \subseteq B$ か $A \cap B = \emptyset$ の場合は補題が示されているので，$A \nsubseteq B$ かつ $A \cap B \ne \emptyset$ を仮定します．
+$s \in A$，$s, u \in B$ であるとします&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;．&lt;br&gt;
+このとき，$A \cup B$ が最小 u - v カットとなることを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$A \cup B$ は u - v カット&lt;br&gt;
+$u \in B$ であるため $u \in A \cup B$ であり，$v \notin A$ かつ $v \notin B$ であるため $v \notin A \cup B$ です．&lt;br&gt;
+よってこのカットは u - v カットです．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$c(A \cup B) = c(B)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$c(A \cup B) \le c(B)$&lt;br&gt;
+仮定より，$s \in A \cap B$ で $t \notin A \cap B$ であるため，$A \cap B$ は s - t カットです．&lt;br&gt;
+$A$ は最小 s - t カットで $A \cap B$ も s - t カットであるため，$c(A \cap B) \ge c(A)$ となります．&lt;br&gt;
+この不等式をカットの劣モジュラ性である $c(A) + c(B) \ge c(A \cap B) + c(A \cup B)$ に代入することで，$c(A \cup B) \le c(B)$ を得ます．&lt;/li&gt;
+&lt;li&gt;$c(A \cup B) \ge c(B)$&lt;br&gt;
+$B$ は最小 u - v カットで $A \cup B$ も u - v カットであるため，$c(A \cup B) \ge c(B)$ を得ます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上により，$A \cup B$ は最小 u - v カットといえます．$A \cup B$ を新しく $B$ ととることで，$A \subseteq B$ であるような最小 u - v カット $B$ とすることができます．&lt;/p&gt;
+&lt;h3 id="gomory-hu-木の性質"&gt;Gomory-Hu 木の性質
+&lt;/h3&gt;&lt;p&gt;Gomory-Hu 木の定義から Gomory-Hu 木の性質が導かれることを示します．&lt;/p&gt;
+&lt;p&gt;$T$ の s - t パス上の最小重みの辺を $(a, b) \in F$ とします．このとき，$C_{ab}$ は s - t カットとなり，最小 s- t カットの容量 $\lambda_{s, t}$ が $w(a,b)$ と一致することを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$\lambda_{s, t} \ge w(a,b)$&lt;br&gt;
+s - t パスの頂点列を考えます．&lt;br&gt;
+$v_1 = s$，$v_k = t$ とすると，補題 1 より $\lambda_{s,t} \ge \min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が成り立ちます．&lt;br&gt;
+Gomory-Hu 木の定義より $\min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}} = \lambda_{a, b} = w(a, b)$ なので，$\lambda_{s, t} \ge w(a, b)$ が成り立ちます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\lambda_{s, t} \le w(a, b)$&lt;br&gt;
+$\lambda_{s, t}$ は定義より最小 s - t カットの値です．&lt;br&gt;
+辺 $(a, b) \in F$ は $s$ から $t$ への唯一のパス上に存在するため，$C_{ab}$ は s - t カットでもあります．このカットの容量は Gomory-Hu 木の定義から $w(a, b)$ です．よって，$\lambda_{s, t} \le c(C_{ab}) = w(a, b)$ が成り立ちます．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上により，$C_{ab}$ が s - t カットであり，$\lambda_{s, t} = w(a, b)$ となることが示せました．&lt;/p&gt;
+&lt;h2 id="gomory-hu-のアルゴリズム"&gt;Gomory-Hu のアルゴリズム
+&lt;/h2&gt;&lt;p&gt;Gomory-Hu 木 $T$ を構築するアルゴリズムを説明します．&lt;br&gt;
+Gomory–Hu 木は，木の各辺が「ある頂点対の最小カット」を表し，その結果として任意の $2$ 頂点間の最小カットが木上で読み取れるという形になっていました．&lt;br&gt;
+そこで直感的には，最初に $G$ のすべての頂点を $1$ つの縮約頂点として持ち，そこから縮約頂点を分割していくことで最終的に $G$ の各頂点を持つ木を作ればよさそうです．&lt;br&gt;
+ただし，分割を適当にしてしまうと新しく見つけたカットが以前の分割と交差してしまいすでに作った構造を壊してしまうことがあります．&lt;br&gt;
+Gomory-Hu のアルゴリズムはここをうまく処理します．具体的には，すでにできている縮約頂点をそれぞれ $1$ 頂点に縮約したグラフの上で最小カットを計算し，その結果を使って縮約頂点を分割します．&lt;br&gt;
+こうすると，新しい分割は「過去に作った分割を壊さない」形に整えられ，分割を積み重ねながら $T$ を安全に構築できます．&lt;br&gt;
+具体的なアルゴリズムは以下の通りです．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;初期化&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$V(T) = \{V(G)\}$&lt;/li&gt;
+&lt;li&gt;$E(T) = \emptyset$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;要素数が $2$ 以上の $X \in V(T)$ がある間以下を行う&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$X$ の中から異なる $2$ 頂点 $s, t \in X$ を選ぶ&lt;/li&gt;
+&lt;li&gt;縮約グラフ $H$ を構築する
+&lt;ul&gt;
+&lt;li&gt;$T$ から $X$ を削除したときの連結成分を $C_1, C_2, \cdots, C_k$ とし，$C_i$ のすべての要素の和集合を $S_i$ とする．&lt;/li&gt;
+&lt;li&gt;$G$ 上で各 $S_i$ を $1$ つの頂点に縮約したグラフを $H$ とする．縮約で生じる並行辺は維持し，同一成分内の辺を除去する．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$H$ 上で 最小 s - t カット $S$ を求め，$A = X \cap S$，$B = X \setminus S$ とする．&lt;/li&gt;
+&lt;li&gt;$X$ を $A$ と $B$ に分割する
+&lt;ul&gt;
+&lt;li&gt;$V(T) = (V(T) - \{ X\}) \cup \{A, B\}$ と更新する．&lt;/li&gt;
+&lt;li&gt;新しい辺 $AB$ を $T$ に追加し，その重みを先程求めた最小 s - t カットの値とする．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;既存の辺を置き換える
+&lt;ul&gt;
+&lt;li&gt;$X$ に接続する辺 $e = XY \in E(T)$について以下を行う．
+&lt;ul&gt;
+&lt;li&gt;$XY$ を $E(T)$ から削除する．&lt;/li&gt;
+&lt;li&gt;$Y$ が属する側の縮約頂点 $v_{S_i}$ について，$v_{S_i} \in S$ なら $AY$を，そうでないなら $BY$ を重みを維持したまま追加する．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;単一集合となったすべての頂点 $\{v\}$ について以下を行う&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;頂点 $\{v\}$ を $v$ に，辺 $(\{u\}, \{v\})$ を $(u, v)$ に置き換える．&lt;/li&gt;
+&lt;li&gt;Gomory-Hu 木 $(V(T), E(T))$ を返す．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="アルゴリズムの実行例"&gt;アルゴリズムの実行例
+&lt;/h2&gt;&lt;p&gt;下のグラフの Gomory-Hu 木を求めます．&lt;br&gt;
+&lt;img src="images/s-t-cut_sample1.png" width="50%"&gt;&lt;/p&gt;
+&lt;h3 id="phase1"&gt;phase1
+&lt;/h3&gt;&lt;p&gt;はじめ，$V(T) = \{ \{1, 2, 3, 4, 5, 6\} \}$ です．&lt;br&gt;
+$X$ として $\{1, 2, 3, 4, 5, 6\}$ を選び，縮約グラフ $H$ を構築します．&lt;br&gt;
+今回は $X$ に接続する辺はないので，$H = G$ となります．&lt;br&gt;
+下の左の図が $T$ で，右の図が $H$ です．&lt;/p&gt;
+&lt;img src="images/t1.png" width="25%"&gt;
+&lt;img src="images/h1.png" width="25%"&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 s - t カットの計算&lt;br&gt;
+$s = 3, t = 5$ として，$H$ での最小 s - t カットを求めると，$S = \{1, 3\}$ となり，その容量は $10$ です．&lt;/li&gt;
+&lt;li&gt;$X$ の分割&lt;br&gt;
+$X$ を $A = X \cap S = \{1, 3\}$ と $B = X \setminus S = \{2, 4, 5, 6\}$ に分割し，重み $10$ の辺を張ります&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらの操作により，$T$ は以下のようになります．&lt;/p&gt;
+&lt;img src="images/t2-1.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase2"&gt;phase2
+&lt;/h3&gt;&lt;p&gt;$X$ として $\{2, 4, 5, 6\}$ を選び，縮約グラフ $H$ を構築します．&lt;br&gt;
+$G$ 上で，$T$ から $X$ を削除したときの連結成分 $C_1$ の展開 $S_1$ を $1$ つの頂点 $v_{S_1}$ として縮約します．&lt;/p&gt;
+&lt;img src="images/t2.png" width="25%"&gt;
+&lt;img src="images/h2.png" width="25%"&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 s - t カットの計算&lt;br&gt;
+$s = 5, t = 4$ とすると，$H$ での最小 s - t カットは $S = \{\{1, 3\}, 2, 5\}$ となり，その容量は $14$ です．&lt;/li&gt;
+&lt;li&gt;$X$ の分割&lt;br&gt;
+$X$ を $A = X \cap S = \{2, 5\}$ と $B = X \setminus S = \{4, 6\}$ に分割し，重み $14$ の辺を張ります．&lt;/li&gt;
+&lt;li&gt;既存の辺の付け替え&lt;br&gt;
+$X$ の分割後，更新前の $T$ の辺 $(\{1, 3\}, X)$ がどうなるか考えます．$v_{S_1} \in S$ であるため，この辺は $A$ と接続します．&lt;br&gt;
+よって辺 $(\{1, 3\}, X)$ は辺 $(\{1, 3\}, A)$ に付け替えられます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/t3-1.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase3"&gt;phase3
+&lt;/h3&gt;&lt;p&gt;$X$ として $\{1, 3\}$ を選び，縮約グラフ $H$ を構築します．&lt;br&gt;
+$S_1$ を $1$ つの頂点 $v_{S_1}$ として縮約します．&lt;/p&gt;
+&lt;img src="images/t3.png" width="25%"&gt;
+&lt;img src="images/h3.png" width="25%"&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 s - t カットの計算&lt;br&gt;
+$s = 1, t = 3$ とすると，グラフ $H$ での最小 s - t カットは $S = \{1\}$ となり，その容量は $7$ です．&lt;/li&gt;
+&lt;li&gt;$X$ の分割&lt;br&gt;
+$X$ を $A = \{1\}$ と $B = \{3\}$ に分割し，重み $7$ の辺を張ります．&lt;/li&gt;
+&lt;li&gt;既存の辺の付け替え&lt;br&gt;
+$X$ の分割後，更新前の $T$ の辺 $(X, \{2, 5\})$ がどうなるか考えます．$v_{S_1} \notin S$ であるため，この辺は $B$ と接続します．&lt;br&gt;
+よって辺 $(X, \{2, 5\})$ は辺 $(B, \{2, 5\})$ に付け替えられます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/t4-1.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase4"&gt;phase4
+&lt;/h3&gt;&lt;p&gt;$X$ として $\{2, 5\}$ を選び，縮約グラフ $H$ を構築します．&lt;br&gt;
+$S_1$ と $S_2$ をそれぞれ $1$ つの頂点 $v_{S_1}, v_{S_2}$ として縮約します．&lt;/p&gt;
+&lt;img src="images/t4.png" width="25%"&gt;
+&lt;img src="images/h4.png" width="25%"&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 s - t カットの計算&lt;br&gt;
+$s = 2, t = 5$ とすると，グラフ $H$ での最小 s - t カット $S$ は $\{2\}$ となり，その容量は $8$ です．&lt;/li&gt;
+&lt;li&gt;$X$ の分割&lt;br&gt;
+$X$ を $A = \{2\}$ と $B = \{5\}$ に分割し，重み $8$ の辺を張ります．&lt;/li&gt;
+&lt;li&gt;既存の辺の付け替え&lt;br&gt;
+$X$ の分割後，更新前の $T$ の辺 $(\{3\}, X)$ がどうなるか考えます．&lt;br&gt;
+$v_{S_1} \notin S$ であるため，この辺は $B$ と接続します．
+また，更新前の $T$ の辺 $(X, \{4, 6\})$ は $v_{S_2} \notin S$ であるため，この辺も $B$ と接続します．&lt;br&gt;
+よって辺 $(\{3\}, X)$ は辺 $(\{3\}, B)$ に，辺 $(X, \{4, 6\})$ は $(B, \{4, 6\})$ に付け替えられます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/t5-1.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase5"&gt;phase5
+&lt;/h3&gt;&lt;p&gt;$X$ として $\{4, 6\}$ を選び，縮約グラフ $H$ を構築します．&lt;br&gt;
+$S_1$ を $1$ つの頂点 $v_{S_1}$ として縮約します．&lt;/p&gt;
+&lt;img src="images/t5.png" width="25%"&gt;
+&lt;img src="images/h5.png" width="25%"&gt;
+&lt;ul&gt;
+&lt;li&gt;最小 s - t カットの計算&lt;br&gt;
+$s = 4, t = 6$ とすると，グラフ $H$ での最小 s - t カット $S$ は $\{4, \{1, 2, 3, 5\}\}$ となり，その容量は $12$ です．&lt;/li&gt;
+&lt;li&gt;$X$ の分割&lt;br&gt;
+$X$ を $A = \{4\}$ と $B = \{6\}$ に分割し，重み $12$ の辺を張ります．&lt;/li&gt;
+&lt;li&gt;既存の辺の付け替え&lt;br&gt;
+$X$ の分割後，更新前の $T$ の辺 $(5, X)$ がどうなるか考えます．$v_{S_1} \in S$ であるため，この辺は $A$ と接続します．&lt;br&gt;
+よって辺 $(5, X)$ は辺 $(5, A)$ に付け替えられます．&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src="images/t6-1.png" width="25%"&gt;
+&lt;hr&gt;
+&lt;h3 id="phase6"&gt;phase6
+&lt;/h3&gt;&lt;p&gt;$T$ のすべての頂点の要素数が $1$ なので Step 2 を終了します．&lt;br&gt;
+Step 3 は省略します．&lt;/p&gt;
+&lt;img src="images/t6.png" width="25%"&gt;
+&lt;h2 id="証明"&gt;証明
+&lt;/h2&gt;&lt;p&gt;アルゴリズムが Gomory-Hu 木を構築する証明をします．&lt;br&gt;
+表記を整理しておきます．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\lambda_{s,t;G}$：グラフ $G$ の最小 s - t カットの容量&lt;/li&gt;
+&lt;li&gt;$\lambda_{s,t;H}$：縮約グラフ $H$ の最小 s - t カットの容量&lt;/li&gt;
+&lt;li&gt;$w(YZ)$：木 $T$ の辺 $YZ$ の重み&lt;/li&gt;
+&lt;li&gt;$C^{\prime}_{YZ}$：木 $T$ から辺 $YZ$ を削除したときにできる 2 つの連結成分のうち，$Y$ に属する連結成分 をすべて展開したもの&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;アルゴリズムの開始時と各イテレーション終了時に，次の不変条件が成り立つことを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;木 T の任意の辺 $YZ$ に対して，ある頂点 $s \in Y$，$t \in Z$ が存在し，$C^{\prime}_{YZ}$ は元のグラフ $G$ における最小 s - t カットであり，$\lambda_{s, t;G} = w(YZ)$ となる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;まず，アルゴリズムの開始時には辺がないので不変条件は成り立ちます．&lt;br&gt;
+このあとで，各イテレーション時には以下の $3$ つの辺について不変条件が成り立つことを示します．&lt;/p&gt;
+&lt;ol type="a"&gt;
+&lt;li&gt;新しく追加される辺 $AB$&lt;/li&gt;
+&lt;li&gt;既存の辺 $XY$ から付け替えられた辺&lt;/li&gt;
+&lt;li&gt;その他の辺&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;アルゴリズムの終了時には縮約頂点はすべて展開され，木 $T$ は Gomory-Hu 木の定義を満たしているため，アルゴリズムは Gomory-Hu 木を構築するといえます．&lt;/p&gt;
+&lt;h3 id="a-新しく追加される辺"&gt;a. 新しく追加される辺 $AB$
+&lt;/h3&gt;&lt;p&gt;アルゴリズムは縮約グラフ $H$ 上で $s, t \in X$ について最小 s - t カット $\bar{S}$ を求め，$A = X \cap \bar{S}$，$B = X \setminus \bar{S}$ と分割します．その上で，辺 $AB$ の重み $w(AB)$ を $\lambda_{s,t;H}$ とします．&lt;/p&gt;
+&lt;p&gt;辺 $AB$ が不変条件を満たすことを示すため，以下を確認します．&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;$H$ 上の最小 s - t カットを展開した頂点集合は $G$ 上の最小 s - t カットとなりその容量は一致する．つまり，$\lambda_{s, t;G} = w(AB) = \lambda_{s,t;H}$ となる&lt;/li&gt;
+&lt;li&gt;$H$ 上の最小 s - t カット を展開した頂点集合は $C^{\prime}_{AB}$ となる&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="1--上の最小-s---t-カットを展開した頂点集合は--上の最小-s---t-カットとなりその容量は一致する"&gt;1. $H$ 上の最小 s - t カットを展開した頂点集合は $G$ 上の最小 s - t カットとなりその容量は一致する
+&lt;/h4&gt;&lt;p&gt;アルゴリズムのあるイテレーションで，$S_1, \cdots, S_k$ を順番に縮約していくことを考えます．$S_i$ までを縮約したグラフを $H_i$ とします．$H_0$ はグラフ $G$ に，$H_k$ はアルゴリズムで述べられている縮約グラフ $H$ に一致します．&lt;/p&gt;
+&lt;p&gt;不変条件より，木の各辺 $YZ$ に対してある頂点対 $(s_{YZ}, t_{YZ})$ が存在し，$C^{\prime}_{YZ}$ は $G$ 上の最小 $s_{YZ}$ - $t_{YZ}$ カットになっています．頂点 $X \in T$ を削除したときの連結成分 $C_i$ と $X$ を結ぶ辺を $Y_i X$ とおくと，$S_i = C^{\prime}_{Y_i X}$ が成り立ちます．&lt;br&gt;
+よって，各 $S_i$ はある頂点対 $(s_i, t_i)$ に対する最小 $s_i \text{-} t_i$ カットです．&lt;br&gt;
+また，$S_i$ は $T \setminus X$ の連結成分から構成されているので，$s, t \notin S_i$ です．&lt;/p&gt;
+&lt;p&gt;各ステップ $i$ について，$H_i$ には $G$ における最小 s - t カットの容量である $\lambda_{s, t;G}$ と同じ容量の s - t カットが存在することを帰納法で示します．&lt;br&gt;
+$i = 0$ のとき，$H_0 = G$ なので自明です．&lt;br&gt;
+帰納法の仮定より，$H_i$ には容量 $\lambda_{s, t;G}$ の s - t カット $C$ があります．このとき，$S_{i + 1}$ を縮約して得られる $H_{i + 1}$ にも容量 $\lambda_{s, t;G}$ の s - t カットが存在することを示します．&lt;br&gt;
+補題 2 により $H_i$ の s - t カット $C$ は $S_{i + 1}$ を交差しないようにとりなおすことができます．よって，$S_{i + 1}$ を縮約して $H_{i + 1}$ を構築しても，容量 $\lambda_{s, t;G}$ の s - t カットが存在することがわかりました．&lt;br&gt;
+よって，$H$ には容量 $\lambda_{s, t;G}$ の s - t カットが存在することが示せました．&lt;/p&gt;
+&lt;p&gt;任意の $H$ 上の s - t カットは，縮約を展開すれば $G$ 上の s - t カットになります．縮約は辺の容量を変えないので，カットの容量も維持されます．&lt;br&gt;
+したがって，任意の $H$ 上の s - t カットの容量 = 対応する $G$ 上の s - t カットの容量 $\ge \lambda_{s, t;G}$ となり，$H$ の最小 s - t カットの容量は $\lambda_{s, t;G}$ となります．&lt;/p&gt;
+&lt;h4 id="2--上の最小-s---t-カット--を展開した頂点集合は--となる"&gt;2. $H$ 上の最小 s - t カット $\bar S$ を展開した頂点集合は $C^{\prime}_{AB}$ となる
+&lt;/h4&gt;&lt;p&gt;$H$ の最小 s - t カット $\bar{S}$ を展開して得られる頂点集合は，アルゴリズムにおける辺の付け替え規則から，更新後の木 $T^{\prime}$ で辺 $AB$ を削除したときの $A$ 側成分 $C^{\prime}_{AB}$ と一致します．&lt;br&gt;
+これは，$X$ 内の頂点のうち $\bar{S}$ に属するものは $A$ に，また各連結成分 $C_i$ に対応する縮約頂点 $v_{S_i}$ が $\bar{S}$ に属する場合に限り，その成分は $A$ 側に接続されるように付け替えられているためです．&lt;/p&gt;
+&lt;p&gt;以上のことから辺 $AB$ が不変条件を満たすことがわかりました．&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="b-既存の辺--から付け替えられた辺"&gt;b. 既存の辺 $XY$ から付け替えられた辺
+&lt;/h3&gt;&lt;p&gt;アルゴリズムは，縮約グラフ $H$ 上で $s, t \in X$ について最小 s - t カット $S$ をみつけ，$X$ を $A = X \cap S$ と $B = X \setminus S$ に分割します．もともと $X$ と $Y$ の間に張られていた辺 $XY$ は $A$ に付け替えられて $AY$ になるか，$B$ に付け替えられて $BY$ になります．&lt;br&gt;
+以降は $A$ に付け替えられた場合を考えますが $B$ でも同じことがいえます．&lt;/p&gt;
+&lt;p&gt;$p \in X$，$q \in Y$ であり，XY の重みは $\lambda_{pq}$ であったとします．&lt;br&gt;
+&lt;img src="images/replace0.png" width="30%"&gt;&lt;/p&gt;
+&lt;p&gt;$X$ の最小 s - t カットを求め，$A$ と $B$ に分割されたとき，$s \in A$，$t \in B$ であるとします．&lt;br&gt;
+$A$ と $B$ は $X$ を分割したものであるため，$C^{\prime}_{AY} = C^{\prime}_{XY}$ とみなすことができます．&lt;br&gt;
+辺 $AY$ の重みが $\lambda_{p,q}$ であることを $p \in A$ の場合と $p \notin A$ の場合について示します．&lt;/p&gt;
+&lt;p&gt;$p \in A$ の場合&lt;br&gt;
+&lt;img src="images/replace1.png" width="30%"&gt;&lt;/p&gt;
+&lt;p&gt;辺 $AY$ の重みは $\lambda_{pq}$ なので，不変条件を満たします．&lt;/p&gt;
+&lt;p&gt;$p \notin A$ の場合&lt;br&gt;
+&lt;img src="images/replace2.png" width="30%"&gt;&lt;/p&gt;
+&lt;p&gt;$\lambda_{s, q} = \lambda_{p, q}$ であることを示します．&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$\lambda_{s, q} \ge \lambda_{p, q}$&lt;br&gt;
+頂点列 $s, t, p, q$ を考えると補題 1 より $\lambda_{s, q} \ge \min \{\lambda_{s, t}, \lambda_{t, p}, \lambda_{p, q} \}$ が言えます．&lt;br&gt;
+最小 s - t カット $S$ は $s, q \in S$，$t, p \in B \subseteq V \setminus S$ です．&lt;/p&gt;
+&lt;p&gt;無向グラフでは $\delta(S) = \delta(V \setminus S)$ なので $V \setminus S$ も最小 s - t カットです．&lt;br&gt;
+そこで，補題 2 を $A = V \setminus S$，$(u, v) = (s, q)$ に適用します（このとき $s, q \notin A$ が成り立ちます）．&lt;br&gt;
+すると，ある最小 s - q カット $C^{\prime}$ が存在して&lt;/p&gt;
+$$(V \setminus S) \subseteq C^{\prime} \text{または} (V \setminus S) \cap C^{\prime} = \emptyset$$&lt;p&gt;が成り立ちます．&lt;br&gt;
+前者なら無向グラフなので $V \setminus C^{\prime}$ も最小 s - q カットであり，こちらは $(V \setminus S) \cap (V \setminus C^{\prime}) = \emptyset$ となるので，$C = V \setminus C^{\prime} \subseteq S$ とできます．&lt;br&gt;
+後者ならそのまま $C = C^{\prime}$ とおけば $C \subseteq S$ です．&lt;br&gt;
+よって，ある最小 s - q カット C は，$C \subseteq S$ であるようにとることができます．&lt;br&gt;
+つまり，最小 s - q カットは $t, p \in B$ となるようにとれるので，$\lambda_{s, q}$ は 辺 $(t, p)$ の容量に依存しないことがわかります．&lt;br&gt;
+よって，大きな容量をもつ辺 $(t, p)$ を追加したとしても不等式が成り立ち，$\lambda_{s, q} \ge \min \{\lambda_{s, t}, \lambda_{p, q} \}$ が成立します．&lt;br&gt;
+また，最小 s - t カットは p-q カットでもあるため，$\lambda_{s, t} \ge \lambda_{p, q}$ が成り立ちます．&lt;br&gt;
+よって，$\lambda_{s, q} \ge \lambda_{p, q}$ が示せました．&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\lambda_{s, q} \le \lambda_{p, q}$&lt;br&gt;
+$C^{\prime}_{XY}$ は $X$ と $Y$ を分けるカットであり，$p \in X$ と $q \in Y$ を分離していて，重みは $\lambda_{p, q}$ でした．&lt;br&gt;
+$s \in A \subset X$ なので，$C^{\prime}_{XY}$ は s - q カットでもあります．&lt;br&gt;
+よって，$\lambda_{s, q} \le \lambda_{p, q}$ が示せました．&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="c-その他の辺"&gt;c. その他の辺
+&lt;/h3&gt;&lt;p&gt;アルゴリズムで選んだ $X$ に接続していない辺 $YZ$ は，木 $T$ 上での位置も対応するカット $C^{\prime}_{YZ}$ も変化しないため，不変条件を満たします．&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://doi.org/10.1137%2F0109047" target="_blank" rel="noopener"
+&gt;Multi-Terminal Network Flows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://webdocs.cs.ualberta.ca/~zacharyf/courses/combopt_2016/notes/lec5.pdf" target="_blank" rel="noopener"
+&gt;Lecture 5 (Sept. 16): Undirected Cuts and Gomory-Hu Trees&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://webdocs.cs.ualberta.ca/~zacharyf/courses/combopt_2016/notes/lec6.pdf" target="_blank" rel="noopener"
+&gt;Lecture 6 (Sept. 19): Gomory-Hu Trees&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.contrib.andrew.cmu.edu/~ravi/book.pdf" target="_blank" rel="noopener"
+&gt;Iterative Methods in Combinatorial Optimization&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;カット関数は $G$ に対して定義されています&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;必要に応じて，$B$ を $V \setminus B$ に置き換える操作と名前の付け替えを行います&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Optimum Branchings の Tarjan の実装</title><link>https://miti-7.github.io/post/optimum-branchings-tarjan/</link><pubDate>Fri, 04 Jul 2025 00:00:00 +0900</pubDate><guid>https://miti-7.github.io/post/optimum-branchings-tarjan/</guid><description>&lt;img src="https://miti-7.github.io/post/optimum-branchings-tarjan/images/%E5%AE%9F%E8%A1%8C%E4%BE%8B_4_f.png" alt="Featured image of post Optimum Branchings の Tarjan の実装" /&gt;&lt;h2 id="optimum-branchings-の-tarjan-の実装"&gt;Optimum Branchings の Tarjan の実装
 &lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://miti-7.github.io/post/optimum-branchings-edmonds/" target="_blank" rel="noopener"
 &gt;Optimum Branchings と Edmonds のアルゴリズム&lt;/a&gt;の続きです．&lt;br&gt;
 Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．&lt;/p&gt;
