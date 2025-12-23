@@ -285,8 +285,7 @@ $14 - 18$ 行目では $s$ と $i \lt s$ となる頂点の最大流の値を設
 このときカット関数を以下のように定義し，この値をカットの容量と呼びます．&lt;/p&gt;
 $$c(S) = \sum_{(u, v) \in \delta(S)} c_{uv}$$&lt;p&gt;ただし，$\emptyset \subsetneq S \subsetneq V$ を満たす頂点集合 $S$ をカットと呼ぶことにします．
 今回は無向グラフを扱っているため $c(S) = c(V \setminus S)$ が成り立ちます．&lt;br&gt;
-また，2 つの異なる頂点 $s$ と $t$ について $|S \cap \{s, t\}| = 1$ となるカット $S$ を s - t カットと呼びます．&lt;br&gt;
-すべての s - t カットのうち，カットの容量が最小のものを最小 s - t カットと呼び，その容量を $\lambda_{s, t}$ で表します．&lt;/p&gt;
+また，2 つの異なる頂点 $s$ と $t$ について $|S \cap \{s, t\}| = 1$ となるカット $S$ を s - t カットと呼びます．そのうち容量が最小のものを最小 s - t カットと呼び，その容量を $\lambda_{s, t}$ で表します．&lt;/p&gt;
 &lt;p&gt;下のグラフを例に，$s$ に $1$，$t$ に $6$ を選んだときの s - t カットをいくつか見ていきます．&lt;/p&gt;
 &lt;img src="images/s-t-cut_sample1.png" width="35%"&gt;
 &lt;hr&gt;
@@ -324,13 +323,13 @@ $$c(A) + c(B) - c(A \cup B) - c(A \cap B) = \mathrm{cap}(1, 2) + \mathrm{cap}(2,
 また，関数 $c(S)$ は $c(S) = c(V \setminus S)$ が成り立つため対称です．&lt;br&gt;
 以上により，無向グラフのカット関数が対称劣モジュラ関数であることが示せました．&lt;/p&gt;
 &lt;h2 id="gomory-hu-木"&gt;Gomory-Hu 木
-&lt;/h2&gt;&lt;p&gt;木から辺 $(u, v)$ を取り除いたときにできるどちらか一方の連結成分を $C_{uv}$ とします．&lt;br&gt;
+&lt;/h2&gt;&lt;p&gt;木から辺 $(u, v)$ を取り除いたときにできるどちらか一方の連結成分の頂点集合を $C_{uv}$ とします．&lt;br&gt;
 Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;無向グラフ $G(V, E)$ の Gomory-Hu 木 $T(V, F)$ は，木のすべての辺 $(u, v) \in F$ について，$C_{uv}$ が $G$ の最小 u - v カットとなるような木である．つまり，$c(C_{uv}) = \lambda_{u, v}$ となる&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;/li&gt;
 &lt;li&gt;各辺 $(u, v) \in F$ の重みを $w(u, v)$ とすると，$w(u, v) = \lambda_{u, v}$ が成り立つ．&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Gomory-Hu 木の定義では，木の辺となるような頂点対のみが $G$ の最小カットとなることを要求しています．&lt;br&gt;
+&lt;p&gt;Gomory-Hu 木の定義では，木の辺となるような頂点対が $G$ の最小カットとなることのみを要求しています．&lt;br&gt;
 あとで示しますが，この定義は任意の頂点対に拡張することができ，結果として Gomory-Hu 木は次の性質を持つといえます．&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;$V$ 上の全域木 $T(V, F)$ である（ただし，$F \subseteq E$ とは限らない）．&lt;/li&gt;
@@ -342,22 +341,22 @@ Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
 &lt;li&gt;グラフの頂点 $1$ と頂点 $6$ の最小カットは $\{1\}$ でその容量は $7$ です．一方，木の頂点 $1$ と頂点 $6$ の最小カットは $\{1\}$ でその容量は $7$ です．&lt;/li&gt;
 &lt;li&gt;グラフの頂点 $3$ と頂点 $5$ の最小カットは $\{1, 3\}$ でその容量は $10$ です．一方，木の頂点 $3$ と頂点 $5$ の最小カットは $\{1, 3\}$ でその容量は $10$ です．&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;このように，任意の異なる 2 点 $s$，$t$ について，木の最小 s - t カットはグラフの最小 s - t カットになり，その容量は一致します．&lt;br&gt;
+&lt;p&gt;このように，任意の異なる 2 頂点 $s$，$t$ について，木の最小 s - t カットはグラフの最小 s - t カットになり，その容量は一致します．&lt;br&gt;
 木の最小 s - t カットは，頂点 $s$ から頂点 $t$ へのパスのうち最も重みの小さい辺 $e$ を削除したときの一方の連結成分となり，カットの容量は辺 $e$ の重みとなるため簡単に求めることができます．&lt;/p&gt;
-&lt;p&gt;Gomory-Hu 木は $n - 1$ 回の最小 s -t カット計算で求めることができます．&lt;br&gt;
+&lt;p&gt;Gomory-Hu 木は $n - 1$ 回の最小 s - t カット計算で求めることができます．&lt;br&gt;
 Gomory-Hu のアルゴリズムを紹介する前に，準備としていくつかの補題を導入し，Gomory-Hu 木の性質が定義から導けることを示します．&lt;/p&gt;
 &lt;h3 id="補題-1"&gt;補題 1
 &lt;/h3&gt;&lt;p&gt;長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$\lambda_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が成り立つ&lt;/p&gt;
 &lt;p&gt;補題 1 を示します．&lt;br&gt;
 $U$ を最小 $v_1$ - $v_k$ カットとし，$v_1 \in U$，$v_k \notin U$ とします．&lt;br&gt;
 このとき，頂点列のどこかに $v_i \in U$，$v_{i + 1} \notin U$ であるような $i$ が存在します．&lt;/p&gt;
-&lt;p&gt;直観的には，次のように考えると分かりやすいです．&lt;br&gt;
+&lt;p&gt;直観的には，次のように考えることができます．&lt;br&gt;
 $U$ に属する頂点を $\circ$，属さない頂点を $\times$，不明な頂点を $?$ とします．&lt;br&gt;
 このとき，頂点列の所属は $(\circ, ?, ?, \cdots, ?, \times)$ と表せますが，$?$ がどのように決められようとどこかに $\circ, \times$ というペアが現れます．これは，$v_i \in U$，$v_{i + 1} \notin U$ であるような $i$ が存在しているということです．&lt;/p&gt;
 &lt;p&gt;よって，$U$ は $v_i$ - $v_{i+1}$ カットでもあります．ただし，$U$ は最小 $v_i$ - $v_{i+1}$ カットとは限らないため，$\lambda_{v_i, v_{i + 1}} \le c(U) = \lambda_{v_1, v_k}$ となります．&lt;br&gt;
 以上により，$\lambda_{v_1, v_k} \ge \min_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が示せました．&lt;/p&gt;
 &lt;h3 id="補題-2"&gt;補題 2
-&lt;/h3&gt;&lt;p&gt;$s, t \in V$ を異なる 2 点とし，最小 s - t カットを $A$ とする．任意の異なる 2 点 $u, v \notin A$ について，$A \subseteq B$ か $A \cap B = \emptyset$ となるような最小 u - v カット $B$ が存在する．&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;$s, t \in V$ を異なる 2 頂点とし，最小 s - t カットを $A$ とする．任意の異なる 2 点 $u, v \notin A$ について，$A \subseteq B$ か $A \cap B = \emptyset$ となるような最小 u - v カット $B$ が存在する．&lt;/p&gt;
 &lt;img src="images/lemma2.png" width="45%"&gt;
 &lt;p&gt;この補題は，すでに存在する最小 s - t カット $A$ と交差しないように最小 u - v カット $B$ をとることができることを意味します．図は $A \subseteq B$ の場合を表しています．&lt;/p&gt;
 &lt;p&gt;補題 2 を示します．&lt;br&gt;
@@ -467,7 +466,7 @@ $X$ として $\{1, 2, 3, 4, 5, 6\}$ を選び，縮約グラフ $H$ を構築�
 &lt;li&gt;最小 s - t カットの計算&lt;br&gt;
 $s$ と $t$ は任意に選べます．今回は $s = 3$，$t = 5$ として，$H$ での最小 s - t カットを求めると，$S = \{1, 3\}$ となり，その容量は $10$ です．&lt;/li&gt;
 &lt;li&gt;$X$ の分割&lt;br&gt;
-$X$ を $A = X \cap S = \{1, 3\}$ と $B = X \setminus S = \{2, 4, 5, 6\}$ に分割し，重み $10$ の辺を張ります&lt;/li&gt;
+$X$ を $A = X \cap S = \{1, 3\}$ と $B = X \setminus S = \{2, 4, 5, 6\}$ に分割し，重み $10$ の辺を張ります．&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;これらの操作により，$T$ は以下のようになります．&lt;/p&gt;
 &lt;img src="images/t2-1.png" width="30%"&gt;
