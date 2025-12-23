@@ -300,7 +300,7 @@ $S$ に属する頂点を赤，$V \setminus S$ に属する頂点を青で示し
 &lt;hr&gt;
 &lt;p&gt;$S = \{1 \}$ も s - t カットです．&lt;br&gt;
 このカットの容量は $2 + 5 = 7$ となります．&lt;br&gt;
-$s$ に $1$，$t$ に $6$ を選んだときこれより容量の小さい s - t カットは存在しないためこのカットは最小 s - t カットです．&lt;/p&gt;
+$s$ に $1$，$t$ に $6$ を選んだとき $7$ より容量の小さい s - t カットは存在しないためこのカットは最小 s - t カットです．&lt;/p&gt;
 &lt;img src="images/s-t-cut_sample4.png" width="35%"&gt;
 &lt;h2 id="カット関数の劣モジュラ性"&gt;カット関数の劣モジュラ性
 &lt;/h2&gt;&lt;p&gt;関数 $f: 2^V \rightarrow \mathbb R$ は，任意の $A, B \subseteq V$ で以下の不等式が成立するとき劣モジュラであると呼ばれます．
@@ -323,7 +323,7 @@ $$c(A) + c(B) - c(A \cup B) - c(A \cap B) = \mathrm{cap}(1, 2) + \mathrm{cap}(2,
 また，関数 $c(S)$ は $c(S) = c(V \setminus S)$ が成り立つため対称です．&lt;br&gt;
 以上により，無向グラフのカット関数が対称劣モジュラ関数であることが示せました．&lt;/p&gt;
 &lt;h2 id="gomory-hu-木"&gt;Gomory-Hu 木
-&lt;/h2&gt;&lt;p&gt;木から辺 $(u, v)$ を取り除いたときにできるどちらか一方の連結成分の頂点集合を $C_{uv}$ とします．&lt;br&gt;
+&lt;/h2&gt;&lt;p&gt;木から辺 $(u, v)$ を取り除いたときにできる $u$ を含む連結成分の頂点集合を $C_{uv}$ とします．&lt;br&gt;
 Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;無向グラフ $G(V, E)$ の Gomory-Hu 木 $T(V, F)$ は，木のすべての辺 $(u, v) \in F$ について，$C_{uv}$ が $G$ の最小 u - v カットとなるような木である．つまり，$c(C_{uv}) = \lambda_{u, v}$ となる&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;．&lt;/li&gt;
@@ -333,7 +333,7 @@ Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
 あとで示しますが，この定義は任意の頂点対に拡張することができ，結果として Gomory-Hu 木は次の性質を持つといえます．&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;$V$ 上の全域木 $T(V, F)$ である（ただし，$F \subseteq E$ とは限らない）．&lt;/li&gt;
-&lt;li&gt;任意の異なる $2$ 点 $s, t \in V$ について，$T$ 上の最小 s - t カットは $G$ 上の最小 s - t カットとなり，その容量は一致する．&lt;/li&gt;
+&lt;li&gt;任意の異なる $2$ 頂点 $s, t \in V$ について，$T$ 上の最小 s - t カットは $G$ 上の最小 s - t カットとなり，その容量は一致する．&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;以下の図を例に Gomory-Hu 木の性質を確認します．&lt;/p&gt;
 &lt;img src="images/gomory-hu_sample1.png" width="70%"&gt;
@@ -346,7 +346,7 @@ Gomory-Hu 木は以下のように定義されます．&lt;/p&gt;
 &lt;p&gt;Gomory-Hu 木は $n - 1$ 回の最小 s - t カット計算で求めることができます．&lt;br&gt;
 Gomory-Hu のアルゴリズムを紹介する前に，準備としていくつかの補題を導入し，Gomory-Hu 木の性質が定義から導けることを示します．&lt;/p&gt;
 &lt;h3 id="補題-1"&gt;補題 1
-&lt;/h3&gt;&lt;p&gt;長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$\lambda_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が成り立つ&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$\lambda_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が成り立つ．&lt;/p&gt;
 &lt;p&gt;補題 1 を示します．&lt;br&gt;
 $U$ を最小 $v_1$ - $v_k$ カットとし，$v_1 \in U$，$v_k \notin U$ とします．&lt;br&gt;
 このとき，頂点列のどこかに $v_i \in U$，$v_{i + 1} \notin U$ であるような $i$ が存在します．&lt;/p&gt;
@@ -356,7 +356,7 @@ $U$ に属する頂点を $\circ$，属さない頂点を $\times$，不明な�
 &lt;p&gt;よって，$U$ は $v_i$ - $v_{i+1}$ カットでもあります．ただし，$U$ は最小 $v_i$ - $v_{i+1}$ カットとは限らないため，$\lambda_{v_i, v_{i + 1}} \le c(U) = \lambda_{v_1, v_k}$ となります．&lt;br&gt;
 以上により，$\lambda_{v_1, v_k} \ge \min_{1 \le i \le k - 1} \lambda_{v_i, v_{i + 1}}$ が示せました．&lt;/p&gt;
 &lt;h3 id="補題-2"&gt;補題 2
-&lt;/h3&gt;&lt;p&gt;$s, t \in V$ を異なる 2 頂点とし，最小 s - t カットを $A$ とする．任意の異なる 2 点 $u, v \notin A$ について，$A \subseteq B$ か $A \cap B = \emptyset$ となるような最小 u - v カット $B$ が存在する．&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;$s, t \in V$ を異なる 2 頂点とし，最小 s - t カットを $A$ とする．任意の異なる 2 頂点 $u, v \notin A$ について，$A \subseteq B$ か $A \cap B = \emptyset$ となるような最小 u - v カット $B$ が存在する．&lt;/p&gt;
 &lt;img src="images/lemma2.png" width="45%"&gt;
 &lt;p&gt;この補題は，すでに存在する最小 s - t カット $A$ と交差しないように最小 u - v カット $B$ をとることができることを意味します．図は $A \subseteq B$ の場合を表しています．&lt;/p&gt;
 &lt;p&gt;補題 2 を示します．&lt;br&gt;
@@ -404,7 +404,7 @@ $\lambda_{s, t}$ は定義より最小 s - t カットの値です．&lt;br&gt;
 Gomory-Hu 木は，木の各辺がある頂点対の最小カットを表し，その結果として任意の $2$ 頂点間の最小カットが木上で読み取れるという形になっていました．&lt;br&gt;
 そこで直感的には，最初に $G$ のすべての頂点を $1$ つの縮約頂点として持ち，辺がある頂点対の最小カットとなるように縮約頂点を分割していくことで木を構築すればよさそうです．&lt;br&gt;
 ただし，適当に分割してしまうと以前の分割と交差してしまいすでに作った構造を壊してしまうことがあります．&lt;br&gt;
-Gomory-Hu のアルゴリズムはこの問題に対処するために，すでにできている縮約頂点をそれぞれ $1$ 頂点に縮約したグラフの上で最小カットを計算し，その結果を使って縮約頂点を分割します．&lt;br&gt;
+Gomory-Hu のアルゴリズムはこの問題に対処するために，すでにできている縮約頂点をそれぞれ 1 頂点に縮約したグラフの上で最小カットを計算し，その結果を使って縮約頂点を分割します．&lt;br&gt;
 こうすると新しい分割は以前の分割を壊さない形で実行することができるため，分割を積み重ねながら木を安全に構築できます．&lt;br&gt;
 具体的なアルゴリズムは以下の通りです．&lt;/p&gt;
 &lt;ol&gt;
@@ -587,16 +587,16 @@ $i = 0$ のとき，$H_0 = G$ なので自明です．&lt;br&gt;
 &lt;p&gt;以上のことから辺 $AB$ が不変条件を満たすことがわかりました．&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3 id="b-既存の辺--から付け替えられた辺"&gt;b. 既存の辺 $XY$ から付け替えられた辺
-&lt;/h3&gt;&lt;p&gt;アルゴリズムは，縮約グラフ $H$ 上で $s, t \in X$ について最小 s - t カット $S$ をみつけ，$X$ を $A = X \cap S$ と $B = X \setminus S$ に分割します．もともと $X$ と $Y$ の間に張られていた辺 $XY$ は $A$ に付け替えられて $AY$ になるか，$B$ に付け替えられて $BY$ になります．&lt;br&gt;
+&lt;/h3&gt;&lt;p&gt;アルゴリズムは，縮約グラフ $H$ 上で $s, t \in X$ について最小 s - t カット $S$ を見つけ，$X$ を $A = X \cap S$ と $B = X \setminus S$ に分割します．もともと $X$ と $Y$ の間に張られていた辺 $XY$ は $A$ に付け替えられて $AY$ になるか，$B$ に付け替えられて $BY$ になります．&lt;br&gt;
 以降は $A$ に付け替えられた場合を考えますが $B$ でも同じことがいえます．&lt;/p&gt;
-&lt;p&gt;$p \in X$，$q \in Y$ であり，XY の重みは $\lambda_{pq}$ であったとします．&lt;br&gt;
+&lt;p&gt;$p \in X$，$q \in Y$ であり，XY の重みは $\lambda_{p, q}$ であったとします．&lt;br&gt;
 &lt;img src="images/replace0.png" width="30%"&gt;&lt;/p&gt;
-&lt;p&gt;$X$ の最小 s - t カットを求め，$A$ と $B$ に分割されたとき，$s \in A$，$t \in B$ であるとします．&lt;br&gt;
+&lt;p&gt;$X$ の最小 s - t カットを求め，$A$ と $B$ に分割したとき，$s \in A$，$t \in B$ であるとします．&lt;br&gt;
 $A$ と $B$ は $X$ を分割したものであるため，$C^{\prime}_{AY} = C^{\prime}_{XY}$ とみなすことができます．&lt;br&gt;
-辺 $AY$ の重みが $\lambda_{p,q}$ であることを $p \in A$ の場合と $p \notin A$ の場合について示します．&lt;/p&gt;
+辺 $AY$ の重みが $\lambda_{p, q}$ であることを $p \in A$ の場合と $p \notin A$ の場合について示します．&lt;/p&gt;
 &lt;p&gt;$p \in A$ の場合&lt;br&gt;
 &lt;img src="images/replace1.png" width="30%"&gt;&lt;/p&gt;
-&lt;p&gt;辺 $AY$ の重みは $\lambda_{pq}$ なので，不変条件を満たします．&lt;/p&gt;
+&lt;p&gt;辺 $AY$ の重みは $\lambda_{p, q}$ なので，不変条件を満たします．&lt;/p&gt;
 &lt;p&gt;$p \notin A$ の場合&lt;br&gt;
 &lt;img src="images/replace2.png" width="30%"&gt;&lt;/p&gt;
 &lt;p&gt;$\lambda_{s, q} = \lambda_{p, q}$ であることを示します．&lt;/p&gt;
@@ -604,14 +604,15 @@ $A$ と $B$ は $X$ を分割したものであるため，$C^{\prime}_{AY} = C^
 &lt;li&gt;
 &lt;p&gt;$\lambda_{s, q} \ge \lambda_{p, q}$&lt;br&gt;
 頂点列 $s, t, p, q$ を考えると補題 1 より $\lambda_{s, q} \ge \min \{\lambda_{s, t}, \lambda_{t, p}, \lambda_{p, q} \}$ が言えます．&lt;br&gt;
-最小 s - t カット $S$ は $s, q \in S$，$t, p \in B \subseteq V \setminus S$ です．&lt;/p&gt;
-&lt;p&gt;無向グラフでは $\delta(S) = \delta(V \setminus S)$ なので $V \setminus S$ も最小 s - t カットです．&lt;br&gt;
-そこで，補題 2 を $A = V \setminus S$，$(u, v) = (s, q)$ に適用します（このとき $s, q \notin A$ が成り立ちます）．&lt;br&gt;
+$H$ 上の最小 s - t カットを展開したものを $\bar S$ とします．&lt;br&gt;
+このとき，$s, q \in \bar S$，$t, p \in B \subseteq V \setminus \bar S$ です．&lt;/p&gt;
+&lt;p&gt;カット関数は対称なので $V \setminus \bar S$ も最小 s - t カットです．&lt;br&gt;
+そこで，補題 2 を $A = V \setminus \bar S$，$(u, v) = (s, q)$ に適用します（このとき $s, q \notin A$ が成り立ちます）．&lt;br&gt;
 すると，ある最小 s - q カット $C^{\prime}$ が存在して&lt;/p&gt;
-$$(V \setminus S) \subseteq C^{\prime} \text{または} (V \setminus S) \cap C^{\prime} = \emptyset$$&lt;p&gt;が成り立ちます．&lt;br&gt;
-前者なら無向グラフなので $V \setminus C^{\prime}$ も最小 s - q カットであり，こちらは $(V \setminus S) \cap (V \setminus C^{\prime}) = \emptyset$ となるので，$C = V \setminus C^{\prime} \subseteq S$ とできます．&lt;br&gt;
-後者ならそのまま $C = C^{\prime}$ とおけば $C \subseteq S$ です．&lt;br&gt;
-よって，ある最小 s - q カット C は，$C \subseteq S$ であるようにとることができます．&lt;br&gt;
+$$(V \setminus \bar S) \subseteq C^{\prime} \text{または} (V \setminus \bar S) \cap C^{\prime} = \emptyset$$&lt;p&gt;が成り立ちます．&lt;br&gt;
+前者なら無向グラフなので $V \setminus C^{\prime}$ も最小 s - q カットであり，こちらは $(V \setminus \bar S) \cap (V \setminus C^{\prime}) = \emptyset$ となるので，$C = V \setminus C^{\prime} \subseteq \bar S$ とできます．&lt;br&gt;
+後者ならそのまま $C = C^{\prime}$ とおけば $C \subseteq \bar S$ です．&lt;br&gt;
+よって，ある最小 s - q カット $C$ は，$C \subseteq \bar S$ であるようにとることができます．&lt;br&gt;
 つまり，最小 s - q カットは $t, p \in B$ となるようにとれるので，$\lambda_{s, q}$ は 辺 $(t, p)$ の容量に依存しないことがわかります．&lt;br&gt;
 よって，大きな容量をもつ辺 $(t, p)$ を追加したとしても不等式が成り立ち，$\lambda_{s, q} \ge \min \{\lambda_{s, t}, \lambda_{p, q} \}$ が成立します．&lt;br&gt;
 また，最小 s - t カットは p-q カットでもあるため，$\lambda_{s, t} \ge \lambda_{p, q}$ が成り立ちます．&lt;br&gt;
@@ -624,6 +625,7 @@ $s \in A \subset X$ なので，$C^{\prime}_{XY}$ は s - q カットでもあ�
 よって，$\lambda_{s, q} \le \lambda_{p, q}$ が示せました．&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;以上より，$\lambda_{s, q} \ge \lambda_{p, q}$ と $\lambda_{s, q} \le \lambda_{p, q}$ の両方が示せたので，$\lambda_{s, q} = \lambda_{p, q}$ が成り立ちます．したがって $w(AY)=w(XY)=\lambda_{p,q}=\lambda_{s,q}$ であり，$s \in A,\, q \in Y$ をとれば辺 $AY$ も不変条件を満たします．&lt;/p&gt;
 &lt;h3 id="c-その他の辺"&gt;c. その他の辺
 &lt;/h3&gt;&lt;p&gt;アルゴリズムで選んだ $X$ に接続していない辺 $YZ$ は，木 $T$ 上での位置も対応するカット $C^{\prime}_{YZ}$ も変化しないため，不変条件を満たします．&lt;/p&gt;
 &lt;h2 id="参考"&gt;参考
