@@ -1,0 +1,16 @@
+{
+  "name": "miti-blog",
+  "image": "ghcr.io/miti-7/miti-blog-hugo@sha256:66c030b7dddb937dd67340bc4ec04d983518f1aaa3cb432eabe3aa984689b9e7",
+  "forwardPorts": [
+    1313
+  ],
+  "postCreateCommand": "git submodule update --init --recursive",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint"
+      ]
+    }
+  }
+}
