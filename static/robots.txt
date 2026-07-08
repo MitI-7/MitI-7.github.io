@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://miti-7.github.io/sitemap.xml
-Sitemap: https://miti-7.github.io/index.xml
+Sitemap: https://blog.miti-7.com/sitemap.xml
