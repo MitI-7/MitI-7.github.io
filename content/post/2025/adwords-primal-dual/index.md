@@ -10,7 +10,7 @@ slug = "adwords-primal-dual"
 
 ## Adwords
 
-[Adwords に対する Primal-Dual を使った貪欲法の競合比解析](https://miti-7.github.io/post/adwords-greedy-primal-dual/) の続きです．  
+[Adwords に対する Primal-Dual を使った貪欲法の競合比解析](/post/adwords-greedy-primal-dual/) の続きです．  
 以下では，adwords に対する primal dual algorithm が $1 - \frac{1}{e}$-competitive となることを示します．
 
 ## Small Bids Assumption
