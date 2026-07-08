@@ -9,7 +9,7 @@ slug = "optimum-branchings-tarjan"
 
 ## Optimum Branchings の Tarjan の実装
 
-[Optimum Branchings と Edmonds のアルゴリズム](https://miti-7.github.io/post/optimum-branchings-edmonds/)の続きです．  
+[Optimum Branchings と Edmonds のアルゴリズム](/post/optimum-branchings-edmonds/)の続きです．  
 Tarjan の実装は Edmonds のアルゴリズムを改良し，適切なデータ構造を用いることで計算量を $O(|E| \log |V|)$ に改善したものです．ここで $|E|$ はグラフの辺の数を，$|V|$ は頂点の数を表します．
 
 Edmonds のアルゴリズムは，クリティカルグラフを作り，クリティカルグラフに閉路が形成されたらその閉路を $1$ つの超頂点に縮約し，縮約したグラフを再帰的に処理していくという流れでした．縮約グラフの最適 branching をもとに，元のグラフ上での対応する辺集合を復元することで最終的な最適 branching を構築します．
