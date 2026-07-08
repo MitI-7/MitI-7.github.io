@@ -14,7 +14,7 @@ slug = "flow-equivalent-tree-gusfield"
 この記事では無向グラフのすべての頂点対の最大流の情報を持つ木であるフロー等価木を紹介します．  
 まず，フロー等価木の説明をします．次に，フロー等価木を構築するアルゴリズムの説明とその証明を行います．最後にフロー等価木を実装し，例として競プロの問題を解きます．  
 
-無向グラフや最小カットなどの用語については[Gomory-Hu 木](https://miti-7.github.io/post/gomory-hu-tree/)を参照してください．
+無向グラフや最小カットなどの用語については[Gomory-Hu 木](/post/gomory-hu-tree/)を参照してください．
 
 ## フロー等価木
 
@@ -82,7 +82,7 @@ $(X, Y), (U, V), (U^{\prime}, V^{\prime})$ を補題 1 と同様にとる．最�
 
 長さ $k \ge 2$ の互いに異なる頂点列 $v_1, v_2, v_3, \cdots, v_k$ について，$f_{v_1, v_k} \ge \min \limits_{1 \le i \le k - 1} f_{v_i, v_{i + 1}}$ が成り立つ
 
-[Gomory-Hu 木の補題 1](https://miti-7.github.io/post/gomory-hu-tree/#%E8%A3%9C%E9%A1%8C-1)を参照してください．
+[Gomory-Hu 木の補題 1](/post/gomory-hu-tree/#%E8%A3%9C%E9%A1%8C-1)を参照してください．
 
 ### 系 2
 
@@ -241,4 +241,4 @@ for (int s = 1; s < N; ++s) {
 
 [^1]: 文脈からグラフが明らかなときは，$f_{s, t}$ と表記します
 [^2]: Gomory-Hu 木は cut equivalent tree ともよばれます
-[^3]: 詳しくは[Gomory-Hu 木](https://miti-7.github.io/post/gomory-hu-tree/#gomory-hu-木)を参照してください
+[^3]: 詳しくは[Gomory-Hu 木](/post/gomory-hu-tree/#gomory-hu-木)を参照してください
