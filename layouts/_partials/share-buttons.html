@@ -1,0 +1,32 @@
+{{ if ne .Params.share false }}
+<section class="section sns_parent">
+    <div class="container sns_section">
+        <div class="sns_button twitter">
+            <a
+                href="https://x.com/intent/tweet?url={{ .Permalink | urlquery }}&text={{ .Title | urlquery }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="twitter"
+            ><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+
+        <div class="sns_button hatena">
+            <a
+                href="https://b.hatena.ne.jp/add?mode=confirm&url={{ .Permalink | urlquery }}&title={{ .Title | urlquery }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="hatena"
+            ><i class="hatena-icon"></i></a>
+        </div>
+
+        <div class="sns_button bluesky">
+            <a
+                href="https://bsky.app/intent/compose?text={{ urlquery (printf "%s %s" .Title .Permalink) }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Bluesky"
+            ><i class="fa-brands fa-bluesky"></i></a>
+        </div>
+    </div>
+</section>
+{{ end }}

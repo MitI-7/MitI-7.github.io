@@ -51,9 +51,8 @@ permalinks:
 params:
   mainSections:
     - post
-  featuredImageField: image
   rssFullContent: true
-  favicon: /images/favicon.ico
+  favicon: images/favicon.png
 
   footer:
     since: 2024
@@ -66,10 +65,7 @@ params:
   sidebar:
     emoji:
     subtitle:
-    avatar:
-      enabled: true
-      local: false
-      src: /images/avatar.png
+    avatar: images/avatar.png
 
   article:
     math: true
@@ -187,12 +183,6 @@ params:
       # Available values: summary, summary_large_image
       card: summary_large_image
 
-  defaultImage:
-    opengraph:
-      enabled: false
-      local: false
-      src:
-
   colorScheme:
     # Display toggle
     toggle: true
@@ -201,9 +191,9 @@ params:
     default: dark
 
   imageProcessing:
-    cover:
-      enabled: true
     content:
+      enabled: true
+    thumbnail:
       enabled: true
 
 ### Custom menu

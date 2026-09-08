@@ -1,0 +1,89 @@
+{{ define "body-class" }}
+    article-page
+    {{/* 
+        Enable the right sidebar if
+            - Widget different from 'TOC' is enabled
+            - TOC is enabled and not empty
+    */}}
+    {{- $HasWidgetNotTOC := false -}}
+    {{- $TOCWidgetEnabled := false -}}
+    {{- range .Site.Params.widgets.page -}}
+        {{- if ne .type "toc" -}}
+            {{ $HasWidgetNotTOC = true -}}
+        {{- else -}}
+            {{ $TOCWidgetEnabled = true -}}
+        {{- end -}}
+    {{- end -}}
+
+    {{- $TOCEnabled := and (default .Site.Params.article.toc .Params.toc) $TOCWidgetEnabled -}}
+    {{- $hasTOC := ge (len .TableOfContents) 100 -}}
+    {{- .Scratch.Set "TOCEnabled" (and $TOCEnabled $hasTOC) -}}
+    
+    {{- .Scratch.Set "hasWidget" (or $HasWidgetNotTOC (and $TOCEnabled $hasTOC)) -}}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "article/article.html" . }}
+
+    {{ partial "share-buttons" . }}
+
+    {{ if .Params.links }}
+        {{ partial "article/components/links" . }}
+    {{ end }}
+
+    {{ partial "article/components/related-content" . }}
+     
+    {{ if not (eq .Params.comments false) }}
+        {{ partial "comments/include" . }}
+    {{ end }}
+
+    {{ partialCached "footer/footer" . }}
+
+    {{ partialCached "article/components/photoswipe" . }}
+    {{ partial "article/components/mermaid" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ if .Scratch.Get "hasWidget" }}
+        {{ partial "sidebar/right.html" (dict "Context" . "Scope" "page") }}
+
+        {{ if .Scratch.Get "TOCEnabled" }}
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sidebar = document.querySelector(
+                "aside.sidebar.right-sidebar.sticky"
+            );
+
+            if (!sidebar) return;
+
+            sidebar.classList.add("article-toc-sidebar");
+
+            const button = document.createElement("button");
+            button.id = "article-toc-toggle";
+            button.className = "article-toc-toggle";
+            button.type = "button";
+            button.textContent = "‹";
+            button.setAttribute("aria-label", "目次を閉じる");
+            button.setAttribute("aria-expanded", "true");
+
+            sidebar.prepend(button);
+
+            button.addEventListener("click", () => {
+                const collapsed =
+                    sidebar.classList.toggle("is-collapsed");
+
+                button.textContent = collapsed ? "›" : "‹";
+                button.setAttribute(
+                    "aria-expanded",
+                    String(!collapsed)
+                );
+                button.setAttribute(
+                    "aria-label",
+                    collapsed ? "目次を開く" : "目次を閉じる"
+                );
+            });
+        });
+        </script>
+        {{ end }}
+    {{ end }}
+{{ end }}

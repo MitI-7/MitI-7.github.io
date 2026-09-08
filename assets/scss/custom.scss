@@ -70,9 +70,6 @@
 
 @media (min-width: 1024px) {
     .article-toc-sidebar {
-        position: sticky;
-        padding-top: var(--main-top-padding);
-
         transition:
             width 0.2s ease,
             max-width 0.2s ease,
@@ -100,6 +97,8 @@
         cursor: pointer;
         font-size: 24px;
         line-height: 1;
+
+        z-index: 1;
     }
 
     .article-toc-sidebar.is-collapsed {
@@ -108,7 +107,7 @@
         flex: 0 0 48px !important;
     }
 
-    .article-toc-sidebar.is-collapsed .article-toc-content {
+    .article-toc-sidebar.is-collapsed > :not(.article-toc-toggle) {
         display: none;
     }
 
@@ -117,6 +116,6 @@
     }
 }
 
-.article-toc-content .widget-title {
+.article-toc-sidebar .widget-title {
     visibility: hidden;
 }
