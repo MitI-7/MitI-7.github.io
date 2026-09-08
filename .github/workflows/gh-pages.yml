@@ -1,10 +1,7 @@
-name: GitHub Pages
+name: Deploy
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,28 +10,31 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-22.04
+
     container:
       image: ghcr.io/miti-7/miti-blog-hugo@sha256:66c030b7dddb937dd67340bc4ec04d983518f1aaa3cb432eabe3aa984689b9e7
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
         with:
-          submodules: true
+          submodules: false
           fetch-depth: 0
+
+      - name: Checkout theme
+        run: git submodule update --init --recursive themes/hugo-theme-stack
+
+      - name: Checkout latest articles
+        run: git submodule update --init --remote --force articles
 
       - name: Build
         run: hugo --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
