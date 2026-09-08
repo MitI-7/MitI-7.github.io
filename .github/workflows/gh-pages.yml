@@ -35,7 +35,12 @@ jobs:
         run: git submodule update --init --recursive themes/hugo-theme-stack
 
       - name: Checkout latest articles
-        run: git submodule update --init --remote --force articles
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          repository: MitI-7/articles
+          path: articles
+          token: ${{ secrets.ARTICLES_TOKEN }}
+          fetch-depth: 1
 
       - name: Build
         run: hugo --minify
