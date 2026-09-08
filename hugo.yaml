@@ -279,3 +279,11 @@ markup:
     lineNos: true
     lineNumbersInTable: true
     tabWidth: 4
+
+module:
+  mounts:
+    - source: content
+      target: content
+
+    - source: articles/blog
+      target: content/post

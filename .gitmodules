@@ -1,3 +1,6 @@
 [submodule "themes/hugo-theme-stack"]
 	path = themes/hugo-theme-stack
 	url = https://github.com/CaiJimmy/hugo-theme-stack
+[submodule "articles"]
+	path = articles
+	url = https://github.com/MitI-7/articles.git
