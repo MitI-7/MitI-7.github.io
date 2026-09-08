@@ -17,7 +17,7 @@ jobs:
       pages: read
 
     container:
-      image: ghcr.io/miti-7/miti-blog-hugo@sha256:66c030b7dddb937dd67340bc4ec04d983518f1aaa3cb432eabe3aa984689b9e7
+      image: ghcr.io/miti-7/miti-blog-hugo@sha256:f5924de8723c2f966e3e719f7b84396a420c2b150f6f81506c868dc89d9790c5
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
