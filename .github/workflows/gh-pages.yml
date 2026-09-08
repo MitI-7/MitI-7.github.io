@@ -3,23 +3,24 @@ name: Deploy
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  packages: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-22.04
+
+    permissions:
+      contents: read
+      packages: read
+      pages: read
 
     container:
       image: ghcr.io/miti-7/miti-blog-hugo@sha256:66c030b7dddb937dd67340bc4ec04d983518f1aaa3cb432eabe3aa984689b9e7
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-
-    concurrency:
-      group: deploy
-      cancel-in-progress: true
 
     steps:
       - name: Checkout
@@ -42,12 +43,31 @@ jobs:
           token: ${{ secrets.ARTICLES_TOKEN }}
           fetch-depth: 1
 
-      - name: Build
-        run: hugo --minify
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e
+      - name: Build
+        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          cname: blog.miti-7.com
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346
