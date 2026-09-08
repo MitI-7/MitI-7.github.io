@@ -44,5 +44,41 @@ Enable the right sidebar if
 {{ end }}
 
 {{ define "right-sidebar" }}
-{{ if .Scratch.Get "hasWidget" }}{{ partial "sidebar/right.html" (dict "Context" . "Scope" "page") }}{{ end}}
+{{ if .Scratch.Get "TOCEnabled" }}
+<aside id="article-toc-sidebar" class="sidebar right-sidebar sticky article-toc-sidebar">
+    <button
+        id="article-toc-toggle"
+        class="article-toc-toggle"
+        type="button"
+        aria-label="目次を閉じる"
+        aria-expanded="true"
+    >
+        ‹
+    </button>
+
+    <div class="article-toc-content">
+        {{ partial "widget/toc.html" (dict "Context" . "Params" dict) }}
+    </div>
+</aside>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.getElementById("article-toc-sidebar");
+    const button = document.getElementById("article-toc-toggle");
+
+    if (!sidebar || !button) return;
+
+    button.addEventListener("click", () => {
+        const collapsed = sidebar.classList.toggle("is-collapsed");
+
+        button.textContent = collapsed ? "›" : "‹";
+        button.setAttribute("aria-expanded", String(!collapsed));
+        button.setAttribute(
+            "aria-label",
+            collapsed ? "目次を開く" : "目次を閉じる"
+        );
+    });
+});
+</script>
+{{ end }}
 {{ end }}

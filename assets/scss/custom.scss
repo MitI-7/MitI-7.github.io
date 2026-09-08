@@ -65,3 +65,58 @@
   font-weight: bold;
   font-style: normal;
 }
+
+/* Collapsible article TOC */
+
+@media (min-width: 1024px) {
+    .article-toc-sidebar {
+        position: sticky;
+        padding-top: var(--main-top-padding);
+
+        transition:
+            width 0.2s ease,
+            max-width 0.2s ease,
+            flex-basis 0.2s ease;
+    }
+
+    .article-toc-toggle {
+        position: absolute;
+        top: var(--main-top-padding);
+        right: 0;
+
+        width: 36px;
+        height: 36px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+        border-radius: 8px;
+
+        background: var(--card-background);
+        color: var(--card-text-color-main);
+
+        cursor: pointer;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .article-toc-sidebar.is-collapsed {
+        width: 48px !important;
+        max-width: 48px !important;
+        flex: 0 0 48px !important;
+    }
+
+    .article-toc-sidebar.is-collapsed .article-toc-content {
+        display: none;
+    }
+
+    .article-toc-sidebar.is-collapsed .article-toc-toggle {
+        right: 6px;
+    }
+}
+
+.article-toc-content .widget-title {
+    visibility: hidden;
+}
