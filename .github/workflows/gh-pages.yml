@@ -17,12 +17,19 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    concurrency:
+      group: deploy
+      cancel-in-progress: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
         with:
           submodules: false
           fetch-depth: 0
+
+      - name: Configure Git
+        run: git config --global --add safe.directory '*'
 
       - name: Checkout theme
         run: git submodule update --init --recursive themes/hugo-theme-stack
