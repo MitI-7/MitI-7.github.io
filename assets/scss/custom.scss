@@ -119,3 +119,17 @@
 .article-toc-sidebar .widget-title {
     visibility: hidden;
 }
+
+.article-content {
+  .img-50 img {
+    width: 50%;
+  }
+
+  .img-75 img {
+    width: 75%;
+  }
+
+  .img-100 img {
+    width: 100%;
+  }
+}
